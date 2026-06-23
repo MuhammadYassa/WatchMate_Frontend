@@ -1,0 +1,23 @@
+import type { ButtonHTMLAttributes } from 'react'
+
+import { cn } from '../../utils/cn'
+
+interface GenreChipProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  active?: boolean
+}
+
+export function GenreChip({ active = false, className, ...props }: GenreChipProps) {
+  return (
+    <button
+      className={cn(
+        'rounded-2xl border px-4 py-2.5 text-sm transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-border-focus)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-bg)]',
+        active
+          ? 'border-[rgba(173,198,255,0.42)] bg-[linear-gradient(145deg,rgba(216,226,255,0.18)_0%,rgba(173,198,255,0.08)_100%)] text-[color:var(--color-accent)] shadow-[0_10px_28px_rgba(173,198,255,0.12)]'
+          : 'border-white/10 bg-[rgba(255,255,255,0.03)] text-[color:var(--color-text-secondary)] hover:border-white/18 hover:bg-[rgba(255,255,255,0.05)] hover:text-white',
+        className,
+      )}
+      type="button"
+      {...props}
+    />
+  )
+}

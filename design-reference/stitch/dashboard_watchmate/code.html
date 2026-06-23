@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>WatchMate | Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&amp;family=Inter:wght@400;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Playfair+Display:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary": "#2b303d",
+                    "on-background": "#e3e2e7",
+                    "on-surface": "#e3e2e7",
+                    "tertiary": "#ffdea4",
+                    "on-secondary-fixed": "#171b27",
+                    "outline-variant": "#44474f",
+                    "secondary-container": "#424754",
+                    "on-secondary-container": "#b0b5c4",
+                    "on-tertiary": "#412d00",
+                    "on-tertiary-fixed": "#261900",
+                    "inverse-surface": "#e3e2e7",
+                    "background": "#121317",
+                    "on-tertiary-container": "#6c4d01",
+                    "on-error-container": "#ffdad6",
+                    "tertiary-fixed": "#ffdea5",
+                    "surface-tint": "#adc6ff",
+                    "inverse-on-surface": "#2f3034",
+                    "tertiary-fixed-dim": "#ebc06e",
+                    "inverse-primary": "#455e90",
+                    "secondary": "#c2c6d6",
+                    "on-primary-fixed": "#001a42",
+                    "outline": "#8e909a",
+                    "surface-container-highest": "#343538",
+                    "secondary-fixed-dim": "#c2c6d6",
+                    "on-primary-fixed-variant": "#2c4677",
+                    "surface-dim": "#121317",
+                    "surface": "#121317",
+                    "surface-bright": "#38393d",
+                    "error": "#ffb4ab",
+                    "on-error": "#690005",
+                    "surface-variant": "#343538",
+                    "primary-fixed": "#d8e2ff",
+                    "secondary-fixed": "#dee2f2",
+                    "primary-container": "#adc6ff",
+                    "on-primary": "#122f5f",
+                    "tertiary-container": "#ebc06e",
+                    "surface-container-lowest": "#0d0e11",
+                    "on-secondary-fixed-variant": "#424754",
+                    "on-primary-container": "#385283",
+                    "primary-fixed-dim": "#adc6ff",
+                    "error-container": "#93000a",
+                    "surface-container-high": "#292a2d",
+                    "surface-container-low": "#1a1b1f",
+                    "primary": "#d8e2ff",
+                    "on-tertiary-fixed-variant": "#5d4200",
+                    "on-surface-variant": "#c4c6d0",
+                    "surface-container": "#1e1f23"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "unit": "8px",
+                    "gutter": "16px",
+                    "section-gap": "48px",
+                    "container-margin": "24px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": ["Playfair Display"],
+                    "body-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-md": ["Playfair Display"],
+                    "body-lg": ["Inter"],
+                    "display-lg": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "display-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #121317;
+            color: #e3e2e7;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-panel {
+            background: rgba(41, 42, 45, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .hero-vignette {
+            background: linear-gradient(to top, #121317 0%, rgba(18, 19, 23, 0.8) 30%, transparent 100%);
+        }
+        .poster-aspect { aspect-ratio: 2/3; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #121317; }
+        ::-webkit-scrollbar-thumb { background: #343538; border-radius: 10px; }
+        
+        .active-glow {
+            box-shadow: inset 0 0 10px rgba(216, 226, 255, 0.2), 0 0 20px rgba(216, 226, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden">
+<!-- NAVIGATION SHELL -->
+<!-- SideNavBar (Desktop Only) -->
+<nav class="hidden md:flex flex-col h-full p-4 gap-4 fixed h-full left-0 top-0 w-64 bg-surface-container dark:bg-surface-container-high/80 backdrop-blur-xl border-r border-white/10 shadow-2xl z-50">
+<div class="mb-8 px-2">
+<h1 class="font-display-lg text-headline-md text-primary font-bold">WatchMate</h1>
+<p class="text-label-sm text-on-surface-variant uppercase tracking-widest mt-1">Premium Member</p>
+</div>
+<div class="flex flex-col gap-2 grow">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-white/5 hover:scale-[1.02] transition-all duration-200 rounded-xl" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-body-md">Home</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-white/5 hover:scale-[1.02] transition-all duration-200 rounded-xl" href="#">
+<span class="material-symbols-outlined" data-icon="movie_filter">movie_filter</span>
+<span class="font-body-md">Trending</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-primary text-on-primary rounded-xl font-bold shadow-lg shadow-primary/20 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="video_library">video_library</span>
+<span class="font-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-white/5 hover:scale-[1.02] transition-all duration-200 rounded-xl" href="#">
+<span class="material-symbols-outlined" data-icon="bookmarks">bookmarks</span>
+<span class="font-body-md">Collections</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-white/5 hover:scale-[1.02] transition-all duration-200 rounded-xl" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-md">Settings</span>
+</a>
+</div>
+<div class="mt-auto border-t border-white/10 pt-4 px-2">
+<div class="bg-primary-container/20 p-4 rounded-2xl mb-4">
+<p class="text-label-sm font-bold text-primary mb-2">Upgrade to Pro</p>
+<p class="text-[11px] text-on-surface-variant leading-tight">Unlock exclusive metadata and early release notifications.</p>
+</div>
+<button class="flex items-center gap-3 px-4 py-3 w-full text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-body-md">Logout</span>
+</button>
+</div>
+</nav>
+<!-- TopNavBar (Mobile Only) -->
+<header class="md:hidden fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-4 bg-surface/80 backdrop-blur-md border-b border-white/15">
+<h1 class="font-display-lg text-display-lg-mobile font-bold text-on-surface">WatchMate</h1>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary" data-icon="notifications">notifications</span>
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container text-xs font-bold">JD</div>
+</div>
+</header>
+<!-- MAIN CANVAS -->
+<main class="md:ml-64 min-h-screen pt-20 md:pt-0 pb-24 md:pb-12">
+<!-- HERO SECTION: CONTINUE WATCHING -->
+<section class="relative w-full h-[614px] flex items-end px-container-margin md:px-section-gap overflow-hidden">
+<!-- Animated Shader Background -->
+
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-1000 hover:scale-105" data-alt="A cinematic wide shot of a futuristic neon-drenched cityscape under a rainy sky, featuring a lone figure standing on a balcony overlooking the glowing urban sprawl. The aesthetic is inspired by premium neo-noir sci-fi films with deep blue and magenta highlights, soft bokeh lighting, and high-fidelity textures." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuARxMpBKaRjGahqppvfEGWxQoc29PfLo9oS-IMFmytO50kECYZu1oYNUynImc2ASCqDHVF8z764TjjyRp6GroVe5OK6SwhdBgaIlJd2hOCXcmL5x3OwJm0x3gyTguno9U4i8SZLA33de2obhL-au-vYxyynXIzJggPc718enc3Pf26ZjL8a6mGjeWf5vZ6aOz8MiSqKoOEmIPYtx5bN9Ju8co3TrC_1UsgBx1ZI9BoSWVanZMD0qpTwjG0WsyP75X_taDqAw17XXQCr')">
+</div>
+<div class="absolute inset-0 hero-vignette"></div>
+<div class="relative z-10 w-full max-w-4xl pb-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
+<div class="flex items-center gap-2 mb-4">
+<span class="bg-primary text-on-primary px-3 py-1 rounded-full text-label-sm uppercase tracking-widest font-bold">Resume Watching</span>
+<span class="text-on-surface/60 text-label-sm">• Season 2, Episode 4</span>
+</div>
+<h2 class="font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-4 drop-shadow-2xl">The Midnight Horizon</h2>
+<div class="flex flex-wrap items-center gap-6">
+<button class="bg-primary text-on-primary px-8 py-4 rounded-xl flex items-center gap-3 font-bold hover:scale-[1.05] transition-transform active:scale-95 shadow-xl shadow-primary/30">
+<span class="material-symbols-outlined" data-icon="play_arrow" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                        Continue from 34:12
+                    </button>
+<button class="bg-white/10 backdrop-blur-md border border-white/20 text-on-surface px-6 py-4 rounded-xl flex items-center gap-2 hover:bg-white/20 transition-all">
+<span class="material-symbols-outlined" data-icon="info">info</span>
+                        Details
+                    </button>
+</div>
+</div>
+</section>
+<!-- DASHBOARD CONTENT GRID -->
+<div class="px-container-margin md:px-section-gap py-12 max-w-7xl mx-auto space-y-section-gap">
+<!-- SECTION: UPCOMING EPISODES (Asymmetric Bento) -->
+<section>
+<div class="flex justify-between items-end mb-8">
+<div>
+<h3 class="font-display-lg text-headline-md text-on-surface">Next on Your List</h3>
+<p class="text-on-surface-variant font-body-md">Episodes airing in the next 48 hours</p>
+</div>
+<button class="text-primary font-label-sm uppercase tracking-widest hover:underline">View All Schedule</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Featured Upcoming -->
+<div class="md:col-span-8 group relative overflow-hidden rounded-3xl glass-panel h-[400px]">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" data-alt="A breathtaking close-up shot of an astronaut looking at a distant star cluster through a cracked visor. The lighting is cinematic, featuring sharp rim lights and a cool blue and silver palette. The style is hyper-realistic and dramatic, capturing the immense scale of space and the vulnerability of the subject." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDzbIKHrgFzs7mpdWg-9KgYO-ha-ihxZGOX6AQ6Q0leWtnEe4X0aB1txhaAEzXDkbiRadnZcKSFM7H958M4NU0GqSEM_rTS6fTMYfkOreVuYpmJ7KVDlJQgprpIU2Hk8XEKHqpLe0Ml_TYw7-j_TGgYx4ZvUifarmf-U94f215zflQWNLIfVoYp8hYb8n8bRUG2GnJE5BwAoRXXW4hitrsYW-NdYsId8tZY6d7M116dr3uiGo7YYKB6gVDv8C5WEQwFDSIz-9uomS6f')">
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-8 w-full flex justify-between items-end">
+<div>
+<p class="text-primary font-bold text-label-sm uppercase mb-1">Airing in 4 Hours</p>
+<h4 class="text-headline-md font-display-lg">Stellar Voyager</h4>
+<p class="text-on-surface/80">S04 E12: The Void Returns</p>
+</div>
+<div class="bg-white/10 backdrop-blur-xl border border-white/20 p-3 rounded-2xl group-hover:bg-primary group-hover:text-on-primary transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="notification_add">notification_add</span>
+</div>
+</div>
+</div>
+<!-- Side Grid Items -->
+<div class="md:col-span-4 flex flex-col gap-6">
+<div class="glass-panel p-6 rounded-3xl flex gap-4 hover:bg-white/5 transition-colors cursor-pointer group">
+<div class="w-24 h-24 rounded-2xl overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A portrait-style movie poster featuring a sleek, minimalist silhouette of a detective under a single streetlight. Deep shadows, high contrast black and white with a single yellow accent. Atmospheric noir aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAueQpmZ9BzjQoHVVymE2vj7mgDAlhZziztEDcSW_Jfzh04aa_saSuk5rzmc_qQ8fUC3zH-cGfoknsvCLIBjnOSAcJ-cKo17i74IfpC5Ei5l3Voa69Jy9WEysYLtx1alSjfftkmpZyoji0ZG6DgJ8Uc1r-isPzoX4P2qwk2UXPAS49XqKofxhv1t5dY4IQU5Y5fPKoW-m3wI51Mp--2DBJRoXSaTHihoERZl08kqh8rpzKJB7uYEV-TtxAkoSnJPR1fjqveEmrhmq1_"/>
+</div>
+<div class="flex flex-col justify-center">
+<span class="text-label-sm text-primary mb-1">Airing Tomorrow</span>
+<p class="font-bold">Echo Chamber</p>
+<p class="text-label-sm text-on-surface-variant">S01 E09: Feedback</p>
+</div>
+</div>
+<div class="glass-panel p-6 rounded-3xl flex gap-4 hover:bg-white/5 transition-colors cursor-pointer group">
+<div class="w-24 h-24 rounded-2xl overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Vibrant, colorful animation still showing a group of quirky creatures in a candy-colored forest. Studio Ghibli style, soft watercolor textures, warm golden hour lighting, whimsical and magical atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvpGcTViU2DZPO--KfGdeo3jpNTln4anrHOnm66IA0OLyPqRiU4dFxUir4DIF1n7QP4w_4-MNODhvqWx8OmoaHrguo7_rOj0PERp-c-iABKWq5XYKsNxtRC-TPxLQnngZiWK50xeWqXls_i2PJbFU430vHwVqRZNB6ojyXxJHxLFjZ1YezAWdyldU71UYV6ZaCyVlss7WGoH-58-D2xr7gK4FUx3Ha0Ab04qgvYmdepJJVUBlH_s2ZikDjidWMruvDM0kGYjepvlsm"/>
+</div>
+<div class="flex flex-col justify-center">
+<span class="text-label-sm text-primary mb-1">Airing Tomorrow</span>
+<p class="font-bold">Sugar Rush Kingdom</p>
+<p class="text-label-sm text-on-surface-variant">S02 E03: The Sour King</p>
+</div>
+</div>
+<div class="glass-panel p-6 rounded-3xl flex gap-4 hover:bg-white/5 transition-colors cursor-pointer group">
+<div class="w-24 h-24 rounded-2xl overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A gritty, urban crime drama poster showing a rainy New York street at night. Muted tones, realistic lighting, focus on a steaming manhole cover and distant taxi lights. Cinematic and moody street photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6TMP2U5YkQ1U8JdcdpMZyU_JuUdGN8r-Af1Ewn71L3OkrZ0C7ZTrx3U6yVMIH07NqowSRsqsRLYS_FFkV9LZC15VvJafNuGfpavZBasvluBdTdVfUfuGdJ5_pRIq_ObBjH0W_gKVeBhwU24o2QYOzwDNu87PrkJhDO1kpx4SvG5BZlfrk-G7jFYq-WcIMguiu1PZxCaPYTc_1mLGWCkjJjWAryLNuq9tRAZseqe9xAAr3kZGGxpc_-_MHmLi5R2_WCUJq60_zYAwU"/>
+</div>
+<div class="flex flex-col justify-center">
+<span class="text-label-sm text-on-surface-variant mb-1">Airing in 2 Days</span>
+<p class="font-bold">Concrete Jungle</p>
+<p class="text-label-sm text-on-surface-variant">S05 E01: Season Premiere</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION: RELEASE CALENDAR (Horizontal Flow) -->
+<section>
+<div class="flex items-center gap-4 mb-8">
+<h3 class="font-display-lg text-headline-md text-on-surface">Release Calendar</h3>
+<div class="h-px grow bg-white/10"></div>
+</div>
+<div class="space-y-10">
+<!-- Friday, Oct 25 -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<div class="lg:col-span-2">
+<p class="text-display-lg-mobile font-bold text-on-surface leading-none">25</p>
+<p class="text-label-sm text-primary uppercase tracking-tighter">Friday, October</p>
+</div>
+<div class="lg:col-span-10 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+<!-- Movie Card -->
+<div class="group cursor-pointer">
+<div class="relative poster-aspect rounded-2xl overflow-hidden mb-3 border border-white/10 transition-all duration-300 group-hover:scale-[1.03] group-hover:shadow-2xl group-hover:shadow-primary/10">
+<img class="w-full h-full object-cover" data-alt="Cinematic movie poster for a thriller titled 'The Silent Patient'. Features a close-up of an eye with a reflected silhouette. Cool clinical lighting, sharp focus, professional film grade color correction." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvEydtsMYrZgK869I9PecV0TJ27r5T_NfukgyBGV48PyF7Ay7xWopVYfgAZ6fJ1QuSSditXGy3N8tKeCPh5fXTD8wrHeido9RYlmobpkSqp2xBBjbbrD_PXWBv5WHMy3lkMAphTQX8NcJafrSwZlJnxgI3i22Mjg5k3yzkutSX2qrqsHJILD9uXgv5_glsEfLRwcK8IQ931mXv9zSrVqemCq-v_4arM2qj3d28UL2XU1IHjAfPREkzCaXlyPs7p2yeg0DsI4VmugaI"/>
+<div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+<div class="bg-white/10 backdrop-blur-md rounded-xl p-2 flex items-center justify-center">
+<span class="material-symbols-outlined text-white" data-icon="add_circle">add_circle</span>
+<span class="text-xs ml-2 font-bold">Watchlist</span>
+</div>
+</div>
+</div>
+<p class="font-bold text-on-surface truncate">The Silent Patient</p>
+<p class="text-xs text-on-surface-variant">Movie • Premier</p>
+</div>
+<div class="group cursor-pointer">
+<div class="relative poster-aspect rounded-2xl overflow-hidden mb-3 border border-white/10 transition-all duration-300 group-hover:scale-[1.03]">
+<img class="w-full h-full object-cover" data-alt="High-fantasy movie poster showing a majestic dragon perched on a crumbling stone tower. Epic scale, warm orange dragon fire against a dark stormy sky. Detailed scales and textures, cinematic fantasy art style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhb-w8_l9NB_t51DBznaaoBkR-rh5U0urMB-LjMPZq_KRt5BIV-SYTBJCerV8GJZRrEO8X94EvXBvB0HTwqOtbEyVCM_9GEMH78GxUV4zMFII87yJeXDVm1uP8pZGXHY5Ik_wugtaM3HDoe1wThJDRBaZaCN6JA7aK2gu6JWsCVSFg9lZlRIrXEctUktwq9qgR2k6zlnTS0qoHhAXyhkUtf6uwnYCrXBB-p7p_jOFklgmLQAF_FpeRt5cLWopTEH_E9EyjzP_LIeOQ"/>
+</div>
+<p class="font-bold text-on-surface truncate">Wyvern's Peak</p>
+<p class="text-xs text-on-surface-variant">S03 E04</p>
+</div>
+<div class="group cursor-pointer">
+<div class="relative poster-aspect rounded-2xl overflow-hidden mb-3 border border-white/10 transition-all duration-300 group-hover:scale-[1.03]">
+<img class="w-full h-full object-cover" data-alt="Documentary style poster for 'Into the Deep'. Eerie underwater shot of a diver approaching a glowing deep-sea creature. Dark indigo waters, ethereal light beams, realistic and immersive nature photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFv8eTesrPF_KO-uGm5RdnEfvmf6Jg5TYlWPTBLHkgZSk79_S9SWMwytqAl9F4YXLNphxstXuJ9yf7AzPNUuJ70gWTYUpsjJjJRLYzs_6VDGFauGFlSPzfCLWo8MSnFHmaOdW6wxn5hsgOHjDkJWxMAUDF0ADTQhV9wW6CmBSZJf7IhFLCmD0jqgvYfwOyk4L3JTm4H48_CvB9_fxs_Rhci24lsjuxZLwfTbL1Pfo-4ZgfsF-TOGdI8RwnX-7GOTRW8XDMuVs5r5wx"/>
+</div>
+<p class="font-bold text-on-surface truncate">Into the Deep</p>
+<p class="text-xs text-on-surface-variant">Documentary</p>
+</div>
+</div>
+</div>
+<!-- Saturday, Oct 26 -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start border-t border-white/5 pt-10">
+<div class="lg:col-span-2">
+<p class="text-display-lg-mobile font-bold text-on-surface-variant leading-none">26</p>
+<p class="text-label-sm text-on-surface-variant uppercase tracking-tighter">Saturday, October</p>
+</div>
+<div class="lg:col-span-10 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+<div class="group cursor-pointer">
+<div class="relative poster-aspect rounded-2xl overflow-hidden mb-3 border border-white/10 transition-all duration-300 group-hover:scale-[1.03]">
+<img class="w-full h-full object-cover" data-alt="Action film poster 'Velocity'. High-speed chase scene with blurred city lights in the background. Focused on a sleek silver sports car. Dynamic composition, motion blur, vibrant orange and teal color grading." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBy_873CnpR0RRP7JhcyrsWmfuWpN_zcUhFQQdasniOv4G1jg86h78BmlZw2qFHdc8LrhyPEy35ZRsBTMqS8cU-HJIY_s7iytJVdZXuAmiBn2S2ByrCSR-szfY17ZIpf8oUCyAk_ocnNLBQZ0Bs50xths_pSVukW8zJkkWXrjMRMoKVhAf759GL4xxYocAro4-GXNM5h23bsZUI4zRAseATpGEv90gp9GzSzSf2itUyHnkkuQcjMvJxdQqfzWEFrYxQEAuO-cTpCj0n"/>
+</div>
+<p class="font-bold text-on-surface truncate">Velocity</p>
+<p class="text-xs text-on-surface-variant">Movie • Premier</p>
+</div>
+<div class="group cursor-pointer">
+<div class="relative poster-aspect rounded-2xl overflow-hidden mb-3 border border-white/10 transition-all duration-300 group-hover:scale-[1.03]">
+<img class="w-full h-full object-cover" data-alt="Romantic drama poster showing two people walking along a misty beach at sunrise. Soft pastel colors, gentle lighting, intimate and melancholic mood. High-end cinematography aesthetic, shallow depth of field." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAW5uvtYK2dzsp7gC9rmFl-H8yG1haz1evOpkxOFrr-o1ciBZMB9vd-lRHmHEftOQ75S2ZtBJUHMwJyF2gpWm2oyXcvK8nZqjbJNVW7_J6yneY4GNqQUccqDOpjtidAZxyFjHMVf8Ajuw_rIfc54NX5yWkONoE7ZruRVYJXaH9lHv6Hw2YyRzUKea0NTMAzNwy0CY8ASPAHde2j_jTcVoYM5n5fCjUbWGe3wLoHz_6JIHml90dZGyRD6RpGOMbKnlxSl37MsZsgnAMN"/>
+</div>
+<p class="font-bold text-on-surface truncate">Waves of Glass</p>
+<p class="text-xs text-on-surface-variant">S02 E11</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 px-6 py-3 flex justify-around items-center bg-surface-container-high/90 backdrop-blur-xl border-t border-white/10">
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="text-[10px] font-bold">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" data-icon="video_library" style="font-variation-settings: 'FILL' 1;">video_library</span>
+<span class="text-[10px] font-bold">Dashboard</span>
+</a>
+<div class="relative -top-6 bg-primary text-on-primary w-14 h-14 rounded-full flex items-center justify-center shadow-lg shadow-primary/40">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</div>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="bookmarks">bookmarks</span>
+<span class="text-[10px] font-bold">Lists</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="text-[10px] font-bold">Profile</span>
+</a>
+</nav>
+<!-- FOOTER -->
+<footer class="md:ml-64 bg-surface-container-lowest py-8 border-t border-outline-variant">
+<div class="flex flex-col md:flex-row justify-between items-center px-container-margin max-w-7xl mx-auto gap-4">
+<div class="flex flex-col md:flex-row items-center gap-6">
+<span class="font-display-lg text-headline-md text-on-surface-variant">WatchMate</span>
+<p class="font-label-sm text-on-surface-variant opacity-60">© 2024 WatchMate. All rights reserved.</p>
+</div>
+<div class="flex items-center gap-6">
+<a class="font-label-sm text-on-surface-variant hover:text-primary transition-all" href="#">Privacy</a>
+<a class="font-label-sm text-on-surface-variant hover:text-primary transition-all" href="#">Terms</a>
+<a class="font-label-sm text-on-surface-variant hover:text-primary transition-all" href="#">Help</a>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interactions for glass cards
+        document.querySelectorAll('.glass-panel, .group').forEach(el => {
+            el.addEventListener('mousemove', (e) => {
+                const rect = el.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                el.style.setProperty('--mouse-x', `${x}px`);
+                el.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    </script>
+</body></html>

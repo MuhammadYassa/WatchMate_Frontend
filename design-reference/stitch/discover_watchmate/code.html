@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Discover - WatchMate</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(30, 31, 35, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .poster-gradient {
+            background: linear-gradient(to top, rgba(18, 19, 23, 0.95) 0%, rgba(18, 19, 23, 0) 50%);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .hero-vignette {
+            background: linear-gradient(to bottom, transparent 0%, #121317 100%),
+                        linear-gradient(to right, #121317 0%, transparent 40%, transparent 60%, #121317 100%);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#2b303d",
+                        "on-background": "#e3e2e7",
+                        "on-surface": "#e3e2e7",
+                        "tertiary": "#ffdea4",
+                        "on-secondary-fixed": "#171b27",
+                        "outline-variant": "#44474f",
+                        "secondary-container": "#424754",
+                        "on-secondary-container": "#b0b5c4",
+                        "on-tertiary": "#412d00",
+                        "on-tertiary-fixed": "#261900",
+                        "inverse-surface": "#e3e2e7",
+                        "background": "#121317",
+                        "on-tertiary-container": "#6c4d01",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-fixed": "#ffdea5",
+                        "surface-tint": "#adc6ff",
+                        "inverse-on-surface": "#2f3034",
+                        "tertiary-fixed-dim": "#ebc06e",
+                        "inverse-primary": "#455e90",
+                        "secondary": "#c2c6d6",
+                        "on-primary-fixed": "#001a42",
+                        "outline": "#8e909a",
+                        "surface-container-highest": "#343538",
+                        "secondary-fixed-dim": "#c2c6d6",
+                        "on-primary-fixed-variant": "#2c4677",
+                        "surface-dim": "#121317",
+                        "surface": "#121317",
+                        "surface-bright": "#38393d",
+                        "error": "#ffb4ab",
+                        "on-error": "#690005",
+                        "surface-variant": "#343538",
+                        "primary-fixed": "#d8e2ff",
+                        "secondary-fixed": "#dee2f2",
+                        "primary-container": "#adc6ff",
+                        "on-primary": "#122f5f",
+                        "tertiary-container": "#ebc06e",
+                        "surface-container-lowest": "#0d0e11",
+                        "on-secondary-fixed-variant": "#424754",
+                        "on-primary-container": "#385283",
+                        "primary-fixed-dim": "#adc6ff",
+                        "error-container": "#93000a",
+                        "surface-container-high": "#292a2d",
+                        "surface-container-low": "#1a1b1f",
+                        "primary": "#d8e2ff",
+                        "on-tertiary-fixed-variant": "#5d4200",
+                        "on-surface-variant": "#c4c6d0",
+                        "surface-container": "#1e1f23"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "gutter": "16px",
+                        "section-gap": "48px",
+                        "container-margin": "24px"
+                    },
+                    "fontFamily": {
+                        "display-lg-mobile": ["Playfair Display"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Playfair Display"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "display-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary selection:text-on-primary">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter py-4 bg-surface/80 dark:bg-surface/80 backdrop-blur-md border-b border-white/15">
+<div class="flex items-center gap-8">
+<h1 class="font-display-lg text-display-lg-mobile md:text-headline-md font-bold text-on-surface tracking-tight">WatchMate</h1>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-body-md text-body-md" href="#">Home</a>
+<a class="text-primary border-b-2 border-primary pb-1 font-body-md text-body-md" href="#">Discover</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-body-md text-body-md" href="#">Search</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-body-md text-body-md" href="#">Dashboard</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-body-md text-body-md" href="#">Watchlists</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-body-md text-body-md" href="#">Profile</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-on-surface">notifications</span>
+</button>
+<div class="w-10 h-10 rounded-full border-2 border-primary/20 p-0.5 overflow-hidden">
+<img class="w-full h-full object-cover rounded-full" data-alt="A premium close-up headshot of a stylish user profile avatar against a soft, dark cinematic background, illuminated by subtle turquoise rim lighting. The aesthetic is high-end and digital-native, reflecting a modern tech professional with a minimalist, sophisticated vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4p3fuo6Y-T4kv9QO-LA1NpQJmPtr1Fa4cAF31y4Jv5u5nUe4wjKLHMxkKkmQ4MhMJuTGVFrti34VPSkqOZj6J_vmWEAgyGN472iE9Hgrzy70G_RQ3_ZjJrhw8xVpA327uEM0CL6KdoQUnH0wm1v7De9K5Uz57MEVg6f4B9uZ4fjj219OVsyY8Ps51BuJflfrnEuRR-3Vckmqapi23um9wTxa-0ZA6s-oYgXy5jXw74V5fR4_k6twA4dQAa6lXvC0Qi2eU-TLmh1Z5"/>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-20">
+<!-- Discover Hero Section -->
+<section class="relative w-full h-[614px] md:h-[716px] mb-section-gap overflow-hidden">
+<div class="absolute inset-0 z-0">
+<div class="absolute inset-0 hero-vignette z-10"></div>
+<img class="w-full h-full object-cover" data-alt="A wide cinematic landscape shot of a futuristic cyberpunk city at dusk, with towering skyscrapers and neon lights reflecting in wet asphalt. The atmosphere is moody and atmospheric, with deep purples, teals, and obsidian shadows. The lighting is dramatic, mimicking a big-budget sci-fi film's opening scene." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtJeccPaB16qQmnPhUwZK2jKMdprhp2JFuA834U8bM0wFjbr9Qpj7k8M1gActTAQ_ZN-PhGtjdyNzJF8UtWW9iepjA26XnaBZIn7fxONoqyLxEpHpj7BhMTvAFiyXNYAIHUpl5zoOISJZchr0bpcPiYNELe14AZ9dlPCV7_gbLD5Lo-ZT8if--BEhjVGPqBT7nXpFWTgWKNwcJMkT4He9dF7FvWbruHxoPyDiz6gvBAZD6tkjKy28tjoz2hBlg4pY0YomUACIDlrhs"/>
+</div>
+<div class="relative z-20 h-full flex flex-col justify-end px-container-margin md:px-32 pb-12 max-w-7xl mx-auto">
+<span class="inline-block px-3 py-1 bg-primary text-on-primary font-label-sm text-label-sm rounded-lg mb-4 uppercase tracking-widest">Featured Tonight</span>
+<h2 class="font-display-lg text-display-lg-mobile md:text-display-lg text-white mb-4 drop-shadow-xl">The Obsidian Horizon</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mb-8 leading-relaxed">A visual masterpiece exploring the depths of space and human consciousness. Critics call it the most immersive cinematic experience of the decade.</p>
+<div class="flex flex-wrap gap-4">
+<button class="px-8 py-3 bg-primary text-on-primary rounded-xl font-bold flex items-center gap-2 hover:scale-[1.02] transition-transform shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                        Watch Trailer
+                    </button>
+<button class="px-8 py-3 bg-white/10 text-white backdrop-blur-md border border-white/20 rounded-xl font-bold flex items-center gap-2 hover:bg-white/20 transition-all">
+<span class="material-symbols-outlined">add</span>
+                        Add to List
+                    </button>
+</div>
+</div>
+</section>
+<!-- Category Tabs -->
+<section class="px-container-margin max-w-7xl mx-auto mb-12">
+<div class="flex items-center gap-8 overflow-x-auto hide-scrollbar border-b border-outline-variant/30 pb-2">
+<button class="text-primary font-bold text-body-md whitespace-nowrap border-b-2 border-primary pb-4 transition-all">Trending Movies</button>
+<button class="text-on-surface-variant font-medium text-body-md whitespace-nowrap hover:text-on-surface pb-4 transition-all">Trending Shows</button>
+<button class="text-on-surface-variant font-medium text-body-md whitespace-nowrap hover:text-on-surface pb-4 transition-all">Popular Now</button>
+<button class="text-on-surface-variant font-medium text-body-md whitespace-nowrap hover:text-on-surface pb-4 transition-all">Airing Today</button>
+<button class="text-on-surface-variant font-medium text-body-md whitespace-nowrap hover:text-on-surface pb-4 transition-all">Upcoming</button>
+<button class="text-on-surface-variant font-medium text-body-md whitespace-nowrap hover:text-on-surface pb-4 transition-all">Recommended Later</button>
+</div>
+</section>
+<!-- Genre Browse Chips -->
+<section class="px-container-margin max-w-7xl mx-auto mb-12">
+<div class="flex flex-wrap gap-3">
+<span class="px-4 py-2 bg-surface-container rounded-full border border-outline-variant/50 text-body-md text-on-surface-variant hover:border-primary hover:text-primary cursor-pointer transition-all">Sci-Fi</span>
+<span class="px-4 py-2 bg-primary text-on-primary rounded-full border border-primary text-body-md cursor-pointer transition-all shadow-md shadow-primary/20 font-semibold">Action</span>
+<span class="px-4 py-2 bg-surface-container rounded-full border border-outline-variant/50 text-body-md text-on-surface-variant hover:border-primary hover:text-primary cursor-pointer transition-all">Drama</span>
+<span class="px-4 py-2 bg-surface-container rounded-full border border-outline-variant/50 text-body-md text-on-surface-variant hover:border-primary hover:text-primary cursor-pointer transition-all">Thriller</span>
+<span class="px-4 py-2 bg-surface-container rounded-full border border-outline-variant/50 text-body-md text-on-surface-variant hover:border-primary hover:text-primary cursor-pointer transition-all">Horror</span>
+<span class="px-4 py-2 bg-surface-container rounded-full border border-outline-variant/50 text-body-md text-on-surface-variant hover:border-primary hover:text-primary cursor-pointer transition-all">Comedy</span>
+<span class="px-4 py-2 bg-surface-container rounded-full border border-outline-variant/50 text-body-md text-on-surface-variant hover:border-primary hover:text-primary cursor-pointer transition-all">Animation</span>
+<span class="px-4 py-2 bg-surface-container rounded-full border border-outline-variant/50 text-body-md text-on-surface-variant hover:border-primary hover:text-primary cursor-pointer transition-all">Documentary</span>
+<span class="px-4 py-2 bg-surface-container rounded-full border border-outline-variant/50 text-body-md text-on-surface-variant hover:border-primary hover:text-primary cursor-pointer transition-all">Romance</span>
+</div>
+</section>
+<!-- Discovery Grid -->
+<section class="px-container-margin max-w-7xl mx-auto">
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-gutter">
+<!-- Poster Card 1 -->
+<div class="group relative aspect-[2/3] rounded-xl overflow-hidden glass-card transition-all duration-300 hover:scale-[1.03] hover:shadow-2xl hover:shadow-primary/10">
+<img class="w-full h-full object-cover" data-alt="A moody, high-contrast movie poster for a neo-noir detective film. A silhouette of a man with a fedora stands under a single streetlamp in the rain. Cold blue and dark grey tones dominate, with a sharp inner highlight outlining the figure. Cinematic grain and sophisticated typography at the bottom." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkQmxhGanhzjOUivjEAkYja_NR7JT_WTEl8YyI0l1Ifpzwb5w4Ac6ePJoLQ0XrFS_DLIuItHTUnCY_wqCP5xCP2Pan_dPybMhYMRxEj4UN_fILhRPIU7JH8oIH2sL9RI3ZXhkRAdf3nP9f1m7As2Jx4YqKvQs1hZLKVGvH35le1NdcABlnrxBXzDIr20PugEdmwlntgAQvQ1lIywVqxZYm3ZU8TR15uOYPWGXVZZL86JV99kEfRuP8R1NWJBZ0p5bRCTlXDQJLJiFO"/>
+<div class="absolute inset-0 poster-gradient opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+<h4 class="font-headline-md text-white text-body-md font-bold mb-1">Silent Echoes</h4>
+<div class="flex items-center gap-2 text-label-sm text-on-surface-variant">
+<span>2024</span>
+<span class="w-1 h-1 rounded-full bg-on-surface-variant"></span>
+<div class="flex items-center text-primary">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="ml-1">8.4</span>
+</div>
+</div>
+</div>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-8 h-8 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+<!-- Poster Card 2 -->
+<div class="group relative aspect-[2/3] rounded-xl overflow-hidden glass-card transition-all duration-300 hover:scale-[1.03] hover:shadow-2xl hover:shadow-primary/10">
+<img class="w-full h-full object-cover" data-alt="A vibrant and colorful movie poster for a high-fantasy adventure film. A majestic dragon flies over a floating island with lush waterfalls. The palette is rich with gold, emerald green, and sky blue. High detail textures on the scales and foliage. The lighting is epic golden hour sunlight." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoZCFmtWOC3V2r1MOUw6uvTLx_BgpUmVZo0fhKXnawpqQ1_ttohBWNcIbPmEA6d7RHttxoCp2sXdD3y90b--S3NaSmH0wUaUaDFs89HzXyZBmOJqAb6pOuSanrj0SXvfAfR2gRVn0HGU-oUgaduIFu8rORNxzpslsaLuV94YsQOUphtEqsfZzjCjeFFBBN7WouRButsAkZyCUPHX14eXjAOaUXcCaHMXiEu5T9xhuKZwcyZ0Iegc7QIXOkYvYA_rtdIo3VqlyDJIbN"/>
+<div class="absolute inset-0 poster-gradient opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+<h4 class="font-headline-md text-white text-body-md font-bold mb-1">Aetheria</h4>
+<div class="flex items-center gap-2 text-label-sm text-on-surface-variant">
+<span>2023</span>
+<span class="w-1 h-1 rounded-full bg-on-surface-variant"></span>
+<div class="flex items-center text-primary">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="ml-1">9.1</span>
+</div>
+</div>
+</div>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-8 h-8 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+<!-- Poster Card 3 -->
+<div class="group relative aspect-[2/3] rounded-xl overflow-hidden glass-card transition-all duration-300 hover:scale-[1.03] hover:shadow-2xl hover:shadow-primary/10">
+<img class="w-full h-full object-cover" data-alt="A gritty and intense movie poster for a psychological thriller. A fractured mirror reflecting several different expressions of the same person's face. Monochromatic black and white with a single sharp red element. The style is experimental and dramatic, focusing on light and shadow." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMjgR080jMiLdwquO3z77wDhOvEQ6FglfpGBAr77a1ICEGX34pd7rjkT2sdrealKynmmSV13xVNmxuUpNDkXr6RNvnmd5Bgjut71tB9CgMDf_-jbB7wauxW4e7zu9K9nk7zHuexplruhyO3qAbJBd11dflddhrBqNv_qb0Ox4vA3AK0GwxjZbz2XdGHsghWrdHpVlFKOOPr6Bm4QudLh-6fy6u43cil6s4NI-eA63h72qAahmWrLDiPbWhmaFFhtTH_fbaii1XgfyL"/>
+<div class="absolute inset-0 poster-gradient opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+<h4 class="font-headline-md text-white text-body-md font-bold mb-1">Mirror Maze</h4>
+<div class="flex items-center gap-2 text-label-sm text-on-surface-variant">
+<span>2024</span>
+<span class="w-1 h-1 rounded-full bg-on-surface-variant"></span>
+<div class="flex items-center text-primary">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="ml-1">7.9</span>
+</div>
+</div>
+</div>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-8 h-8 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+<!-- Poster Card 4 -->
+<div class="group relative aspect-[2/3] rounded-xl overflow-hidden glass-card transition-all duration-300 hover:scale-[1.03] hover:shadow-2xl hover:shadow-primary/10">
+<img class="w-full h-full object-cover" data-alt="An atmospheric movie poster for an indie romantic drama set in Paris. Two people walking along the Seine river at night with the city lights blurred in the background. Soft warm amber and deep navy colors. The mood is romantic and melancholic, with a filmic texture and soft focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAesTxFDCgiTGPtadBn6u3SM8r7IA0D6ySw2tL_58cNQcKY9d995_VeMnBZJqrIEwNEq6hbhIEbTl0dWjqGKkm8FF4IBmxBSxQtX0ojWh-FMjCq4JdrQzuECasqHPHUGF9rrQ7aoEsvKPSJdZ-aBcARKHB8YypJalTOf1ECICHPbiyYIBuws1S52NGQubZ2jVNCcHmXMiq6hDvsh10oKkBAnOCeBs3hwimdpaCbWuACKBNT5ZuNk9b-yCNuIAu2aVTRIjNUBzLjfkIK"/>
+<div class="absolute inset-0 poster-gradient opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+<h4 class="font-headline-md text-white text-body-md font-bold mb-1">Midnight Waltz</h4>
+<div class="flex items-center gap-2 text-label-sm text-on-surface-variant">
+<span>2024</span>
+<span class="w-1 h-1 rounded-full bg-on-surface-variant"></span>
+<div class="flex items-center text-primary">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="ml-1">8.6</span>
+</div>
+</div>
+</div>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-8 h-8 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+<!-- Poster Card 5 -->
+<div class="group relative aspect-[2/3] rounded-xl overflow-hidden glass-card transition-all duration-300 hover:scale-[1.03] hover:shadow-2xl hover:shadow-primary/10">
+<img class="w-full h-full object-cover" data-alt="A sleek and minimalist movie poster for a tech-focused sci-fi film. A glowing digital eye made of circuit lines against a deep obsidian background. Sharp neon cyan and magenta accents. The aesthetic is extremely clean, high-tech, and futuristic. Fine lines and intricate details represent artificial intelligence." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfrdcyFp9mH_c47n8-mqxYy-OAPeGaTztvRauvbxReaTKT3II4QVv64Jk3JnasfeVAjZs4NzHsDCxFZHz-Z9iqbdblwoYPFjnAKkTn8R2NG8MoyKLGYyGZcQ6e81T0nu32UziEvIQcgxYcw5asRVO5RFiD6xRZxEXO615FcmBitj8FbtEGuj6gZt-vrRKnjYxKEsEyMaGk5_3iV6HrIf4KRfZCFfnDIXTgzqkW9HlM6B-URPXDUjqvoxRU3c0hvb065xXMlijHHu2C"/>
+<div class="absolute inset-0 poster-gradient opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+<h4 class="font-headline-md text-white text-body-md font-bold mb-1">Cyber Neural</h4>
+<div class="flex items-center gap-2 text-label-sm text-on-surface-variant">
+<span>2025</span>
+<span class="w-1 h-1 rounded-full bg-on-surface-variant"></span>
+<div class="flex items-center text-primary">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="ml-1">9.5</span>
+</div>
+</div>
+</div>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-8 h-8 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+<!-- Poster Card 6 -->
+<div class="group relative aspect-[2/3] rounded-xl overflow-hidden glass-card transition-all duration-300 hover:scale-[1.03] hover:shadow-2xl hover:shadow-primary/10">
+<img class="w-full h-full object-cover" data-alt="A breathtaking nature documentary poster. A close-up of a snow leopard's intense blue eye reflecting a vast mountain range. The style is hyper-realistic with every hair visible. Cool white and icy blue color palette. The mood is majestic and silent, showcasing the power of nature." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJAGgnGLld-NUCL-hsbFjUZg77ogS0fvxoJw6bHg_v89TlmnGeGAJFBsTgNkGnMYFbZ6OxF9h2avfQNpCUvm3bBOpKbe_rY1aQU1VaqAwGwZeE8MXhSQ1DvN146ATUGBMz7qYzjKZEj6WFPHRXMel0tRHyRchBhkYiXT_6VRkCVnP1AZOFMxrv6h_G-8x_JqJkOaQamGuNoaHh1ib--1q4IG6cg6lNRS-szjB2fTwvLryRnsixphcaxlcL3nRRxcGyJCMvezosW5cG"/>
+<div class="absolute inset-0 poster-gradient opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+<h4 class="font-headline-md text-white text-body-md font-bold mb-1">The High Peaks</h4>
+<div class="flex items-center gap-2 text-label-sm text-on-surface-variant">
+<span>2024</span>
+<span class="w-1 h-1 rounded-full bg-on-surface-variant"></span>
+<div class="flex items-center text-primary">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="ml-1">8.2</span>
+</div>
+</div>
+</div>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-8 h-8 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+<!-- Poster Card 7 -->
+<div class="group relative aspect-[2/3] rounded-xl overflow-hidden glass-card transition-all duration-300 hover:scale-[1.03] hover:shadow-2xl hover:shadow-primary/10">
+<img class="w-full h-full object-cover" data-alt="A vibrant movie poster for an animated family film. A group of quirky robots of different shapes and sizes standing in a colorful futuristic garden. Bright, saturated colors like orange, yellow, and turquoise. The lighting is cheerful and sun-drenched. Professional 3D render style with expressive characters." src="https://lh3.googleusercontent.com/aida-public/AB6AXuApHWK9KZYKlhcwJWl25WuGGtVOTPCf5wJhmOTP4l1VAPdbv8jo2CRhyXshpFJQBFPcJeU-F8PyDYcWhmpeXyqnXoCYEo3HNXjDxECd8-fl0DjDBuspturQmuVKNfKN85bNGCnBE-3c-S3BtaVH1lwsZWAnzzIDZ__-MoNSi2TczV3ERy24tJKoZO5YpNRvlSN3ScKNoiMhQ4401rnPllGmAcoEanVzzoyIz6VA2yu76CiGf2ccgtfbCYdihFcdEoruTpF4eEzkjZxN"/>
+<div class="absolute inset-0 poster-gradient opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+<h4 class="font-headline-md text-white text-body-md font-bold mb-1">Bot Buddies</h4>
+<div class="flex items-center gap-2 text-label-sm text-on-surface-variant">
+<span>2024</span>
+<span class="w-1 h-1 rounded-full bg-on-surface-variant"></span>
+<div class="flex items-center text-primary">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="ml-1">7.5</span>
+</div>
+</div>
+</div>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-8 h-8 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+<!-- Poster Card 8 -->
+<div class="group relative aspect-[2/3] rounded-xl overflow-hidden glass-card transition-all duration-300 hover:scale-[1.03] hover:shadow-2xl hover:shadow-primary/10">
+<img class="w-full h-full object-cover" data-alt="A high-impact action movie poster. A sleek black sports car speeding through a desert landscape at dusk with dust clouds trailing behind. Fiery orange and deep purple sky. The composition is dynamic and full of energy. Realistic textures on the car and environment, with cinematic motion blur." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7PNQbMjWHBPrkCJ6lSe8D46P-NtkJUnM9B_eGz4L1wPOhlT4oLPrlzdW_JELw-VOJ9Qr5KBA64soGqx4Cd3iwoblJT_QA5P01Cv0IQtlVbdAg3ASQk9c_c22zWJxJ0q6QpKGWB6SoEs-S4JUc9HHS4qL2ZM0lHn1WU0C9dkVV2AcWd-3L_bhKWLVQ0oyDa7Xch2feZRAjD3PrhCm84agqyT35Kdv5YKnvqoqgEL6SiFo0bZFzABKsg8WZ5kNtxOAmusYdAi-kZPyb"/>
+<div class="absolute inset-0 poster-gradient opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+<h4 class="font-headline-md text-white text-body-md font-bold mb-1">Velocity Run</h4>
+<div class="flex items-center gap-2 text-label-sm text-on-surface-variant">
+<span>2024</span>
+<span class="w-1 h-1 rounded-full bg-on-surface-variant"></span>
+<div class="flex items-center text-primary">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="ml-1">8.0</span>
+</div>
+</div>
+</div>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-8 h-8 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+<!-- Poster Card 9 -->
+<div class="group relative aspect-[2/3] rounded-xl overflow-hidden glass-card transition-all duration-300 hover:scale-[1.03] hover:shadow-2xl hover:shadow-primary/10">
+<img class="w-full h-full object-cover" data-alt="A dramatic movie poster for a historical epic. A vast army standing on a grassy field under a stormy, overcast sky. The lighting is moody and desaturated with high contrast. Cinematic framing and epic scale. Historical armor and weapons are shown in fine detail. The mood is solemn and grand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpdgaabCJxxpIBf6oOcko4lF0YS1k6R6G23Xi4SB-0wnwJ4yiwkyFPWT8hfxioGFgkVh2jJ6yrqBbj8qNRkPk5uXGBjHNSURSYYOrYjItK9R9H8USFkMokCWGvxLPZbv8JAkwBpIRGJV-5GG5Tqb43kmd3hvD_yEYk5ucR9eWglvy5SPi3U7FRJYxBkNmYfgjdUixR_NK9Lze6mlYhCpQ40K31DsoDEm5P5IE-d3MRavIZpGVxJZJYCJAn9YxJwxbmtdf2IUgoRChK"/>
+<div class="absolute inset-0 poster-gradient opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+<h4 class="font-headline-md text-white text-body-md font-bold mb-1">Empire's Fall</h4>
+<div class="flex items-center gap-2 text-label-sm text-on-surface-variant">
+<span>2023</span>
+<span class="w-1 h-1 rounded-full bg-on-surface-variant"></span>
+<div class="flex items-center text-primary">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="ml-1">8.9</span>
+</div>
+</div>
+</div>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-8 h-8 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+<!-- Poster Card 10 -->
+<div class="group relative aspect-[2/3] rounded-xl overflow-hidden glass-card transition-all duration-300 hover:scale-[1.03] hover:shadow-2xl hover:shadow-primary/10">
+<img class="w-full h-full object-cover" data-alt="A haunting horror movie poster. A dense, fog-filled forest at midnight with a faint, ghostly light coming from deep between the trees. The palette is desaturated green and black. The mood is eerie and suspenseful, with a strong sense of isolation. High-end cinematic lighting and composition." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6kKMvDUN8063Ru85ifmo0q9m9xuB8XV3juuwtF4VJnRjcKdNRqaspqWuUpksI_FhO77t2lr3CCopAyYoEwYcDDYuxdApFl2LtLu5TtNnpRnhlQqYVzUIIK8Qs0QyJg9PJf6VNoQYQ8THU4gDZUlK4mRbgcsk4LqnMGY06fhLNUR_HgIPeHHI7rkIKy3ZAEqXBV13n07UG_7nfo8KXhVCyzWB9YPz3IiOfGDRUFCZc20wqlRe_WPKGFK2zgtfuYe0Axtj3UBAdMxQJ"/>
+<div class="absolute inset-0 poster-gradient opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+<h4 class="font-headline-md text-white text-body-md font-bold mb-1">Woods of Whispers</h4>
+<div class="flex items-center gap-2 text-label-sm text-on-surface-variant">
+<span>2024</span>
+<span class="w-1 h-1 rounded-full bg-on-surface-variant"></span>
+<div class="flex items-center text-primary">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="ml-1">7.2</span>
+</div>
+</div>
+</div>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-8 h-8 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Load More Button -->
+<div class="flex justify-center mt-section-gap">
+<button class="px-12 py-4 bg-surface-container hover:bg-surface-container-high text-primary font-bold rounded-xl border border-white/5 transition-all flex items-center gap-3">
+<span class="material-symbols-outlined">expand_more</span>
+                    Load More Titles
+                </button>
+</div>
+</section>
+</main>
+<!-- Footer Section -->
+<footer class="bg-surface-container-lowest dark:bg-surface-container-lowest border-t border-outline-variant py-8">
+<div class="flex flex-col md:flex-row justify-between items-center px-container-margin max-w-7xl mx-auto gap-6">
+<div class="flex flex-col items-center md:items-start gap-2">
+<h2 class="font-display-lg text-headline-md text-primary font-bold">WatchMate</h2>
+<p class="font-label-sm text-label-sm text-on-surface-variant">© 2024 WatchMate. All rights reserved.</p>
+</div>
+<div class="flex items-center gap-8">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary underline transition-all" href="#">Privacy</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary underline transition-all" href="#">Terms</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary underline transition-all" href="#">Help</a>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer transition-colors">public</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer transition-colors">group</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer transition-colors">share</span>
+</div>
+</div>
+</footer>
+<!-- Mobile Bottom Navigation -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full h-16 bg-surface/90 backdrop-blur-xl border-t border-white/10 z-[60] flex justify-around items-center px-4">
+<button class="flex flex-col items-center text-on-surface-variant">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] mt-1">Home</span>
+</button>
+<button class="flex flex-col items-center text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">explore</span>
+<span class="text-[10px] mt-1">Discover</span>
+</button>
+<button class="flex flex-col items-center text-on-surface-variant">
+<span class="material-symbols-outlined">movie</span>
+<span class="text-[10px] mt-1">Watchlist</span>
+</button>
+<button class="flex flex-col items-center text-on-surface-variant">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] mt-1">Profile</span>
+</button>
+</nav>
+<script>
+        // Smooth hover micro-interactions
+        document.querySelectorAll('.group').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                // Potential for haptic feedback triggers here
+            });
+        });
+
+        // Simple tab switching logic for UI demonstration
+        const tabs = document.querySelectorAll('.category-tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => {
+                    t.classList.remove('text-primary', 'border-b-2', 'border-primary', 'font-bold');
+                    t.classList.add('text-on-surface-variant', 'font-medium');
+                });
+                tab.classList.add('text-primary', 'border-b-2', 'border-primary', 'font-bold');
+                tab.classList.remove('text-on-surface-variant', 'font-medium');
+            });
+        });
+    </script>
+</body></html>

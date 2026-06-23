@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Search | WatchMate</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Playfair+Display:wght@600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Playfair+Display:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary": "#2b303d",
+                    "on-background": "#e3e2e7",
+                    "on-surface": "#e3e2e7",
+                    "tertiary": "#ffdea4",
+                    "on-secondary-fixed": "#171b27",
+                    "outline-variant": "#44474f",
+                    "secondary-container": "#424754",
+                    "on-secondary-container": "#b0b5c4",
+                    "on-tertiary": "#412d00",
+                    "on-tertiary-fixed": "#261900",
+                    "inverse-surface": "#e3e2e7",
+                    "background": "#121317",
+                    "on-tertiary-container": "#6c4d01",
+                    "on-error-container": "#ffdad6",
+                    "tertiary-fixed": "#ffdea5",
+                    "surface-tint": "#adc6ff",
+                    "inverse-on-surface": "#2f3034",
+                    "tertiary-fixed-dim": "#ebc06e",
+                    "inverse-primary": "#455e90",
+                    "secondary": "#c2c6d6",
+                    "on-primary-fixed": "#001a42",
+                    "outline": "#8e909a",
+                    "surface-container-highest": "#343538",
+                    "secondary-fixed-dim": "#c2c6d6",
+                    "on-primary-fixed-variant": "#2c4677",
+                    "surface-dim": "#121317",
+                    "surface": "#121317",
+                    "surface-bright": "#38393d",
+                    "error": "#ffb4ab",
+                    "on-error": "#690005",
+                    "surface-variant": "#343538",
+                    "primary-fixed": "#d8e2ff",
+                    "secondary-fixed": "#dee2f2",
+                    "primary-container": "#adc6ff",
+                    "on-primary": "#122f5f",
+                    "tertiary-container": "#ebc06e",
+                    "surface-container-lowest": "#0d0e11",
+                    "on-secondary-fixed-variant": "#424754",
+                    "on-primary-container": "#385283",
+                    "primary-fixed-dim": "#adc6ff",
+                    "error-container": "#93000a",
+                    "surface-container-high": "#292a2d",
+                    "surface-container-low": "#1a1b1f",
+                    "primary": "#d8e2ff",
+                    "on-tertiary-fixed-variant": "#5d4200",
+                    "on-surface-variant": "#c4c6d0",
+                    "surface-container": "#1e1f23"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "unit": "8px",
+                    "gutter": "16px",
+                    "section-gap": "48px",
+                    "container-margin": "24px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": ["Playfair Display"],
+                    "body-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-md": ["Playfair Display"],
+                    "body-lg": ["Inter"],
+                    "display-lg": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "display-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .backdrop-blur-cinematic {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .glass-border {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .movie-card:hover .meta-overlay {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #44474f;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary selection:text-on-primary overflow-x-hidden">
+<!-- WebGL Shader Background (Cinematic Atmosphere) -->
+<div class="fixed inset-0 pointer-events-none z-0">
+
+</div>
+<!-- Navigation -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter py-4 bg-surface/80 dark:bg-surface/80 backdrop-blur-md border-b border-white/15">
+<div class="font-display-lg text-display-lg-mobile font-bold text-on-surface">WatchMate</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-on-surface-variant hover:text-on-surface font-body-md text-body-md transition-colors duration-300" href="#">Home</a>
+<a class="text-on-surface-variant hover:text-on-surface font-body-md text-body-md transition-colors duration-300" href="#">Discover</a>
+<a class="text-primary border-b-2 border-primary pb-1 font-body-md text-body-md transition-colors duration-300" href="#">Search</a>
+<a class="text-on-surface-variant hover:text-on-surface font-body-md text-body-md transition-colors duration-300" href="#">Dashboard</a>
+<a class="text-on-surface-variant hover:text-on-surface font-body-md text-body-md transition-colors duration-300" href="#">Watchlists</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary hover:bg-white/10 p-2 rounded-full transition-colors">notifications</button>
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold border border-white/10">
+                JD
+            </div>
+</div>
+</header>
+<main class="relative z-10 pt-32 pb-24 px-container-margin max-w-7xl mx-auto min-h-screen">
+<!-- Large Search Input Section -->
+<div class="mb-section-gap max-w-3xl mx-auto">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-6 top-1/2 -translate-y-1/2 text-primary text-3xl">search</span>
+<input class="w-full bg-surface-container-high/60 backdrop-blur-xl border-2 border-white/10 rounded-full py-6 pl-16 pr-8 text-body-lg font-body-lg focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all duration-300 text-on-surface placeholder:text-on-surface-variant/50" id="main-search" placeholder="Search movies, actors, or genres..." type="text"/>
+<kbd class="hidden md:block absolute right-6 top-1/2 -translate-y-1/2 bg-white/5 border border-white/10 px-2 py-1 rounded text-label-sm text-on-surface-variant">⌘ K</kbd>
+</div>
+</div>
+<!-- Recent Searches Section -->
+<section class="mb-section-gap" id="recent-searches">
+<div class="flex items-center justify-between mb-gutter">
+<h2 class="font-headline-md text-headline-md text-on-surface">Recent Searches</h2>
+<button class="text-label-sm font-label-sm text-primary hover:underline uppercase tracking-widest">Clear All</button>
+</div>
+<div class="flex flex-wrap gap-4">
+<button class="flex items-center gap-2 bg-surface-container-low border border-white/5 px-6 py-3 rounded-full hover:bg-surface-container-high transition-all group">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">history</span>
+<span class="text-body-md text-on-surface-variant group-hover:text-on-surface">Dune: Part Two</span>
+</button>
+<button class="flex items-center gap-2 bg-surface-container-low border border-white/5 px-6 py-3 rounded-full hover:bg-surface-container-high transition-all group">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">history</span>
+<span class="text-body-md text-on-surface-variant group-hover:text-on-surface">Oppenheimer</span>
+</button>
+<button class="flex items-center gap-2 bg-surface-container-low border border-white/5 px-6 py-3 rounded-full hover:bg-surface-container-high transition-all group">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">history</span>
+<span class="text-body-md text-on-surface-variant group-hover:text-on-surface">Wes Anderson</span>
+</button>
+<button class="flex items-center gap-2 bg-surface-container-low border border-white/5 px-6 py-3 rounded-full hover:bg-surface-container-high transition-all group">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">history</span>
+<span class="text-body-md text-on-surface-variant group-hover:text-on-surface">Sci-Fi Classics</span>
+</button>
+</div>
+</section>
+<!-- Dynamic Results Container -->
+<div class="min-h-[400px]" id="results-canvas">
+<!-- Empty State (Default) -->
+<div class="flex flex-col items-center justify-center py-24 text-center" id="empty-state">
+<div class="relative mb-8">
+<div class="absolute -inset-4 bg-primary/20 blur-3xl rounded-full"></div>
+<span class="material-symbols-outlined text-8xl text-primary relative">movie_filter</span>
+</div>
+<h3 class="font-display-lg text-headline-md text-on-surface mb-2">Explore the Cinematic Universe</h3>
+<p class="text-on-surface-variant max-w-md mx-auto text-body-md">Dive into our curated library of over 10,000 films. Search by title, director, or cast to find your next obsession.</p>
+</div>
+<!-- No Results State (Hidden by default) -->
+<div class="hidden flex flex-col items-center justify-center py-24 text-center" id="no-results-state">
+<span class="material-symbols-outlined text-8xl text-error mb-8">search_off</span>
+<h3 class="font-display-lg text-headline-md text-on-surface mb-2">No titles found</h3>
+<p class="text-on-surface-variant max-w-md mx-auto text-body-md">We couldn't find anything matching your query. Check for typos or try searching for a broader category.</p>
+<button class="mt-8 px-8 py-3 bg-primary text-on-primary rounded-full font-bold hover:scale-105 transition-transform" onclick="resetSearch()">Clear Search</button>
+</div>
+<!-- Grid of Results (Hidden by default, shown on search) -->
+<div class="hidden grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-gutter" id="results-grid">
+<!-- Movie Poster Card 1 -->
+<div class="movie-card group relative aspect-[2/3] rounded-xl overflow-hidden glass-border bg-surface-container-highest cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" data-alt="A moody, high-contrast cinematic poster for a science fiction epic set on a desert planet. The lighting is warm and golden with swirling dust particles caught in the rays of two distant suns. The overall aesthetic is gritty, sophisticated, and grand, echoing the visual style of modern desert-themed space operas with deep blacks and rich orange tones." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC-4QJ26cyqaH5Lz98TS_Y3J4bs-mJvxJAD36i785Ttbc79WVWRqcsqIaoHN0JWhgNFOU6g_y2WSNdLR2A5cTPpEgeGtjUOjrGDwGHW6Zq7Zj-8fqKmngnn6WKJlfDRLrd4gxVlTmtgphnqgbvuoEjjNYK2amvQn1ff43lQp_yf1RAuwsNQdLVXstrMpz3z7aZyDdMwnX2t62ylWMVvQXOz7eQL6JrLBbSPQd9Wo9w0x7XdWyJJS2lXjGXcVuEYNX_cuPLFjlBMFgej')">
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
+<div class="meta-overlay absolute inset-x-0 bottom-0 p-4 opacity-0 transform translate-y-4 transition-all duration-300 backdrop-blur-cinematic bg-black/40 border-t border-white/10">
+<h4 class="font-bold text-on-surface text-body-md truncate">Chronicles of Solara</h4>
+<div class="flex justify-between items-center mt-1">
+<span class="text-label-sm text-on-surface-variant">2024</span>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-tertiary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-label-sm text-tertiary">8.9</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Movie Poster Card 2 -->
+<div class="movie-card group relative aspect-[2/3] rounded-xl overflow-hidden glass-border bg-surface-container-highest cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" data-alt="A minimalist film poster with a deep obsidian background featuring a single glowing neon blue geometric shape in the center. The style is ultra-modern and cinematic, suggesting a high-concept psychological thriller. Sharp lighting creates crisp reflections on polished dark surfaces, with a cool-toned atmospheric color palette." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA9b3sdSyn1CZZemmm3fvxfq_huPndYjr7MS5kMRLADdD0_ehFZD7XeEPriURoS3Pns6pNRtibyytdIqJblMVqgxKCW6XWZ67nE0S7L8HbiyhKKpn9clZFKH7zJrn6eMpaj8-kfM13ifGdqTAi2v2kTCyen9GrW5l4Oo6fkULi0nk-CT9U7zUgZG6Awq4jbNqMZ_zvIeZa8-kljMhEfFYgFxPOuUvGjyYMh5_nzYfWyRnZA8MPF5oW1csXZcy5UeivGudgK-bMGyhow')">
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
+<div class="meta-overlay absolute inset-x-0 bottom-0 p-4 opacity-0 transform translate-y-4 transition-all duration-300 backdrop-blur-cinematic bg-black/40 border-t border-white/10">
+<h4 class="font-bold text-on-surface text-body-md truncate">The Blue Enigma</h4>
+<div class="flex justify-between items-center mt-1">
+<span class="text-label-sm text-on-surface-variant">2023</span>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-tertiary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-label-sm text-tertiary">7.4</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Movie Poster Card 3 -->
+<div class="movie-card group relative aspect-[2/3] rounded-xl overflow-hidden glass-border bg-surface-container-highest cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" data-alt="A vivid, painterly movie poster showing a stylized European street at night during a rainstorm. The wet pavement reflects the vibrant neon signs of a jazz club in shades of magenta and teal. The lighting is cinematic noir with a modern twist, creating a deeply immersive and artistic mood full of texture and color." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBN5UBWNX2lZjGgMstafT1B1U7iA-ZmLy-zvo2GsSTcT-VLgYXYz428pzvRDAo6LjHup73SWZLuyw0MtV-a_EEDfdP5CYr_9bAsd1BbP6nfu5JqKusycrbooQbAr4up0Q2dpPNttgy4lo2dfXe-FtzRVWgd8Eaqe-wPuWR5dOREWqIxkBu7KeoO9SX46i7DYwSpL-5er4MpwGgDU_rN-RMrmRiEYvO0oLBu2gYLM5bzaIl9uP-ctlgeCvgdOPxBsuRMbHN5uMUwGXA_')">
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
+<div class="meta-overlay absolute inset-x-0 bottom-0 p-4 opacity-0 transform translate-y-4 transition-all duration-300 backdrop-blur-cinematic bg-black/40 border-t border-white/10">
+<h4 class="font-bold text-on-surface text-body-md truncate">Midnight in Lyon</h4>
+<div class="flex justify-between items-center mt-1">
+<span class="text-label-sm text-on-surface-variant">2024</span>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-tertiary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-label-sm text-tertiary">9.2</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Movie Poster Card 4 -->
+<div class="movie-card group relative aspect-[2/3] rounded-xl overflow-hidden glass-border bg-surface-container-highest cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" data-alt="A high-action cinematic shot for a thriller poster featuring a luxury car speeding through a futuristic tunnel. The lighting is dominated by red tail light streaks and cold white fluorescent beams. The aesthetic is sleek, fast-paced, and premium, with a focused depth of field and motion blur effects." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBXTBo0xHLn1iw1ldsRqqYZL-g5gmsPyLi4Mk4W7Ft66Hw3lHTJppIS_4y_3zR80K6XS08jvmSUj8eNSTAu-VR6k1vxd1-TkX3H5ZIETroefZkMt4uV8wpwj8x0oTTT7zLf7IucfkBgPHablgvxnIuSB1V1ssEh6WYEnFZtaKaatsgTni7C1wuKGjKksOzZILnLmzTVNG-2Iptl31ZtXSZ6kS3b9x919fDs3b63ogh161WVFuyCfyOkmixUzvBs1__NQHmGaoH1-E2w')">
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
+<div class="meta-overlay absolute inset-x-0 bottom-0 p-4 opacity-0 transform translate-y-4 transition-all duration-300 backdrop-blur-cinematic bg-black/40 border-t border-white/10">
+<h4 class="font-bold text-on-surface text-body-md truncate">Velocity Zero</h4>
+<div class="flex justify-between items-center mt-1">
+<span class="text-label-sm text-on-surface-variant">2022</span>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-tertiary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-label-sm text-tertiary">8.1</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Movie Poster Card 5 -->
+<div class="movie-card group relative aspect-[2/3] rounded-xl overflow-hidden glass-border bg-surface-container-highest cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" data-alt="A serene and atmospheric film poster depicting a lone figure standing on a snow-covered mountain peak at dawn. The sky is a gradient of deep violet to soft pink. The style is majestic and contemplative, with a high-end photography look that emphasizes the vastness of nature and a quiet, focused emotional state." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD0jQGX5n7egLhlbIeplsWZhMIaI9flcAZDXhdNP2Tn_kfCM08HvqIvMyANaPB5ec9O8yUZabTl9AXCaels70yR3O6_iphK0G9E524jg3bM8shtir3k_1Ms2u_rJeWDGLm4HO5dEWD7bIR3mfPiFuks6eqpvOjyQ0PrkzL1pJjWhol1kG1Z5G-fzybmk0UZ0pDWKTs3ktiG1pFn6WIrWhy8OFPuoF6sK_-FYgH28fw9hj3-TRNRij_EiGk2wqZt-fM7ufmgJ7sdT-n3')">
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
+<div class="meta-overlay absolute inset-x-0 bottom-0 p-4 opacity-0 transform translate-y-4 transition-all duration-300 backdrop-blur-cinematic bg-black/40 border-t border-white/10">
+<h4 class="font-bold text-on-surface text-body-md truncate">Ascent of Echoes</h4>
+<div class="flex justify-between items-center mt-1">
+<span class="text-label-sm text-on-surface-variant">2024</span>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-tertiary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-label-sm text-tertiary">8.5</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest dark:bg-surface-container-lowest border-t border-outline-variant py-8">
+<div class="flex flex-col md:flex-row justify-between items-center px-container-margin max-w-7xl mx-auto gap-4">
+<div class="font-display-lg text-headline-md text-primary font-bold">WatchMate</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">© 2024 WatchMate. All rights reserved.</p>
+<div class="flex gap-6">
+<a class="text-on-surface-variant hover:text-primary underline transition-all font-label-sm text-label-sm" href="#">Privacy</a>
+<a class="text-on-surface-variant hover:text-primary underline transition-all font-label-sm text-label-sm" href="#">Terms</a>
+<a class="text-on-surface-variant hover:text-primary underline transition-all font-label-sm text-label-sm" href="#">Help</a>
+</div>
+</div>
+</footer>
+<script>
+        const searchInput = document.getElementById('main-search');
+        const emptyState = document.getElementById('empty-state');
+        const noResultsState = document.getElementById('no-results-state');
+        const resultsGrid = document.getElementById('results-grid');
+        const recentSearches = document.getElementById('recent-searches');
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.trim().toLowerCase();
+            
+            if (query.length === 0) {
+                resetSearch();
+                return;
+            }
+
+            // Mock Search Logic
+            if (query === 'error' || query === 'none' || query === 'xyz') {
+                showNoResults();
+            } else {
+                showResults();
+            }
+        });
+
+        function showResults() {
+            emptyState.classList.add('hidden');
+            noResultsState.classList.add('hidden');
+            resultsGrid.classList.remove('hidden');
+            recentSearches.classList.add('opacity-40', 'pointer-events-none', 'scale-95');
+            recentSearches.classList.add('transition-all', 'duration-500');
+        }
+
+        function showNoResults() {
+            emptyState.classList.add('hidden');
+            resultsGrid.classList.add('hidden');
+            noResultsState.classList.remove('hidden');
+            recentSearches.classList.remove('opacity-40', 'pointer-events-none', 'scale-95');
+        }
+
+        function resetSearch() {
+            searchInput.value = '';
+            emptyState.classList.remove('hidden');
+            noResultsState.classList.add('hidden');
+            resultsGrid.classList.add('hidden');
+            recentSearches.classList.remove('opacity-40', 'pointer-events-none', 'scale-95');
+        }
+
+        // Keyboard Shortcut Sim
+        document.addEventListener('keydown', (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                searchInput.focus();
+            }
+        });
+    </script>
+</body></html>

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>WatchMate | Track What You Love</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&amp;family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary": "#2b303d",
+                    "on-background": "#e3e2e7",
+                    "on-surface": "#e3e2e7",
+                    "tertiary": "#ffdea4",
+                    "on-secondary-fixed": "#171b27",
+                    "outline-variant": "#44474f",
+                    "secondary-container": "#424754",
+                    "on-secondary-container": "#b0b5c4",
+                    "on-tertiary": "#412d00",
+                    "on-tertiary-fixed": "#261900",
+                    "inverse-surface": "#e3e2e7",
+                    "background": "#121317",
+                    "on-tertiary-container": "#6c4d01",
+                    "on-error-container": "#ffdad6",
+                    "tertiary-fixed": "#ffdea5",
+                    "surface-tint": "#adc6ff",
+                    "inverse-on-surface": "#2f3034",
+                    "tertiary-fixed-dim": "#ebc06e",
+                    "inverse-primary": "#455e90",
+                    "secondary": "#c2c6d6",
+                    "on-primary-fixed": "#001a42",
+                    "outline": "#8e909a",
+                    "surface-container-highest": "#343538",
+                    "secondary-fixed-dim": "#c2c6d6",
+                    "on-primary-fixed-variant": "#2c4677",
+                    "surface-dim": "#121317",
+                    "surface": "#121317",
+                    "surface-bright": "#38393d",
+                    "error": "#ffb4ab",
+                    "on-error": "#690005",
+                    "surface-variant": "#343538",
+                    "primary-fixed": "#d8e2ff",
+                    "secondary-fixed": "#dee2f2",
+                    "primary-container": "#adc6ff",
+                    "on-primary": "#122f5f",
+                    "tertiary-container": "#ebc06e",
+                    "surface-container-lowest": "#0d0e11",
+                    "on-secondary-fixed-variant": "#424754",
+                    "on-primary-container": "#385283",
+                    "primary-fixed-dim": "#adc6ff",
+                    "error-container": "#93000a",
+                    "surface-container-high": "#292a2d",
+                    "surface-container-low": "#1a1b1f",
+                    "primary": "#d8e2ff",
+                    "on-tertiary-fixed-variant": "#5d4200",
+                    "on-surface-variant": "#c4c6d0",
+                    "surface-container": "#1e1f23"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "unit": "8px",
+                    "gutter": "16px",
+                    "section-gap": "48px",
+                    "container-margin": "24px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": ["Playfair Display"],
+                    "body-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-md": ["Playfair Display"],
+                    "body-lg": ["Inter"],
+                    "display-lg": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "display-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #121317;
+            color: #e3e2e7;
+            -webkit-font-smoothing: antialiased;
+        }
+        .glass-panel {
+            background: rgba(41, 42, 45, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .poster-aspect {
+            aspect-ratio: 2/3;
+        }
+        .vignette {
+            background: linear-gradient(to top, #121317 0%, transparent 40%, transparent 60%, rgba(18, 19, 23, 0.8) 100%);
+        }
+        .hero-gradient {
+            background: linear-gradient(to right, #121317 30%, transparent 100%);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glow-hover:hover {
+            box-shadow: 0 0 20px rgba(216, 226, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden">
+<!-- TopNavBar (Shared Component) -->
+<nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter py-4 bg-surface/80 dark:bg-surface/80 backdrop-blur-md border-b border-white/15">
+<div class="flex items-center gap-8">
+<span class="font-display-lg text-display-lg-mobile md:text-headline-md font-bold text-on-surface">WatchMate</span>
+<div class="hidden md:flex gap-6">
+<a class="text-primary border-b-2 border-primary pb-1 font-body-md text-body-md transition-all" href="#">Home</a>
+<a class="text-on-surface-variant hover:text-on-surface font-body-md text-body-md transition-all" href="#">Discover</a>
+<a class="text-on-surface-variant hover:text-on-surface font-body-md text-body-md transition-all" href="#">Watchlists</a>
+<a class="text-on-surface-variant hover:text-on-surface font-body-md text-body-md transition-all" href="#">Profile</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined p-2 hover:bg-white/10 rounded-full transition-colors cursor-pointer" data-icon="search">search</span>
+<span class="material-symbols-outlined p-2 hover:bg-white/10 rounded-full transition-colors cursor-pointer" data-icon="notifications">notifications</span>
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold text-xs" title="User Profile">JD</div>
+</div>
+</nav>
+<!-- Hero Section -->
+<header class="relative min-h-[921px] flex items-center overflow-hidden">
+<div class="absolute inset-0 z-0">
+<div class="absolute inset-0 hero-gradient z-10"></div>
+<div class="absolute inset-0 vignette z-10"></div>
+<img class="w-full h-full object-cover" data-alt="A grand, cinematic landscape of a futuristic neon-lit city at night, reflecting on a rainy pavement. The scene is shot with a shallow depth of field, highlighting high-end cinematography and deep atmospheric blues and purples. This professional film still sets a sophisticated, midnight-focus tone for the WatchMate cinematic platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcVFzftmdyfFohTyxl25QK4CAt9pRYGVUux5HkHf77XdfMq2FVVHl_1k_djV5TJFzjYFFqz6Daqn85lfWh8B13udE-sPHxKmLpaVbOJfK7jbkmyKwBqv3BR6V--EB9x5JSeOzb7e_z68ptDGK8cJkq81wTKmOPoXwvvH7dnvKZ5BStoCdFI_Uul_vkWhyvUCfI5W1XhUlgiXbsoF76oWk9x7VSF__4y0Uvo3fl0tueCBo5xQVYIDTsNMiDD6aor2DY_PstSx1bj6gn"/>
+</div>
+<div class="relative z-20 max-w-7xl mx-auto px-container-margin w-full">
+<div class="max-w-2xl">
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-6 leading-tight">Track what you love.</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-10 max-w-lg">
+                    The ultimate theater-focused toolkit for cinephiles. Organize your history, discover hidden gems, and connect with other viewers in a high-end, immersive environment.
+                </p>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="bg-primary text-on-primary px-8 py-4 rounded-xl font-bold font-body-md text-body-md hover:scale-105 transition-transform glow-hover">
+                        Start tracking
+                    </button>
+<button class="border border-white/20 bg-white/5 backdrop-blur-md text-on-surface px-8 py-4 rounded-xl font-bold font-body-md text-body-md hover:bg-white/10 transition-colors">
+                        Explore titles
+                    </button>
+</div>
+</div>
+</div>
+<!-- Ambient Shader Background behind text -->
+
+</header>
+<!-- Discover Bento Grid -->
+<section class="py-section-gap px-container-margin max-w-7xl mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+<div>
+<span class="text-primary font-label-sm uppercase tracking-widest mb-2 block">Curation</span>
+<h2 class="font-display-lg text-headline-md md:text-display-lg">Discover Trending Titles</h2>
+</div>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-sm flex items-center gap-2" href="#">
+                VIEW ALL TRENDING <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+<!-- Movie Card 1 -->
+<div class="group relative poster-aspect rounded-xl overflow-hidden border border-white/10 cursor-pointer">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A moody, high-contrast cinematic movie poster for a sci-fi drama featuring a lone astronaut gazing at a massive, shattered moon. The lighting is cold and clinical, with sharp shadows and a professional, filmic grain. The color palette is dominated by deep obsidian and cool primary blues, consistent with the WatchMate premium brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZ_XJa-PcevfbrWKUZjcT56uCnOwi9Sg-R3vwxcC0I4r2t6k_isgl378CT9Cs8a0qdQ3cL3XZCAtZaDpfN7CDVZ9-C0GkEeHzQSOw99bv3fREaV-MOQX_J3MZb_qIBK0xBWUvMqshHAf_GvNni1L6-yaKB6ZkuffTD_p9Zn41TGb6KKNoAS5pUQOAMO5zYpsDagyAAaQvwvj1WS5xq0tauXkWm7ksY9jdvqaPev_5NzzPBHju9w9gVkRmkreCnM0YcZUEpv4wfam3J"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+<div class="glass-panel p-3 rounded-lg">
+<p class="font-bold text-sm truncate">Celestial Echoes</p>
+<p class="text-xs text-on-surface-variant">2024 • Sci-Fi</p>
+</div>
+</div>
+</div>
+<!-- Movie Card 2 -->
+<div class="group relative poster-aspect rounded-xl overflow-hidden border border-white/10 cursor-pointer">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A sophisticated film poster for a period drama set in a dimly lit, 1920s jazz club. A female singer stands center-stage under a single bright spotlight, surrounded by shadows and soft smoke. The style is classic film noir with a modern, high-definition polish, utilizing warm gold accents and deep blacks to create a theater-like immersion." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyXvTGir8-GMH1aFDROKgW5Ccr8gJTVTiICDfrzbVBq2rtRb7VCMiaeoPK0N4Ur08Sr4s58AAK75WJl1LDdc4yMPAOpVYurRzJYwxlBijIt_lDPPP2VlwxYj2C8Rbea2nhDbouNwLK9Hsin5CrpDbkU26nUOcXjDmqaMgTnKNNeVFpd-VtT4W1QX927UfHOvwikjODJqCQadKvOt2j1KuBe0hEoyYF0NRuxW8cuJVLbLymFt-Et5zCQlXDTiMz2DrXKnEmw6q29nzT"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+<div class="glass-panel p-3 rounded-lg">
+<p class="font-bold text-sm truncate">Midnight Rhythm</p>
+<p class="text-xs text-on-surface-variant">2023 • Drama</p>
+</div>
+</div>
+</div>
+<!-- Movie Card 3 -->
+<div class="group relative poster-aspect rounded-xl overflow-hidden border border-white/10 cursor-pointer">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A vibrant animated movie poster showing a colorful, underwater fantasy world filled with bioluminescent creatures and coral reefs. The lighting is magical and radiant, with glowing primary-colored highlights throughout. The aesthetic is sharp and digital, representing the diversity of shows available on WatchMate's cinematic platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKe3HvyzEjLSvqn9LgZBWnFUZu8dKX71Gu1lv0hSGcDedGEKl1WTEfGJWy__GlndlMtGsgiOg9u1HQ_GZzIFr4ewtnEFspkcdXKEUI-PQqH317ZnnXfEpO-TOTJTVyAqFtk2BmVggiqEDscA-vVdEIQ2gk9RsvbgSgj1s5KQF3P7zhaIZxJnc8l1G-gmxeKrBwmWYNYMQnfUhJ8yatbAeNLOhmIztGfDqT37rCBgkL4bb2CtkM1-MUndFPpw5xTssKz-OWbxUsHNl7"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+<div class="glass-panel p-3 rounded-lg">
+<p class="font-bold text-sm truncate">Abyss Bloom</p>
+<p class="text-xs text-on-surface-variant">2024 • Animation</p>
+</div>
+</div>
+</div>
+<!-- Large Feature Card -->
+<div class="col-span-2 row-span-2 group relative rounded-xl overflow-hidden border border-white/10 cursor-pointer">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A wide-angle, epic cinematic shot of a samurai standing in a snowy field at twilight. The background is a traditional Japanese village illuminated by glowing lanterns. The mood is calm yet intense, with a palette of soft whites and deep indigos, punctuated by the glowing primary-tinted orange of the lanterns. This high-end visual anchors the feature section of the UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBh1ELjBPgKBjbVxn5G8qyNFMlaeQjW84Oa5pmfJJ8h-kVWzklxdPPcUj5VyQcdqMrPx7fse1E8jGeoTLTAQI0Xuxsraw2o1vN_0OD4hM6p6sjW2Oy2fVpYWDCc-fK9BZcDAa0caGYvY6HGx5rwDLwE_zCemVPwjZEBK3RF1vj5LED_fsOOriy7VQ5AuNDUtVkON226hD5CD0UIfU_Wm0cCslpjYrxFoWHLCS_PURlPeRGVFNSGwpN0uOZNX01yv3eAgBL4Yl1f6VLc"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent flex flex-col justify-end p-8">
+<span class="bg-primary text-on-primary font-label-sm w-fit px-3 py-1 rounded mb-4">CRITIC'S PICK</span>
+<h3 class="font-display-lg text-display-lg-mobile md:text-headline-md mb-2">Winter's Last Breath</h3>
+<p class="text-on-surface-variant max-w-sm">A visual masterpiece that redefined contemporary cinematography.</p>
+</div>
+</div>
+<!-- Movie Card 4 -->
+<div class="group relative poster-aspect rounded-xl overflow-hidden border border-white/10 cursor-pointer">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A dark thriller poster featuring a rain-streaked window overlooking a blurry, neon-lit city street. A single red umbrella is the only sharp point of focus in the distance. The mood is mysterious and atmospheric, using deep blacks and vibrant red highlights against a dark grey background to create a quiet, cinematic stage." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwHq6MQ1nmVywQInOrVyspmpCPJ8n-R-TzhfMoNbnqrommQr9Y_2eLUfwVO8_tGyB87vAvSPKm3XCuUYQ3PpnCbox3-TKmB8Cm2NQc8PFA-a9sB2Q4QHWqRvxnc4ywjGOhu-aBTWeuEuS_IoYvO2US82SiuDp0jvuMY1l8wCLKMj9PV9LN72UgISePMG30MIUqJ-uYNZaAe1BsXnK_zWnYR4vBbAS_kdOD5kQ50hjVq4lUBTHX1WCnvt0bG0_HGesMf8jFkSWCiCRo"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+<div class="glass-panel p-3 rounded-lg">
+<p class="font-bold text-sm truncate">Red Umber</p>
+<p class="text-xs text-on-surface-variant">2023 • Thriller</p>
+</div>
+</div>
+</div>
+<!-- More Cards to fill the grid -->
+<div class="group relative poster-aspect rounded-xl overflow-hidden border border-white/10 cursor-pointer">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A documentary film poster showcasing a massive iceberg under the midnight sun in the Arctic. The lighting is crisp and natural, highlighting the textures of the ice and the deep blue of the water. This professional, high-resolution still represents the high-quality documentary content tracked on WatchMate." src="https://lh3.googleusercontent.com/aida-public/AB6AXuATOMuTI1na3NTX3p6pdF7nwdjyYeQgXvp-jPv1TEQQ4MKBRZH9BFDBdwR7aAUzXGIaMpqo_xdfXnMf9paXJbw-bw9gsd1eik7rNrygO_xABhxuUUc-BYXfk2i83xa00xRzbaCudZRKzKjTWT_JxvZNdRxoGHaNATM9Jppx9SJVVMklf5lKns3ktgPvICTZ-1lETiSpXe_3vKQwM8mcbEGb8qs-J3dyhnXZfceLM9lMkw9QTMM1Johft6KgVpcMQmNOkWKjALy87pXr"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+<div class="glass-panel p-3 rounded-lg">
+<p class="font-bold text-sm truncate">Frozen Horizon</p>
+<p class="text-xs text-on-surface-variant">2024 • Doc</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Tracking Progress & Watchlists (Glassmorphic Interface) -->
+<section class="py-section-gap bg-surface-container-low relative">
+<div class="max-w-7xl mx-auto px-container-margin grid md:grid-cols-2 gap-16 items-center">
+<div class="order-2 md:order-1">
+<div class="glass-panel p-8 rounded-[2rem] relative overflow-hidden">
+<div class="absolute top-0 right-0 p-8 opacity-20">
+<span class="material-symbols-outlined text-[120px]" data-icon="auto_awesome">auto_awesome</span>
+</div>
+<h3 class="font-headline-md mb-8">Your Library, Reimagined</h3>
+<!-- Progress Item -->
+<div class="mb-6">
+<div class="flex justify-between items-center mb-2">
+<span class="font-bold">Stranger Things</span>
+<span class="text-on-surface-variant text-sm">S4: E7 • 85%</span>
+</div>
+<div class="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[85%]"></div>
+</div>
+</div>
+<!-- Watchlist Preview -->
+<div class="space-y-4">
+<div class="flex items-center gap-4 p-3 bg-white/5 rounded-xl border border-white/5 hover:bg-white/10 transition-colors cursor-pointer">
+<div class="w-12 h-16 bg-surface-container rounded border border-white/10 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A miniature movie poster for a space exploration film, showing a rocket trail against a starry nebula. Cinematic lighting, deep blacks and blues." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAq8cph3VgOe1_9go0Z1uw5Dea9qVa4d7H0jEh6iPF0q8N1pim4VRuxZ11Bc4aUGm3jHmuUdlVdgC2UzRDh3PabR6360qKc-VzvQSgCBeY6rl43kTvy07eB76e-QvzLDva1DeEFX9tWaJ349IhCuuyee6JI5Qf4gir93M99xZhbS8ej3YHh4BXhRmRcxEjUrATs7S45KfejcEZcQEJrayKrah9CujTB7RH_SvAMmfMkzoKYdB13x1SehFI2OC_B-1TZMD2hquSSdcER"/>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold">Interstellar II</p>
+<p class="text-xs text-on-surface-variant">Added 2 days ago</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">more_vert</span>
+</div>
+<div class="flex items-center gap-4 p-3 bg-white/5 rounded-xl border border-white/5 hover:bg-white/10 transition-colors cursor-pointer">
+<div class="w-12 h-16 bg-surface-container rounded border border-white/10 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A miniature film poster for a desert-themed adventure movie, featuring a lone traveler on a camel against a massive sand dune. Warm golden hour lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfbGkzaTFg7OCMvHV-WQJIIEcUAzOCpp7KFGiFk5beUpbvObKRDOxfG3yCL8ZeflFx7tOfkGwaf0-dErxSJXTDZwXrmLtQYtZKD-LfCnkuI_NqwajkDi60g21r1cO5O0TNiee0ez0IfBi8xbutjCGVyWs9n-parq18W8Ka9x4brM8YvjdjbIV8B11TTqx_leRamBYNYTQHNyLX59x-6nyW7LQwDApB6XLDw-NLtGhPgzMhxSAt8h8ua8BfGyB5qo-iZekXedZF3oG2"/>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold">Dune: Part Three</p>
+<p class="text-xs text-on-surface-variant">Priority Watchlist</p>
+</div>
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">bookmarks</span>
+</div>
+</div>
+</div>
+</div>
+<div class="order-1 md:order-2">
+<span class="text-primary font-label-sm uppercase tracking-widest mb-2 block">Organization</span>
+<h2 class="font-display-lg text-headline-md md:text-display-lg mb-6">Track progress &amp; build watchlists.</h2>
+<p class="text-on-surface-variant mb-8 font-body-lg">
+                    Never lose track of where you left off. WatchMate synchronizes your progress across all your devices and helps you organize your future viewing with smart, categorized watchlists.
+                </p>
+<div class="grid grid-cols-2 gap-6">
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-primary text-3xl">sync</span>
+<div>
+<p class="font-bold mb-1">Live Sync</p>
+<p class="text-xs text-on-surface-variant">Update history in real-time across devices.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-primary text-3xl">smart_toy</span>
+<div>
+<p class="font-bold mb-1">Smart Lists</p>
+<p class="text-xs text-on-surface-variant">AI-curated based on your taste.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Reviews & Community -->
+<section class="py-section-gap px-container-margin max-w-7xl mx-auto overflow-hidden">
+<div class="text-center mb-16">
+<span class="text-primary font-label-sm uppercase tracking-widest mb-2 block">Community</span>
+<h2 class="font-display-lg text-headline-md md:text-display-lg">Review and Follow.</h2>
+</div>
+<div class="grid md:grid-cols-3 gap-8">
+<!-- Review Card 1 -->
+<div class="glass-panel p-6 rounded-2xl border border-white/5 flex flex-col gap-4 group">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A portrait of a male film critic with a sophisticated, professional look. Soft studio lighting, neutral background, cinematic aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIoMH1FBzw56zhevWt9VB4SKJbBCs2n4h5hTht08V47KJrelOcX2XiDbOHrqFmxBgnyZXCYld051exSmf6uyocuYgxx3AGgk3iKey6G0XwZWVKsbqPcywEZniyR1Bnt4mlipTAcSHUygl9Kk4jkALh3vwaiOw33s_YpFgUo43PWX43hIIPEA710X7D5UFDtPrjo6plHYx5jaPYVex7dOmwK9Ef3-Bv-5EpM4aB5kNp5vE6qjpfCTkDqzxz7ouF-hR4W-__B2X8WAlt"/>
+</div>
+<div>
+<p class="font-bold text-sm">Marcus Vane</p>
+<p class="text-xs text-on-surface-variant">Top Critic</p>
+</div>
+<button class="ml-auto text-xs border border-primary/30 text-primary px-3 py-1 rounded-full hover:bg-primary hover:text-on-primary transition-all">Follow</button>
+</div>
+<div class="flex gap-1 text-primary">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm">star_half</span>
+</div>
+<p class="text-sm italic text-on-surface-variant line-clamp-4">
+                    "The cinematography in 'Celestial Echoes' is simply unparalleled. A masterclass in visual storytelling that demands to be seen on the largest screen possible. WatchMate's tracking helped me keep my re-watches organized."
+                </p>
+<div class="mt-auto pt-4 border-t border-white/5 flex justify-between items-center text-xs text-on-surface-variant">
+<span>Review of <strong class="text-on-surface">Celestial Echoes</strong></span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">favorite</span> 1.2k</span>
+</div>
+</div>
+<!-- Review Card 2 (User Following focus) -->
+<div class="glass-panel p-6 rounded-2xl border border-white/5 flex flex-col gap-4 group">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A portrait of a female film enthusiast with a trendy, cinematic style. She is wearing glasses and has a warm, inviting expression. Deep bokeh background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2YEUJzssSk0lGfHzp9vCh8xecnnU2SMDecsbLW7hgxvYmJE5ywKm3WnU_PdOikocYGACIY_VzsMdMjtESWOIJ3JoBttBpXemlp4U5b6LXlDkXaZcGP_CoPy4ClwCQPhSFm2cCZmgEIAfVbLUH43HkUBJGXYmQGst_KqOPP21FJnzSU8QJf1_3laqO6zJdOB2CeHxhGGp-d-JZl7OAO8kLxjwWz0uROh3ml1FuAq5oS4sObaZwAuF5UO-Fl4_cR3omVPaHu4ArXyxB"/>
+</div>
+<div>
+<p class="font-bold text-sm">Elena Ross</p>
+<p class="text-xs text-on-surface-variant">Indie Lover</p>
+</div>
+<button class="ml-auto text-xs bg-primary text-on-primary px-3 py-1 rounded-full">Following</button>
+</div>
+<div class="bg-white/5 rounded-xl p-3 flex gap-3 items-center">
+<div class="w-12 h-16 rounded overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A movie poster for an indie film featuring two people walking through a quiet autumn park. Soft, warm natural lighting and earthy tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC45Tn0hAl4jR-qbmkitsDtvFJHax4Pj5iR8FwBnmVGKOWlQ6VYu4fTchVvR6UxdVe994E3Wp0C_ppHhjNUoYD9VZN0VDQGBCNggUAOmjAPefQcGFP7mEmdbvzb_adgC5pxIY-z1QXaD_41a95fuDV1vvyOyDwTyKuqWFgTjoRHZCU8RFR1QcsflMvjxtqrEcmZOOHqKLFlSFP7ciIoPrBeAcMT6zVHK5ZhrHkheLPfeZ6QNfn5EWyfatibB-Orw_UOZhox9_oBfRVq"/>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-xs font-bold truncate">Silent Pathways</p>
+<p class="text-[10px] text-on-surface-variant uppercase">JUST WATCHED</p>
+</div>
+<div class="bg-primary/20 text-primary text-[10px] px-2 py-1 rounded">8.5</div>
+</div>
+<p class="text-sm text-on-surface-variant">
+                    Elena just completed her "Autumn Vibes" collection with 12 new titles. Follow her to see what she's watching next.
+                </p>
+<div class="mt-auto flex -space-x-2">
+<div class="w-6 h-6 rounded-full border border-background bg-secondary"></div>
+<div class="w-6 h-6 rounded-full border border-background bg-primary"></div>
+<div class="w-6 h-6 rounded-full border border-background bg-tertiary"></div>
+<span class="pl-4 text-[10px] text-on-surface-variant self-center">+ 42 others follow her</span>
+</div>
+</div>
+<!-- Review Card 3 -->
+<div class="glass-panel p-6 rounded-2xl border border-white/5 flex flex-col gap-4 group">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A portrait of a male director-style character with a thoughtful, artistic expression. Cinematic black and white photography style with high contrast." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCksTIytPELAbwy98EataBukgpjYEzWSYewmbKnEjku9gRVa527trozWXFM7YwJyV7cbHYxQIxXiSllKQ4gIH1NuI-6Hm5t67fkBB-iv-L8gkS0tVnchIKgp8GerFsmudiPQiy1eLPej2es4grgNWV-Xx5LmRC41ZNsmMd3Wp6p7FSNUb4NHJyU1jAUp4xE27DNd6lIjDnJmq7lB6aMtq-U3jGEbNKR2waHVvM5bVoCpcaHNgU8_WaRurPvoHjMNnkHBgmWZ85LkZ-Z"/>
+</div>
+<div>
+<p class="font-bold text-sm">Director K.</p>
+<p class="text-xs text-on-surface-variant">Verified Creator</p>
+</div>
+<button class="ml-auto text-xs border border-primary/30 text-primary px-3 py-1 rounded-full hover:bg-primary hover:text-on-primary transition-all">Follow</button>
+</div>
+<div class="flex gap-1 text-primary">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="text-sm italic text-on-surface-variant line-clamp-4">
+                    "A profound achievement in contemporary noir. Every frame is a painting. I appreciate how WatchMate allows for long-form nuanced reviews that don't just boil down to a simple score."
+                </p>
+<div class="mt-auto pt-4 border-t border-white/5 flex justify-between items-center text-xs text-on-surface-variant">
+<span>Review of <strong class="text-on-surface">Red Umber</strong></span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">favorite</span> 840</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="py-section-gap relative overflow-hidden">
+
+<div class="relative z-10 max-w-3xl mx-auto px-container-margin text-center">
+<h2 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-8">Ready to curate your cinema history?</h2>
+<div class="flex flex-wrap justify-center gap-6">
+<button class="bg-primary text-on-primary px-10 py-5 rounded-2xl font-bold font-body-lg text-body-lg hover:scale-105 transition-transform shadow-2xl shadow-primary/20">
+                    Join WatchMate
+                </button>
+<button class="border border-white/10 glass-panel text-on-surface px-10 py-5 rounded-2xl font-bold font-body-lg text-body-lg hover:bg-white/10 transition-colors">
+                    Learn more
+                </button>
+</div>
+</div>
+</section>
+<!-- Footer (Shared Component) -->
+<footer class="bg-surface-container-lowest dark:bg-surface-container-lowest border-t border-outline-variant py-8">
+<div class="flex flex-col md:flex-row justify-between items-center px-container-margin max-w-7xl mx-auto gap-6">
+<div class="flex flex-col md:items-start items-center">
+<span class="font-display-lg text-headline-md font-bold text-primary">WatchMate</span>
+<p class="text-on-surface-variant font-label-sm mt-2">© 2024 WatchMate. All rights reserved.</p>
+</div>
+<div class="flex gap-8">
+<a class="text-on-surface-variant hover:text-primary underline font-label-sm text-label-sm transition-all" href="#">Privacy</a>
+<a class="text-on-surface-variant hover:text-primary underline font-label-sm text-label-sm transition-all" href="#">Terms</a>
+<a class="text-on-surface-variant hover:text-primary underline font-label-sm text-label-sm transition-all" href="#">Help</a>
+</div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer transition-colors" data-icon="facebook">face_nod</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer transition-colors" data-icon="instagram">camera_alt</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer transition-colors" data-icon="twitter">1k</span>
+</div>
+</div>
+</footer>
+<script>
+        // Intersection Observer for scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-8');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('section').forEach(section => {
+            section.classList.add('transition-all', 'duration-700', 'opacity-0', 'translate-y-8');
+            observer.observe(section);
+        });
+
+        // Simple parallax effect for hero
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const heroImage = document.querySelector('header img');
+            if(heroImage) {
+                heroImage.style.transform = `translateY(${scrolled * 0.4}px)`;
+            }
+        });
+    </script>
+</body></html>

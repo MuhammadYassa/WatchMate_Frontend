@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>WatchMate - Season Episodes</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Playfair+Display:wght@600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(30, 31, 35, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .hero-gradient {
+            background: linear-gradient(to bottom, transparent 0%, #121317 100%);
+        }
+        .poster-border {
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+        }
+        .glow-active {
+            box-shadow: 0 0 15px rgba(216, 226, 255, 0.3);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary": "#2b303d",
+                      "on-background": "#e3e2e7",
+                      "on-surface": "#e3e2e7",
+                      "tertiary": "#ffdea4",
+                      "on-secondary-fixed": "#171b27",
+                      "outline-variant": "#44474f",
+                      "secondary-container": "#424754",
+                      "on-secondary-container": "#b0b5c4",
+                      "on-tertiary": "#412d00",
+                      "on-tertiary-fixed": "#261900",
+                      "inverse-surface": "#e3e2e7",
+                      "background": "#121317",
+                      "on-tertiary-container": "#6c4d01",
+                      "on-error-container": "#ffdad6",
+                      "tertiary-fixed": "#ffdea5",
+                      "surface-tint": "#adc6ff",
+                      "inverse-on-surface": "#2f3034",
+                      "tertiary-fixed-dim": "#ebc06e",
+                      "inverse-primary": "#455e90",
+                      "secondary": "#c2c6d6",
+                      "on-primary-fixed": "#001a42",
+                      "outline": "#8e909a",
+                      "surface-container-highest": "#343538",
+                      "secondary-fixed-dim": "#c2c6d6",
+                      "on-primary-fixed-variant": "#2c4677",
+                      "surface-dim": "#121317",
+                      "surface": "#121317",
+                      "surface-bright": "#38393d",
+                      "error": "#ffb4ab",
+                      "on-error": "#690005",
+                      "surface-variant": "#343538",
+                      "primary-fixed": "#d8e2ff",
+                      "secondary-fixed": "#dee2f2",
+                      "primary-container": "#adc6ff",
+                      "on-primary": "#122f5f",
+                      "tertiary-container": "#ebc06e",
+                      "surface-container-lowest": "#0d0e11",
+                      "on-secondary-fixed-variant": "#424754",
+                      "on-primary-container": "#385283",
+                      "primary-fixed-dim": "#adc6ff",
+                      "error-container": "#93000a",
+                      "surface-container-high": "#292a2d",
+                      "surface-container-low": "#1a1b1f",
+                      "primary": "#d8e2ff",
+                      "on-tertiary-fixed-variant": "#5d4200",
+                      "on-surface-variant": "#c4c6d0",
+                      "surface-container": "#1e1f23"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "unit": "8px",
+                      "gutter": "16px",
+                      "section-gap": "48px",
+                      "container-margin": "24px"
+              },
+              "fontFamily": {
+                      "display-lg-mobile": ["Playfair Display"],
+                      "body-md": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "headline-md": ["Playfair Display"],
+                      "body-lg": ["Inter"],
+                      "display-lg": ["Playfair Display"]
+              },
+              "fontSize": {
+                      "display-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-background font-body-md overflow-x-hidden">
+<!-- TopNavBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter py-4 bg-surface/80 dark:bg-surface/80 backdrop-blur-md border-b border-white/15">
+<div class="flex items-center gap-8">
+<span class="font-display-lg text-display-lg-mobile md:text-headline-md font-bold text-on-surface tracking-tight">WatchMate</span>
+<nav class="hidden md:flex gap-6">
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-body-md text-body-md" href="#">Home</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-body-md text-body-md" href="#">Discover</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-body-md text-body-md" href="#">Search</a>
+<a class="text-primary border-b-2 border-primary pb-1 font-body-md text-body-md" href="#">Dashboard</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-body-md text-body-md" href="#">Watchlists</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-body-md text-body-md" href="#">Profile</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-on-surface-variant hover:bg-white/10 transition-colors rounded-full">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold overflow-hidden border border-white/10">
+<img class="w-full h-full object-cover" data-alt="A clean, minimalist profile portrait of a user with a neutral expression, styled in a high-end cinematic editorial fashion. The lighting is dramatic and low-key, featuring soft blue and amber rim lights against a dark, textured obsidian background. The overall aesthetic is professional, sharp, and perfectly aligned with a premium digital application for film enthusiasts, using a sophisticated dark mode color palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNbngGCo1iWlDPPaVIkLjlHJNFzOWoLaOUAlqNhQMkL_qCtovZ9tgPaD4W0PZklSQe-BxIcfSmNleotcu26DhDjLv9l48XccuQzOr8QEdCKgIvT6K5S5utHbruDtKHv3wnzTaTolNG_5yqCnCZI63UaAWskO9r9v1sF-EzjNXsCOTJhwJ_8Uw3XFLZRXMz9ZzzR23ZegacOfZqUJoRWFMtoFGrL9zoK6BMXU3G-ZIju4Uc7NB8zqeDJWSTkNkvZ9i3lZ78E42_eCvJ"/>
+</div>
+</div>
+</header>
+<main class="pt-20 min-h-screen">
+<!-- Hero Background Shader -->
+<div class="fixed inset-0 z-[-1] opacity-40">
+
+</div>
+<!-- Season Header -->
+<section class="relative w-full py-12 px-container-margin md:px-0">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row gap-10 items-end">
+<!-- Poster -->
+<div class="relative w-full max-w-[300px] aspect-[2/3] rounded-xl overflow-hidden glass-panel poster-border shadow-2xl shrink-0">
+<img class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" data-alt="A cinematic movie poster for a fictional sci-fi drama series titled The Void, featuring a lone figure standing before a massive, glowing celestial portal in a dark, atmospheric desert. The lighting is dominated by deep indigo and vibrant cyan glows, reflecting the cinematic glassmorphism style of the UI. The composition is epic and centered, with razor-sharp details and a high-end aesthetic that prioritizes visual immersion and midnight focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtOFKY1hBaWQom3PrMXvJQyC1LmgQ2IVb1GI3QzaQQYbaHmQlyvvefLN2xswSBqyDfz6MwztnOyDp-h3LaHuU7iB6VzfTGiLGmyzlaMUGwsanceIiU0OUYGZH4XRUhfCqV1zLl_E7-z9eJR0sHnIwuamIm7b46aFAiyTpaWo7npJHBKCrgpBWpodOsNYcB7hFpBpg22Pd-bLzOVxH4WpNa9iLH1AY9HLL4grc44h5jGzk5C1s-V5l1ZaW3MWG9NpbyaQbMUxVHiChV"/>
+</div>
+<!-- Info -->
+<div class="flex-1 pb-4">
+<div class="flex items-center gap-3 mb-4">
+<span class="bg-primary text-on-primary px-3 py-1 rounded-full text-label-sm font-label-sm uppercase tracking-widest">Season 4</span>
+<span class="text-on-surface-variant font-body-md text-body-md">2023 • 10 Episodes</span>
+</div>
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-6 drop-shadow-lg">The Nexus Chronicles</h1>
+<p class="max-w-2xl text-on-surface-variant font-body-md text-body-lg mb-8 leading-relaxed">
+                        In the aftermath of the Great Collapse, Elias must navigate the fractured realities of the Nexus. As the boundaries between time and space begin to dissolve, the crew of the WatchMate ship discovers a signal from a forgotten civilization that could either save humanity or hasten its final sunset.
+                    </p>
+<div class="flex gap-4">
+<div class="glass-panel px-6 py-3 rounded-full flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-bold text-on-surface">8.9</span>
+<span class="text-on-surface-variant opacity-60">/ 10</span>
+</div>
+<div class="glass-panel px-6 py-3 rounded-full flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="schedule">schedule</span>
+<span class="text-on-surface font-body-md">480m Total</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Episode List -->
+<section class="max-w-7xl mx-auto px-container-margin py-section-gap">
+<div class="flex justify-between items-center mb-12">
+<h2 class="font-headline-md text-headline-md text-on-surface">Episodes</h2>
+<div class="flex items-center gap-4 text-on-surface-variant font-label-sm text-label-sm">
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-primary"></span> Watched</span>
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-outline-variant"></span> Remaining</span>
+</div>
+</div>
+<!-- Bento-style Episode Grid -->
+<div class="grid grid-cols-1 gap-6">
+<!-- Episode Item 1 (Watched) -->
+<div class="group glass-panel rounded-2xl overflow-hidden flex flex-col md:flex-row transition-all duration-300 hover:bg-surface-container-high/40">
+<div class="relative w-full md:w-72 aspect-video shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A dramatic high-angle shot from a cinematic sci-fi scene where a character explores a glowing neon-lit laboratory. The color palette is heavy on teals and purples with high contrast. The image is crisp and evocative of a high-budget cinematic production, perfectly matching the dark and focused aesthetic of the movie tracking application." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_Ux4vji9tsFWCoei_kDgbzb5G3RZ3ZhetGIl5MIBhQ16k8mpy3CHcElSB0oOpbq5ApU7j8fY4NMHZWuEXX25hee-Ow8a3NhPCUcFwO68MjxxTdKJ3PT88IzSynval1GE0LfIoDKnlPkhXxBo44_EpWpqz8Rbjyvn_yAE5GIopl9gfSKFnlOzwoqg2XFMHPyYn1LSovJpD74Hi2K1WNgomCyyfi2IqIby_seNeqDGBnU-6ZIto86D7zQqdpkyvTHF_wSpKjxUK_9tF"/>
+<div class="absolute inset-0 bg-primary/20 flex items-center justify-center opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-white text-4xl drop-shadow-lg" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="absolute bottom-2 left-2 px-2 py-1 bg-black/60 backdrop-blur-md rounded text-label-sm font-label-sm text-white">
+                            S04 E01
+                        </div>
+</div>
+<div class="p-6 flex-1 flex flex-col justify-center">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md text-primary">The First Signal</h3>
+<span class="text-on-surface-variant text-label-sm font-label-sm uppercase">Oct 12, 2023</span>
+</div>
+<div class="flex items-center gap-4 mb-4 text-on-surface-variant text-label-sm font-label-sm">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs" data-icon="timer">timer</span> 48 min</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs" data-icon="hd">hd</span> 4K Ultra</span>
+</div>
+<p class="text-on-surface-variant line-clamp-2 group-hover:line-clamp-none transition-all duration-300">
+                            Elias picks up a mysterious frequency from the outer rim of the Nexus, leading to a discovery that challenges everything the council knows about the Collapse.
+                        </p>
+</div>
+</div>
+<!-- Episode Item 2 (Watched) -->
+<div class="group glass-panel rounded-2xl overflow-hidden flex flex-col md:flex-row transition-all duration-300 hover:bg-surface-container-high/40">
+<div class="relative w-full md:w-72 aspect-video shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A breathtaking cinematic wide shot of a futuristic cityscape buried under emerald-tinted fog. Skyscrapers are illuminated by soft orange lights, creating a moody, atmospheric setting. The style is hyper-realistic and polished, with a focus on depth and professional lighting that enhances the premium user interface of the film application." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlVWtGxzLrwfh4xrdPQYv64K-2XendGJ6EZXFMBNOtbVESXlNzqmouXFc_MtLvbwsD3CErXopK41LU07MhpCn1990Bz6IwCAA1VRUyzP4ZlQEUKhUFLgm0R5ciNFEgOlAmXXOzveW-pnIdgjmT5ZEXwRNgpz2VBOr2sonCZrBVWqPQmMCyLhZoQjdETRvVddcjrAdh8Whlz2E4IdMa3A9rFN97dStF-8gfTgXn8B2ciKVk6bA_kIprXd_S8ZxWbG_Bpyk1GU6s6sNn"/>
+<div class="absolute inset-0 bg-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-4xl drop-shadow-lg" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="absolute bottom-2 left-2 px-2 py-1 bg-black/60 backdrop-blur-md rounded text-label-sm font-label-sm text-white">
+                            S04 E02
+                        </div>
+</div>
+<div class="p-6 flex-1 flex flex-col justify-center">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md text-primary">Echoes of Eden</h3>
+<span class="text-on-surface-variant text-label-sm font-label-sm uppercase">Oct 19, 2023</span>
+</div>
+<div class="flex items-center gap-4 mb-4 text-on-surface-variant text-label-sm font-label-sm">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs" data-icon="timer">timer</span> 52 min</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs" data-icon="hd">hd</span> 4K Ultra</span>
+</div>
+<p class="text-on-surface-variant line-clamp-2 group-hover:line-clamp-none transition-all duration-300">
+                            The team travels to the ruins of Sector 7, searching for the source of the encryption key. Tensions rise as supplies run low and a storm approaches.
+                        </p>
+</div>
+</div>
+<!-- Episode Item 3 (Unwatched) -->
+<div class="group glass-panel rounded-2xl overflow-hidden flex flex-col md:flex-row transition-all duration-300 hover:bg-surface-container-high/40 opacity-80 hover:opacity-100">
+<div class="relative w-full md:w-72 aspect-video shrink-0 overflow-hidden bg-surface-container-lowest">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 grayscale group-hover:grayscale-0" data-alt="An atmospheric, low-key cinematic close-up of a high-tech mechanical device glowing with soft orange and gold light. Detailed textures of brushed metal and glass reflect the ambient surroundings. The mood is mysterious and focused, styled like a frame from a prestige television drama with professional cinematic lighting and shallow depth of field." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtuqKEfXJUXmOkQByXRzeHxwDuJL1_SIyKdvKTdb4n9NzDwzQmppX7sAKTg26rhsSX1LRpRkqLZZ0b0OybFrCR5rhXv8bT9vM5IKaZxYPjkBm7J2ByM9lKvQ4Tax_rX7HwrmibFRg33_KradjF0FVhjUT4ZV50Vll3aHFl_kYJVbecw-9pPjvNmvO9Eum4o2e6W9f2Sabz88rcIVUgbv8VFgNvOM7HG005zn6INSQ4fMyuYE5qkEg5tcoe_pl8c2ZA6Q9Xzu4Mg97D"/>
+<div class="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined text-white/50 text-4xl" data-icon="play_circle">play_circle</span>
+</div>
+<div class="absolute bottom-2 left-2 px-2 py-1 bg-black/60 backdrop-blur-md rounded text-label-sm font-label-sm text-white">
+                            S04 E03
+                        </div>
+</div>
+<div class="p-6 flex-1 flex flex-col justify-center">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md text-on-surface">The Glass Fortress</h3>
+<span class="text-on-surface-variant text-label-sm font-label-sm uppercase">Oct 26, 2023</span>
+</div>
+<div class="flex items-center gap-4 mb-4 text-on-surface-variant text-label-sm font-label-sm">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs" data-icon="timer">timer</span> 45 min</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs" data-icon="hd">hd</span> 4K Ultra</span>
+</div>
+<p class="text-on-surface-variant line-clamp-2 group-hover:line-clamp-none transition-all duration-300">
+                            Infiltrating the Obsidian Citadel, the crew discovers the Archive—a digital consciousness that claims to remember the world before the Nexus.
+                        </p>
+</div>
+</div>
+<!-- Episode Item 4 (Unwatched) -->
+<div class="group glass-panel rounded-2xl overflow-hidden flex flex-col md:flex-row transition-all duration-300 hover:bg-surface-container-high/40 opacity-80 hover:opacity-100">
+<div class="relative w-full md:w-72 aspect-video shrink-0 overflow-hidden bg-surface-container-lowest">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 grayscale group-hover:grayscale-0" data-alt="A wide, cinematic establishing shot of a frozen wasteland under a double-moon sky. The lighting is ethereal and cold, featuring deep blues and icy whites. The composition is balanced and artistic, evoking the silent, focused mood of a prestige science fiction film. The high-contrast visual style is designed to be a centerpiece for a premium dark-mode interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiylA1zbjXhx77WpJIxDM9i6mggxcyS95Z194gCd9Oh7mpHhiTdbLhgSHmVQyGbyY6Mwnd-Bpo2QqGVPNOS-pvsbSS-fqd7jc8QWTKglOJFxPQrCTXTlwozL43pQMvajgBjPTuYe4aDF1JgkSkHp8O0MX_kfsdgNnOnKA2OVxmrqDiaRdHhKBgy6ZO_jMXL2wliTmuGL4G37h0GToiuIDjtVx8rULW9nElBwTUrfaVZ0-egrSEh8CulMMGihjx1lr4hj0zxBazBbCa"/>
+<div class="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined text-white/50 text-4xl" data-icon="play_circle">play_circle</span>
+</div>
+<div class="absolute bottom-2 left-2 px-2 py-1 bg-black/60 backdrop-blur-md rounded text-label-sm font-label-sm text-white">
+                            S04 E04
+                        </div>
+</div>
+<div class="p-6 flex-1 flex flex-col justify-center">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md text-on-surface">Subzero Protocol</h3>
+<span class="text-on-surface-variant text-label-sm font-label-sm uppercase">Nov 02, 2023</span>
+</div>
+<div class="flex items-center gap-4 mb-4 text-on-surface-variant text-label-sm font-label-sm">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs" data-icon="timer">timer</span> 50 min</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs" data-icon="hd">hd</span> 4K Ultra</span>
+</div>
+<p class="text-on-surface-variant line-clamp-2 group-hover:line-clamp-none transition-all duration-300">
+                            A mission to the arctic research station goes sideways when a traitor is revealed among the crew. The frost isn't the only thing that's cold.
+                        </p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest dark:bg-surface-container-lowest border-t border-outline-variant py-8">
+<div class="flex flex-col md:flex-row justify-between items-center px-container-margin max-w-7xl mx-auto gap-4">
+<div class="flex items-center gap-4">
+<span class="font-display-lg text-headline-md text-primary font-bold">WatchMate</span>
+<span class="text-on-surface-variant font-label-sm text-label-sm">© 2024 WatchMate. All rights reserved.</span>
+</div>
+<nav class="flex gap-6">
+<a class="text-on-surface-variant hover:text-primary underline font-label-sm text-label-sm transition-all" href="#">Privacy</a>
+<a class="text-on-surface-variant hover:text-primary underline font-label-sm text-label-sm transition-all" href="#">Terms</a>
+<a class="text-on-surface-variant hover:text-primary underline font-label-sm text-label-sm transition-all" href="#">Help</a>
+</nav>
+</div>
+</footer>
+<!-- Interactive micro-interactions -->
+<script>
+        document.querySelectorAll('.group').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                item.classList.add('glow-active');
+            });
+            item.addEventListener('mouseleave', () => {
+                item.classList.remove('glow-active');
+            });
+        });
+
+        // Simple scroll effect for navbar
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('header');
+            if (window.scrollY > 20) {
+                nav.classList.add('bg-surface/95');
+                nav.classList.remove('bg-surface/80');
+            } else {
+                nav.classList.add('bg-surface/80');
+                nav.classList.remove('bg-surface/95');
+            }
+        });
+    </script>
+</body></html>

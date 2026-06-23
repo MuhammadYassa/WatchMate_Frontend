@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+:root {
+  color-scheme: dark;
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --color-bg: #121317;
+  --color-bg-elevated: #0d0e11;
+  --color-surface-1: #1a1b1f;
+  --color-surface-2: #1e1f23;
+  --color-surface-3: #292a2d;
+  --color-surface-glass: rgba(30, 31, 35, 0.68);
+  --color-surface-glass-strong: rgba(24, 26, 31, 0.84);
+  --color-accent: #d8e2ff;
+  --color-accent-strong: #adc6ff;
+  --color-accent-dim: #7c91bf;
+  --color-accent-glow: rgba(173, 198, 255, 0.2);
+  --color-text-primary: #e3e2e7;
+  --color-text-secondary: #c4c6d0;
+  --color-text-tertiary: #8e909a;
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-border-strong: rgba(255, 255, 255, 0.16);
+  --color-border-focus: #adc6ff;
+  --color-success: #a7f3d0;
+  --color-warning: #ffdea4;
+  --color-error: #ffb4ab;
+  --color-backdrop-tint: rgba(18, 19, 23, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top center, rgba(173, 198, 255, 0.12), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(255, 222, 164, 0.05), transparent 24%),
+    linear-gradient(180deg, #121317 0%, #0d0e11 100%);
+  color: var(--color-text-primary);
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(173, 198, 255, 0.06), transparent 18%),
+    radial-gradient(circle at 82% 0%, rgba(255, 222, 164, 0.04), transparent 20%);
+  opacity: 0.9;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: rgba(173, 198, 255, 0.3);
+  color: #001a42;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: rgba(142, 144, 154, 0.5);
+  background-clip: padding-box;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
