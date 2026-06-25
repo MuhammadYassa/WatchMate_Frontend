@@ -1,28 +1,23 @@
 import { apiClient } from './client'
-import type { FavouriteStatusDTO, UserFavouritesDTO } from '../types/api'
-import type { MediaType } from '../types/enums'
+import type { FavouriteStatusDTO, MediaDetailsDTO, PageResponse } from '../types/api'
 
 export const favouriteApi = {
-  addFavourite: async (tmdbId: number, type: MediaType) => {
-    const result = await apiClient.post<unknown>(
-      `/favourites/add/${tmdbId}?type=${encodeURIComponent(type)}`,
+  addFavourite: async (tmdbId: number) => {
+    const result = await apiClient.post<unknown>(`/favourites/${tmdbId}`)
+    return result.data
+  },
+  getFavouriteStatus: async (tmdbId: number) => {
+    const result = await apiClient.get<FavouriteStatusDTO>(`/favourites/${tmdbId}/status`)
+    return result.data
+  },
+  getFavourites: async (page = 0, size = 20) => {
+    const result = await apiClient.get<PageResponse<MediaDetailsDTO>>(
+      `/favourites?page=${page}&size=${size}`,
     )
     return result.data
   },
-  checkFavourite: async (tmdbId: number, type: MediaType) => {
-    const result = await apiClient.get<FavouriteStatusDTO>(
-      `/favourites/check/${tmdbId}?type=${encodeURIComponent(type)}`,
-    )
-    return result.data
-  },
-  getAll: async () => {
-    const result = await apiClient.get<UserFavouritesDTO>('/favourites/all')
-    return result.data
-  },
-  removeFavourite: async (tmdbId: number, type: MediaType) => {
-    const result = await apiClient.delete<FavouriteStatusDTO>(
-      `/favourites/remove/${tmdbId}?type=${encodeURIComponent(type)}`,
-    )
+  removeFavourite: async (tmdbId: number) => {
+    const result = await apiClient.delete<FavouriteStatusDTO>(`/favourites/${tmdbId}`)
     return result.data
   },
 }

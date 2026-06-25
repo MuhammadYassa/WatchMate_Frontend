@@ -6,7 +6,7 @@ export function MediaRail({ children, className }: PropsWithChildren<{ className
   return (
     <div
       className={cn(
-        'flex gap-4 overflow-x-auto pb-4 pr-4 pt-1 [scrollbar-width:none] snap-x snap-mandatory [&::-webkit-scrollbar]:hidden',
+        'rail-fade-mask flex gap-4 overflow-x-auto pb-4 pr-4 pt-1 scroll-smooth [scrollbar-width:none] snap-x snap-proximity [&::-webkit-scrollbar]:hidden',
         className,
       )}
     >

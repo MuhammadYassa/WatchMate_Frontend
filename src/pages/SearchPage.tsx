@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useInfiniteQuery, type InfiniteData } from '@tanstack/react-query'
-import { Clock3, Search as SearchIcon } from 'lucide-react'
+import { Clock3, Search as SearchIcon, Sparkles } from 'lucide-react'
 import { useSearchParams } from 'react-router-dom'
 
 import { searchApi } from '../api/searchApi'
@@ -23,9 +23,9 @@ import {
 function SearchLoadingState() {
   return (
     <div className="space-y-4">
-      <Skeleton className="h-36 rounded-[30px]" />
-      <Skeleton className="h-36 rounded-[30px]" />
-      <Skeleton className="h-36 rounded-[30px]" />
+      <Skeleton className="h-32 rounded-[24px]" />
+      <Skeleton className="h-32 rounded-[24px]" />
+      <Skeleton className="h-32 rounded-[24px]" />
     </div>
   )
 }
@@ -82,35 +82,40 @@ export function SearchPage() {
   )
 
   return (
-    <PageContainer className="relative isolate space-y-8 overflow-hidden pt-8 md:space-y-10 md:pt-12">
+    <PageContainer className="relative isolate space-y-10 overflow-hidden pt-8 md:space-y-12 md:pt-12">
       <BrowsePageAtmosphere variant="hero" />
 
-      <section className="relative z-10 overflow-hidden rounded-[36px] border border-white/10 bg-[linear-gradient(145deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.97)_100%)] px-5 py-6 shadow-[0_28px_70px_rgba(0,0,0,0.34)] md:px-8 md:py-8">
-        <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(173,198,255,0.12)_0%,rgba(173,198,255,0)_72%)]" />
-        <div className="relative space-y-5">
-          <div className="space-y-3">
+      <section className="relative z-10 overflow-hidden rounded-[34px] border border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.9)_0%,rgba(10,11,14,0.98)_100%)] px-5 py-8 shadow-[0_30px_80px_rgba(0,0,0,0.34)] md:px-8 md:py-10 lg:px-10 lg:py-12">
+        <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(173,198,255,0.15)_0%,rgba(173,198,255,0)_72%)]" />
+        <div className="relative space-y-8">
+          <div className="space-y-4">
             <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
               Search
             </p>
-            <h1 className="max-w-3xl font-display text-5xl tracking-[-0.05em] text-white md:text-6xl">
+            <h1 className="max-w-4xl font-display text-5xl tracking-[-0.06em] text-white md:text-6xl xl:text-[5.1rem]">
               Find your next movie or show.
             </h1>
+            <p className="max-w-2xl text-sm leading-7 text-[color:var(--color-text-secondary)] md:text-base">
+              Search across the supported WatchMate catalog, save the names you keep returning to,
+              and jump straight into the title you want to track next.
+            </p>
           </div>
+
           <FormField label="Search for a movie or show">
             <div className="relative">
               <SearchIcon
                 aria-hidden="true"
-                className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-[color:var(--color-text-tertiary)]"
+                className="pointer-events-none absolute left-5 top-1/2 size-5 -translate-y-1/2 text-[color:var(--color-text-tertiary)]"
               />
               <Input
-                className="h-14 rounded-[24px] border-white/10 bg-[rgba(255,255,255,0.04)] pl-12 pr-20 text-base"
+                className="h-16 rounded-[22px] border-white/10 bg-[rgba(255,255,255,0.04)] pl-14 pr-24 text-base shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] transition duration-300 focus:border-[rgba(173,198,255,0.32)] focus:shadow-[0_0_0_1px_rgba(173,198,255,0.18),0_18px_55px_rgba(0,0,0,0.28)] md:h-20 md:text-lg"
                 onChange={(event) => setDraftQuery(event.target.value)}
                 placeholder="Search for a title"
                 value={draftQuery}
               />
               {draftQuery ? (
                 <button
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-medium text-[color:var(--color-text-tertiary)] transition hover:text-white"
+                  className="absolute right-5 top-1/2 -translate-y-1/2 text-sm font-medium text-[color:var(--color-text-tertiary)] transition hover:text-white"
                   onClick={() => setDraftQuery('')}
                   type="button"
                 >
@@ -119,14 +124,13 @@ export function SearchPage() {
               ) : null}
             </div>
           </FormField>
-        </div>
-      </section>
 
-      {!debouncedQuery ? (
-        <div className="relative z-10 space-y-5">
-          <EmptyState
-            action={
-              recentSearches.length > 0 ? (
+          {!debouncedQuery && recentSearches.length > 0 ? (
+            <div className="space-y-3">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-text-tertiary)]">
+                  Recent searches
+                </p>
                 <Button
                   onClick={() => {
                     clearRecentSearches()
@@ -136,26 +140,36 @@ export function SearchPage() {
                 >
                   Clear recent
                 </Button>
-              ) : undefined
-            }
+              </div>
+              <div className="flex flex-wrap gap-3">
+                {recentSearches.map((search) => (
+                  <Button key={search} onClick={() => setDraftQuery(search)} variant="secondary">
+                    {search}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          ) : null}
+        </div>
+      </section>
+
+      {!debouncedQuery ? (
+        <div className="relative z-10">
+          <EmptyState
             body={
               recentSearches.length > 0
                 ? 'Pick up from a recent search or start typing a title.'
                 : 'Search for a movie or show to start browsing.'
             }
             heading={recentSearches.length > 0 ? 'Recent searches' : 'Start with a title'}
-            icon={<Clock3 aria-hidden="true" className="size-5" />}
+            icon={
+              recentSearches.length > 0 ? (
+                <Clock3 aria-hidden="true" className="size-5" />
+              ) : (
+                <Sparkles aria-hidden="true" className="size-5" />
+              )
+            }
           />
-
-          {recentSearches.length > 0 ? (
-            <div className="flex flex-wrap gap-3">
-              {recentSearches.map((search) => (
-                <Button key={search} onClick={() => setDraftQuery(search)} variant="secondary">
-                  {search}
-                </Button>
-              ))}
-            </div>
-          ) : null}
         </div>
       ) : null}
 
@@ -193,7 +207,7 @@ export function SearchPage() {
             <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
               Results
             </p>
-            <h2 className="font-display text-3xl tracking-[-0.04em] text-white md:text-5xl">
+            <h2 className="font-display text-3xl tracking-[-0.045em] text-white md:text-5xl">
               Results for "{debouncedQuery}"
             </h2>
           </div>

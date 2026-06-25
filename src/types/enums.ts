@@ -7,13 +7,18 @@ export type WatchStatus =
   | 'UP_TO_DATE'
   | 'WATCHED'
 
-export type PrivacyStatuses = 'PUBLIC' | 'PRIVATE'
+export type PrivacyStatus = 'PUBLIC' | 'PRIVATE'
 
-export type FollowStatuses =
+export type PrivacyStatuses = PrivacyStatus
+
+export type FollowStatus =
   | 'FOLLOWING'
   | 'NOT_FOLLOWING'
-  | 'BLOCKED'
   | 'REQUESTED'
+  | 'BLOCKED'
+  | 'SELF'
+
+export type FollowStatuses = FollowStatus
 
 export type FollowRequestStatuses =
   | 'PENDING'

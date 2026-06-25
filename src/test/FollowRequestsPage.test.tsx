@@ -10,13 +10,17 @@ import { ApiClientError } from '../types/errors'
 import { renderWithProviders } from './renderWithProviders'
 
 const acceptFollowRequestMock = vi.fn()
+const cancelFollowRequestMock = vi.fn()
 const getReceivedFollowRequestsMock = vi.fn()
+const getSentFollowRequestsMock = vi.fn()
 const rejectFollowRequestMock = vi.fn()
 
 vi.mock('../api/socialApi', () => ({
   socialApi: {
     acceptFollowRequest: (...args: unknown[]) => acceptFollowRequestMock(...args),
+    cancelFollowRequest: (...args: unknown[]) => cancelFollowRequestMock(...args),
     getReceivedFollowRequests: (...args: unknown[]) => getReceivedFollowRequestsMock(...args),
+    getSentFollowRequests: (...args: unknown[]) => getSentFollowRequestsMock(...args),
     rejectFollowRequest: (...args: unknown[]) => rejectFollowRequestMock(...args),
   },
 }))
@@ -42,7 +46,7 @@ function createPage(content: FollowRequestDTO[]) {
     last: true,
     number: 0,
     numberOfElements: content.length,
-    size: 10,
+    size: 20,
     totalElements: content.length,
     totalPages: content.length > 0 ? 1 : 0,
   }
@@ -63,6 +67,7 @@ describe('FollowRequestsPage', () => {
 
   it('renders pending follow requests', async () => {
     getReceivedFollowRequestsMock.mockResolvedValue(createPage([createRequest()]))
+    getSentFollowRequestsMock.mockResolvedValue(createPage([]))
 
     renderWithProviders(
       <MemoryRouter initialEntries={['/follow-requests']}>
@@ -86,6 +91,7 @@ describe('FollowRequestsPage', () => {
     let currentRequests = [createRequest()]
 
     getReceivedFollowRequestsMock.mockImplementation(() => Promise.resolve(createPage(currentRequests)))
+    getSentFollowRequestsMock.mockResolvedValue(createPage([]))
     acceptFollowRequestMock.mockImplementation(() => {
       currentRequests = []
       return Promise.resolve({ newStatus: 'ACCEPTED', requestId: 1 })
@@ -117,6 +123,7 @@ describe('FollowRequestsPage', () => {
     let currentRequests = [createRequest()]
 
     getReceivedFollowRequestsMock.mockImplementation(() => Promise.resolve(createPage(currentRequests)))
+    getSentFollowRequestsMock.mockResolvedValue(createPage([]))
     rejectFollowRequestMock.mockImplementation(() => {
       currentRequests = []
       return Promise.resolve({ newStatus: 'REJECTED', requestId: 1 })
@@ -148,6 +155,7 @@ describe('FollowRequestsPage', () => {
     let currentRequests = [createRequest()]
 
     getReceivedFollowRequestsMock.mockImplementation(() => Promise.resolve(createPage(currentRequests)))
+    getSentFollowRequestsMock.mockResolvedValue(createPage([]))
     rejectFollowRequestMock.mockImplementation(() => {
       currentRequests = []
       return Promise.reject(
@@ -185,6 +193,7 @@ describe('FollowRequestsPage', () => {
 
   it('renders the empty state when there are no pending requests', async () => {
     getReceivedFollowRequestsMock.mockResolvedValue(createPage([]))
+    getSentFollowRequestsMock.mockResolvedValue(createPage([]))
 
     renderWithProviders(
       <MemoryRouter initialEntries={['/follow-requests']}>
@@ -196,6 +205,48 @@ describe('FollowRequestsPage', () => {
 
     await waitFor(() => {
       expect(screen.getByText('No pending requests')).toBeInTheDocument()
+    })
+  })
+
+  it('renders sent requests and lets the user cancel one', async () => {
+    const user = userEvent.setup()
+    let currentSentRequests = [
+      createRequest({
+        requestId: 8,
+        requesterUsername: 'viewer',
+        targetUsername: 'cinephile',
+      }),
+    ]
+
+    getReceivedFollowRequestsMock.mockResolvedValue(createPage([]))
+    getSentFollowRequestsMock.mockImplementation(() => Promise.resolve(createPage(currentSentRequests)))
+    cancelFollowRequestMock.mockImplementation(() => {
+      currentSentRequests = []
+      return Promise.resolve({ newStatus: 'CANCELED', requestId: 8 })
+    })
+
+    renderWithProviders(
+      <MemoryRouter initialEntries={['/follow-requests']}>
+        <Routes>
+          <Route element={<FollowRequestsPage />} path="/follow-requests" />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /sent/i })).toBeInTheDocument()
+    })
+
+    await user.click(screen.getByRole('button', { name: /sent/i }))
+
+    await waitFor(() => {
+      expect(screen.getByText('cinephile')).toBeInTheDocument()
+    })
+
+    await user.click(screen.getByRole('button', { name: /cancel request/i }))
+
+    await waitFor(() => {
+      expect(screen.getByText('No sent requests')).toBeInTheDocument()
     })
   })
 })

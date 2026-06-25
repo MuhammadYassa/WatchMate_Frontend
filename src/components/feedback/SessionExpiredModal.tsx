@@ -14,7 +14,7 @@ export function SessionExpiredModal() {
 
   return (
     <div className="fixed inset-0 z-[60] flex items-start justify-center overflow-y-auto bg-black/70 px-4 py-4 backdrop-blur-sm sm:items-center sm:py-8">
-      <div className="w-full max-w-md rounded-[30px] border border-white/10 bg-[color:var(--color-surface-glass-strong)] p-6 shadow-[0_32px_90px_rgba(0,0,0,0.52)] backdrop-blur-2xl sm:p-7">
+      <div className="motion-modal w-full max-w-md rounded-[18px] border border-white/10 bg-[color:var(--color-surface-glass-strong)] p-6 shadow-[0_32px_90px_rgba(0,0,0,0.52)] backdrop-blur-xl sm:p-7">
         <div className="space-y-3">
           <p className="text-[11px] uppercase tracking-[0.3em] text-[color:var(--color-accent-strong)]">
             Session ended

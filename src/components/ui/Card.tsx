@@ -6,7 +6,7 @@ export function Card({ children, className, ...props }: PropsWithChildren<HTMLAt
   return (
     <div
       className={cn(
-        'rounded-[28px] border border-white/10 bg-[color:var(--color-surface-glass)] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-2xl',
+        'relative glass-hover-glow motion-card rounded-[var(--radius-panel)] border border-white/10 bg-[color:var(--color-surface-glass)] p-5 shadow-[var(--shadow-panel)] backdrop-blur-xl',
         className,
       )}
       {...props}

@@ -1,6 +1,5 @@
-import type { ReactNode } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { ArrowRight, Layers3 } from 'lucide-react'
+import { ArrowRight, Layers3, PlayCircle } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { dashboardApi } from '../api/dashboardApi'
@@ -12,25 +11,31 @@ import { ErrorState } from '../components/feedback/ErrorState'
 import { Skeleton, SkeletonPoster } from '../components/feedback/Skeleton'
 import { PageContainer } from '../components/layout/PageContainer'
 import { SectionHeader } from '../components/layout/SectionHeader'
-import { BackdropHero } from '../components/media/BackdropHero'
 import { GenreChip } from '../components/media/GenreChip'
 import { MediaRail } from '../components/media/MediaRail'
-import {
-  PosterCard,
-  PosterCardActionLink,
-} from '../components/media/PosterCard'
+import { PosterCard, PosterCardActionLink } from '../components/media/PosterCard'
 import { Button } from '../components/ui/Button'
+import { getButtonClassName } from '../components/ui/buttonStyles'
 import type { DiscoveryMediaItemDTO } from '../types/api'
 import { formatMediaType } from '../utils/labels'
 import { getMediaRoute } from '../utils/mediaRoutes'
+import { getBackdropUrl } from '../utils/tmdbImages'
 
 function HomeLoadingState() {
   return (
-    <PageContainer className="relative isolate space-y-10 overflow-hidden pt-8 md:pt-12">
+    <PageContainer className="relative isolate space-y-12 overflow-hidden pt-6 md:pt-8">
       <BrowsePageAtmosphere variant="hero" />
-      <Skeleton className="relative z-10 h-[420px] rounded-[38px]" />
-      {[0, 1, 2].map((section) => (
-        <div className="relative z-10 space-y-5" key={section}>
+      <Skeleton className="-mx-4 h-[72vh] min-h-[34rem] rounded-none sm:-mx-6 lg:-mx-8 xl:-mx-12" />
+      <div className="space-y-4">
+        <Skeleton className="h-14 w-full max-w-3xl rounded-[16px]" />
+        <div className="flex gap-4 overflow-hidden">
+          <SkeletonPoster />
+          <SkeletonPoster />
+          <SkeletonPoster />
+        </div>
+      </div>
+      {[0, 1].map((section) => (
+        <div className="space-y-5" key={section}>
           <Skeleton className="h-8 w-56" />
           <div className="flex gap-4 overflow-hidden">
             <SkeletonPoster />
@@ -54,18 +59,44 @@ function getHomeHero(homeData: Awaited<ReturnType<typeof homeApi.getHome>>) {
   return sections.flat().find(Boolean) ?? null
 }
 
-function GenrePanel({
-  children,
-  title,
+function CompactGenreShelf({
+  movieGenres,
+  onMovieGenre,
+  onShowGenre,
+  showGenres,
 }: {
-  children: ReactNode
-  title: string
+  movieGenres: string[]
+  onMovieGenre: (genre: string) => void
+  onShowGenre: (genre: string) => void
+  showGenres: string[]
 }) {
+  const featuredMovieGenres = movieGenres.slice(0, 4)
+  const featuredShowGenres = showGenres.slice(0, 4)
+
   return (
-    <div className="rounded-[30px] border border-white/10 bg-[linear-gradient(145deg,rgba(18,19,23,0.88)_0%,rgba(11,12,16,0.96)_100%)] px-5 py-5 shadow-[0_20px_50px_rgba(0,0,0,0.24)] md:px-6 md:py-6">
-      <div className="space-y-4">
-        <SectionHeader eyebrow="Genres" title={title} />
-        <div className="flex flex-wrap gap-3">{children}</div>
+    <div className="rounded-[18px] border border-white/8 bg-[rgba(12,13,17,0.84)] px-4 py-4 shadow-[0_18px_42px_rgba(0,0,0,0.28)] backdrop-blur-xl sm:px-5">
+      <div className="grid gap-4 lg:grid-cols-[auto_1fr_auto_1fr] lg:items-center">
+        <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-accent-strong)]">
+          Browse genres
+        </p>
+        <div className="flex flex-wrap gap-2.5">
+          <span className="sr-only">Browse movie genres</span>
+          {featuredMovieGenres.map((genre) => (
+            <GenreChip key={`movie-${genre}`} onClick={() => onMovieGenre(genre)}>
+              {genre}
+            </GenreChip>
+          ))}
+        </div>
+        <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-text-tertiary)]">
+          Browse show genres
+        </p>
+        <div className="flex flex-wrap gap-2.5">
+          {featuredShowGenres.map((genre) => (
+            <GenreChip key={`show-${genre}`} onClick={() => onShowGenre(genre)}>
+              {genre}
+            </GenreChip>
+          ))}
+        </div>
       </div>
     </div>
   )
@@ -120,120 +151,167 @@ export function HomePage() {
     { items: homeQuery.data.recommendedLater, title: 'Recommended Later' },
   ]
 
+  const continueWatchingItems = continueWatchingQuery.data?.items ?? []
+
   return (
-    <PageContainer className="relative isolate space-y-12 overflow-hidden pt-8 md:space-y-14 md:pt-12">
+    <div className="relative isolate overflow-hidden pb-24">
       <BrowsePageAtmosphere variant="hero" />
 
-      <div className="relative z-10">
-        {hero ? (
-          <BackdropHero
-            ctaHref={getMediaRoute(hero.tmdbId, hero.type)}
-            ctaLabel={`View ${hero.title}`}
-            imagePath={hero.backdropPath}
-            meta={hero.type === 'MOVIE' ? 'Featured movie' : 'Featured show'}
-            subtitle={hero.overview || "A standout title from today's WatchMate feed."}
-            title={hero.title}
+      {hero ? (
+        <section className="relative min-h-[84vh] overflow-hidden border-b border-white/6">
+          {hero.backdropPath ? (
+            <img
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover opacity-72"
+              src={getBackdropUrl(hero.backdropPath, 'w1280') ?? undefined}
+            />
+          ) : null}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_18%,rgba(173,198,255,0.16),transparent_22%),linear-gradient(180deg,rgba(9,10,13,0.14)_0%,rgba(9,10,13,0.34)_24%,rgba(9,10,13,0.96)_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(10,10,13,0.96)_8%,rgba(10,10,13,0.78)_38%,rgba(10,10,13,0.3)_100%)]" />
+
+          <div className="relative mx-auto flex min-h-[84vh] max-w-[1440px] items-end px-4 pb-18 pt-28 sm:px-6 lg:px-8 xl:px-12">
+            <div className="motion-stagger max-w-3xl space-y-6">
+              <div className="space-y-4">
+                <span className="inline-flex rounded-[10px] border border-[rgba(173,198,255,0.24)] bg-[rgba(216,226,255,0.12)] px-3 py-1.5 text-[11px] uppercase tracking-[0.22em] text-[color:var(--color-accent)]">
+                  Featured today
+                </span>
+                <h1 className="font-display text-[3.6rem] leading-[0.92] tracking-[-0.055em] text-white sm:text-[4.7rem] md:text-[5.8rem]">
+                  {hero.title}
+                </h1>
+                <p className="max-w-2xl text-base leading-8 text-[color:var(--color-text-secondary)] md:text-lg">
+                  {hero.overview || "A standout title from today's WatchMate feed."}
+                </p>
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  className={getButtonClassName('primary', 'min-w-[12rem]')}
+                  to={getMediaRoute(hero.tmdbId, hero.type)}
+                >
+                  View {hero.title}
+                </Link>
+                <Link className={getButtonClassName('secondary', 'min-w-[12rem]')} to="/discover">
+                  Explore titles
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : (
+        <PageContainer className="relative isolate overflow-hidden pt-10">
+          <div className="relative z-10">
+            <EmptyState
+              body="The home feed is empty right now. Try again in a moment."
+              heading="Nothing to show yet"
+              icon={<Layers3 aria-hidden="true" className="size-5" />}
+            />
+          </div>
+        </PageContainer>
+      )}
+
+      <div className="relative z-10 -mt-6 md:-mt-8">
+        <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8 xl:px-12">
+          <CompactGenreShelf
+            movieGenres={homeQuery.data.movieGenres}
+            onMovieGenre={(genre) => navigate(`/discover?genreType=movie&genre=${encodeURIComponent(genre)}`)}
+            onShowGenre={(genre) => navigate(`/discover?genreType=show&genre=${encodeURIComponent(genre)}`)}
+            showGenres={homeQuery.data.showGenres}
           />
-        ) : (
-          <EmptyState
-            body="The home feed is empty right now. Try again in a moment."
-            heading="Nothing to show yet"
-            icon={<Layers3 aria-hidden="true" className="size-5" />}
-          />
-        )}
+        </div>
       </div>
 
-      {isAuthenticated && continueWatchingQuery.data?.items.length ? (
-        <section className="relative z-10 space-y-5">
-          <SectionHeader eyebrow="Your queue" title="Continue watching" />
-          <MediaRail className="pr-2">
-            {continueWatchingQuery.data.items.map((item) => (
-              <PosterCard
-                key={`${item.type}-${item.tmdbId}`}
-                href={getMediaRoute(item.tmdbId, item.type)}
-                imagePath={item.posterPath}
-                mediaTypeLabel={
-                  item.type === 'SHOW' && item.resumeSeasonNumber && item.resumeEpisodeNumber
-                    ? `Resume S${item.resumeSeasonNumber} E${item.resumeEpisodeNumber}`
-                    : formatMediaType(item.type)
-                }
-                rating={item.rating}
-                title={item.title}
-              />
-            ))}
-          </MediaRail>
+      {isAuthenticated && continueWatchingItems.length > 0 ? (
+        <section className="relative z-10 mt-12">
+          <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8 xl:px-12">
+            <div className="motion-stagger space-y-5">
+              <SectionHeader eyebrow="Your queue" title="Continue watching" />
+              <MediaRail className="pr-0">
+                {continueWatchingItems.map((item) => (
+                  <PosterCard
+                    key={`${item.type}-${item.tmdbId}`}
+                    href={getMediaRoute(item.tmdbId, item.type)}
+                    imagePath={item.posterPath}
+                    mediaTypeLabel={
+                      item.type === 'SHOW' && item.resumeSeasonNumber && item.resumeEpisodeNumber
+                        ? `Resume S${item.resumeSeasonNumber} E${item.resumeEpisodeNumber}`
+                        : formatMediaType(item.type)
+                    }
+                    rating={item.rating}
+                    title={item.title}
+                  />
+                ))}
+              </MediaRail>
+            </div>
+          </div>
         </section>
       ) : null}
 
-      {sections.map((section) =>
+      {sections.map((section, index) =>
         section.items.length > 0 ? (
-          <section className="relative z-10 space-y-5" key={section.title}>
-            <SectionHeader
-              action={<PosterCardActionLink href="/discover" label="Explore more" />}
-              eyebrow="Browse"
-              title={section.title}
-            />
-            <MediaRail className="pr-2">
-              {section.items.map((item) => (
-                <PosterCard
-                  key={`${section.title}-${item.tmdbId}`}
-                  href={getMediaRoute(item.tmdbId, item.type)}
-                  imagePath={item.posterPath}
-                  mediaTypeLabel={formatMediaType(item.type)}
-                  rating={item.rating}
-                  releaseDate={item.releaseDate}
-                  title={item.title}
+          <section className="relative z-10 mt-14" key={section.title}>
+            <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8 xl:px-12">
+              <div className="motion-stagger space-y-5">
+                <SectionHeader
+                  action={
+                    index < 2 ? <PosterCardActionLink href="/discover" label="Explore more" /> : undefined
+                  }
+                  eyebrow="Browse"
+                  title={section.title}
                 />
-              ))}
-            </MediaRail>
+                <MediaRail className="pr-0">
+                  {section.items.map((item) => (
+                    <PosterCard
+                      key={`${section.title}-${item.tmdbId}`}
+                      href={getMediaRoute(item.tmdbId, item.type)}
+                      imagePath={item.posterPath}
+                      mediaTypeLabel={formatMediaType(item.type)}
+                      rating={item.rating}
+                      releaseDate={item.releaseDate}
+                      title={item.title}
+                    />
+                  ))}
+                </MediaRail>
+              </div>
+            </div>
           </section>
         ) : null,
       )}
 
-      <section className="relative z-10 grid gap-6 lg:grid-cols-2">
-        <GenrePanel title="Browse movie genres">
-          {homeQuery.data.movieGenres.map((genre) => (
-            <GenreChip
-              key={genre}
-              onClick={() => navigate(`/discover?genreType=movie&genre=${encodeURIComponent(genre)}`)}
-            >
-              {genre}
-            </GenreChip>
-          ))}
-        </GenrePanel>
-        <GenrePanel title="Browse show genres">
-          {homeQuery.data.showGenres.map((genre) => (
-            <GenreChip
-              key={genre}
-              onClick={() => navigate(`/discover?genreType=show&genre=${encodeURIComponent(genre)}`)}
-            >
-              {genre}
-            </GenreChip>
-          ))}
-        </GenrePanel>
-      </section>
-
       {!isAuthenticated ? (
-        <div className="relative z-10 overflow-hidden rounded-[30px] border border-[rgba(173,198,255,0.2)] bg-[linear-gradient(145deg,rgba(26,30,38,0.92)_0%,rgba(13,15,20,0.98)_100%)] px-5 py-5 shadow-[0_26px_60px_rgba(0,0,0,0.28)]">
-          <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(173,198,255,0.14)_0%,rgba(173,198,255,0)_72%)]" />
-          <div className="relative flex flex-wrap items-center justify-between gap-4">
-            <div className="space-y-1">
-              <p className="text-[11px] uppercase tracking-[0.3em] text-[color:var(--color-accent-strong)]">
-                Join WatchMate
-              </p>
-              <span className="text-sm text-[color:var(--color-text-secondary)]">
-                Create an account to carry your progress, favourites, and watchlists with you.
-              </span>
+        <section className="relative z-10 mt-16">
+          <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8 xl:px-12">
+            <div className="overflow-hidden rounded-[18px] border border-[rgba(173,198,255,0.18)] bg-[linear-gradient(145deg,rgba(26,30,38,0.92)_0%,rgba(13,15,20,0.98)_100%)] px-5 py-6 shadow-[0_26px_60px_rgba(0,0,0,0.28)]">
+              <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(173,198,255,0.14)_0%,rgba(173,198,255,0)_72%)]" />
+              <div className="relative flex flex-wrap items-center justify-between gap-4">
+                <div className="space-y-2">
+                  <p className="text-[11px] uppercase tracking-[0.3em] text-[color:var(--color-accent-strong)]">
+                    Join WatchMate
+                  </p>
+                  <span className="text-sm text-[color:var(--color-text-secondary)]">
+                    Create an account to carry your progress, favourites, and watchlists with you.
+                  </span>
+                </div>
+                <Link
+                  className="inline-flex items-center gap-2 text-sm font-medium text-[color:var(--color-accent)] transition hover:text-white"
+                  to="/register"
+                >
+                  Start tracking <ArrowRight aria-hidden="true" className="size-4" />
+                </Link>
+              </div>
             </div>
-            <Link
-              className="inline-flex items-center gap-2 text-sm font-medium text-[color:var(--color-accent)] transition hover:text-white"
-              to="/register"
-            >
-              Start tracking <ArrowRight aria-hidden="true" className="size-4" />
-            </Link>
           </div>
-        </div>
+        </section>
       ) : null}
-    </PageContainer>
+
+      {!hero && !sections.some((section) => section.items.length > 0) ? (
+        <PageContainer className="pt-12">
+          <EmptyState
+            body="Nothing is available in the home feed right now."
+            heading="The browse canvas is quiet tonight"
+            icon={<PlayCircle aria-hidden="true" className="size-5" />}
+          />
+        </PageContainer>
+      ) : null}
+    </div>
   )
 }

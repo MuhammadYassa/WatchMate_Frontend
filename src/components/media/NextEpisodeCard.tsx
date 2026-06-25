@@ -7,7 +7,7 @@ import { Card } from '../ui/Card'
 export function NextEpisodeCard({ nextEpisode }: { nextEpisode: NextEpisodeAiringDTO }) {
   if (!nextEpisode.nextEpisodeAirDate && !nextEpisode.episodeName) {
     return (
-      <Card className="space-y-4 border-white/10 bg-[linear-gradient(145deg,rgba(19,20,25,0.92)_0%,rgba(10,11,15,0.98)_100%)] p-6">
+      <Card className="space-y-4 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(19,20,25,0.92)_0%,rgba(10,11,15,0.99)_100%)] p-6">
         <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
           Next episode
         </p>
@@ -22,7 +22,8 @@ export function NextEpisodeCard({ nextEpisode }: { nextEpisode: NextEpisodeAirin
   }
 
   return (
-    <Card className="space-y-5 border-white/10 bg-[linear-gradient(145deg,rgba(19,20,25,0.92)_0%,rgba(10,11,15,0.98)_100%)] p-6 shadow-[0_24px_60px_rgba(0,0,0,0.34)]">
+    <Card className="space-y-5 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(19,20,25,0.92)_0%,rgba(10,11,15,0.99)_100%)] p-6 shadow-[0_24px_60px_rgba(0,0,0,0.34)]">
+      <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(255,222,164,0.28)_50%,rgba(255,255,255,0)_100%)]" />
       <div className="space-y-2.5">
         <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
           Next episode
@@ -34,7 +35,7 @@ export function NextEpisodeCard({ nextEpisode }: { nextEpisode: NextEpisodeAirin
 
       <div className="grid gap-3 sm:grid-cols-2">
         {(nextEpisode.seasonNumber !== null && nextEpisode.episodeNumber !== null) ? (
-          <div className="rounded-[22px] border border-white/10 bg-[rgba(255,255,255,0.04)] p-4">
+          <div className="rounded-[18px] border border-white/10 bg-[rgba(255,255,255,0.04)] p-4">
             <span className="inline-flex items-center gap-2 text-sm text-[color:var(--color-text-secondary)]">
               <Tv2 aria-hidden="true" className="size-4 text-[color:var(--color-accent)]" />
               Season {nextEpisode.seasonNumber} Episode {nextEpisode.episodeNumber}
@@ -42,7 +43,7 @@ export function NextEpisodeCard({ nextEpisode }: { nextEpisode: NextEpisodeAirin
           </div>
         ) : null}
         {nextEpisode.nextEpisodeAirDate ? (
-          <div className="rounded-[22px] border border-white/10 bg-[rgba(255,255,255,0.04)] p-4">
+          <div className="rounded-[18px] border border-white/10 bg-[rgba(255,255,255,0.04)] p-4">
             <span className="inline-flex items-center gap-2 text-sm text-[color:var(--color-text-secondary)]">
               <CalendarDays aria-hidden="true" className="size-4 text-[color:var(--color-accent)]" />
               {formatDisplayDate(nextEpisode.nextEpisodeAirDate)}

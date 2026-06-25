@@ -2,6 +2,7 @@ import { cn } from '../../utils/cn'
 import { getTitleInitials } from '../../utils/tmdbImages'
 
 const sizeClasses = {
+  xl: 'size-28 rounded-[34px] text-4xl md:size-36 md:text-5xl',
   lg: 'size-24 rounded-[30px] text-3xl md:size-28 md:text-4xl',
   md: 'size-16 rounded-[24px] text-2xl',
   sm: 'size-12 rounded-[18px] text-lg',

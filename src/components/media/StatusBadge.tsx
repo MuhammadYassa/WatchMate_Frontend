@@ -7,14 +7,14 @@ type StatusBadgeTone = 'default' | 'success' | 'accent'
 
 function getToneClassName(tone: StatusBadgeTone) {
   if (tone === 'success') {
-    return 'border-[rgba(167,243,208,0.24)] bg-[rgba(6,78,59,0.28)] text-[#d1fae5]'
+    return 'border-[rgba(167,243,208,0.24)] bg-[rgba(6,78,59,0.22)] text-[#d1fae5]'
   }
 
   if (tone === 'accent') {
-    return 'border-[rgba(173,198,255,0.34)] bg-[rgba(216,226,255,0.14)] text-[color:var(--color-accent)]'
+    return 'border-[rgba(173,198,255,0.28)] bg-[rgba(216,226,255,0.12)] text-[color:var(--color-accent)]'
   }
 
-  return 'border-white/10 bg-[rgba(10,12,16,0.56)] text-[color:var(--color-text-secondary)]'
+  return 'border-white/10 bg-[rgba(10,12,16,0.6)] text-[color:var(--color-text-secondary)]'
 }
 
 export function WatchStatusBadge({

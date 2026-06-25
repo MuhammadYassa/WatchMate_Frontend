@@ -33,7 +33,8 @@ export function MediaActionsPanel({
   const selectedStatus = statusOverride ?? watchStatus ?? 'NONE'
 
   return (
-    <Card className="space-y-6 border-white/10 bg-[linear-gradient(145deg,rgba(21,22,27,0.94)_0%,rgba(10,11,15,0.98)_100%)] p-6 shadow-[0_26px_70px_rgba(0,0,0,0.38)] md:sticky md:top-28">
+    <Card className="space-y-6 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.94)_0%,rgba(10,11,15,0.99)_100%)] p-6 shadow-[0_26px_70px_rgba(0,0,0,0.38)] md:sticky md:top-28">
+      <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(173,198,255,0.38)_50%,rgba(255,255,255,0)_100%)]" />
       <div className="space-y-2.5">
         <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
           Your actions
@@ -62,7 +63,7 @@ export function MediaActionsPanel({
         </Button>
       </div>
 
-      <div className="space-y-3 rounded-[24px] border border-white/10 bg-[rgba(255,255,255,0.03)] p-4">
+      <div className="space-y-3 rounded-[18px] border border-white/10 bg-[rgba(255,255,255,0.03)] p-4">
         <div className="space-y-1.5">
           <label className="block text-sm font-medium text-slate-100" htmlFor={`status-${mediaType}`}>
             Watch status

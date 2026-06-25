@@ -7,31 +7,35 @@ import { useAuthStore } from '../auth/authStore'
 import { ProfilePage } from '../pages/ProfilePage'
 import { renderWithProviders } from './renderWithProviders'
 import type { UserProfileDTO } from '../types/api'
-import type { FollowStatuses, PrivacyStatuses } from '../types/enums'
+import type { FollowStatus, PrivacyStatus } from '../types/enums'
 
+const blockUserMock = vi.fn()
 const followUserMock = vi.fn()
 const getFollowStatusMock = vi.fn()
-const getProfileMock = vi.fn()
-const toggleBlockUserMock = vi.fn()
+const getProfileByUsernameMock = vi.fn()
 const unfollowUserMock = vi.fn()
+const unblockUserMock = vi.fn()
+const updateMyPrivacyStatusMock = vi.fn()
 
 vi.mock('../api/socialApi', () => ({
   socialApi: {
+    blockUser: (...args: unknown[]) => blockUserMock(...args),
     followUser: (...args: unknown[]) => followUserMock(...args),
     getFollowStatus: (...args: unknown[]) => getFollowStatusMock(...args),
-    getProfile: (...args: unknown[]) => getProfileMock(...args),
-    toggleBlockUser: (...args: unknown[]) => toggleBlockUserMock(...args),
+    getProfileByUsername: (...args: unknown[]) => getProfileByUsernameMock(...args),
     unfollowUser: (...args: unknown[]) => unfollowUserMock(...args),
+    unblockUser: (...args: unknown[]) => unblockUserMock(...args),
+    updateMyPrivacyStatus: (...args: unknown[]) => updateMyPrivacyStatusMock(...args),
   },
 }))
 
 function createProfile({
-  followStatus = 'NOT_FOLLOWING' as FollowStatuses,
-  privacyStatus = 'PUBLIC' as PrivacyStatuses,
+  followStatus = 'NOT_FOLLOWING' as FollowStatus,
+  privacyStatus = 'PUBLIC' as PrivacyStatus,
   username = 'cinephile',
 }: {
-  followStatus?: FollowStatuses
-  privacyStatus?: PrivacyStatuses
+  followStatus?: FollowStatus
+  privacyStatus?: PrivacyStatus
   username?: string
 } = {}) {
   return {
@@ -58,7 +62,7 @@ describe('ProfilePage', () => {
   })
 
   it('renders a self profile with available sections', async () => {
-    getProfileMock.mockResolvedValue({
+    getProfileByUsernameMock.mockResolvedValue({
       ...createProfile({ followStatus: 'NOT_FOLLOWING', username: 'viewer' }),
       moviesWatched: {
         content: [
@@ -155,10 +159,11 @@ describe('ProfilePage', () => {
     expect(screen.getByText('The Matrix')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /find people/i })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /follow requests/i })).toBeInTheDocument()
+    expect(screen.getByLabelText(/profile visibility/i)).toHaveValue('PUBLIC')
   }, 10000)
 
   it('hides absent private sections gracefully', async () => {
-    getProfileMock.mockResolvedValue(
+    getProfileByUsernameMock.mockResolvedValue(
       createProfile({
         followStatus: 'NOT_FOLLOWING',
         privacyStatus: 'PRIVATE',
@@ -185,7 +190,7 @@ describe('ProfilePage', () => {
   })
 
   it('renders the blocked profile state', async () => {
-    getProfileMock.mockResolvedValue(
+    getProfileByUsernameMock.mockResolvedValue(
       createProfile({
         followStatus: 'BLOCKED',
         privacyStatus: 'PRIVATE',
@@ -207,19 +212,19 @@ describe('ProfilePage', () => {
     })
 
     expect(screen.queryByRole('button', { name: /follow/i })).not.toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: /block profile/i })).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /unblock profile/i })).toBeInTheDocument()
   })
 
   it('updates to requested when following a private profile returns REQUESTED', async () => {
     const user = userEvent.setup()
-    let currentFollowStatus: FollowStatuses = 'NOT_FOLLOWING'
+    let currentFollowStatus: FollowStatus = 'NOT_FOLLOWING'
     let currentProfile = createProfile({
       followStatus: 'NOT_FOLLOWING',
       privacyStatus: 'PRIVATE',
       username: 'privateviewer',
     })
 
-    getProfileMock.mockImplementation(() => Promise.resolve(currentProfile))
+    getProfileByUsernameMock.mockImplementation(() => Promise.resolve(currentProfile))
     getFollowStatusMock.mockImplementation(() => Promise.resolve({ followStatus: currentFollowStatus }))
     followUserMock.mockImplementation(() => {
       currentFollowStatus = 'REQUESTED'
@@ -248,14 +253,14 @@ describe('ProfilePage', () => {
 
   it('updates to following when following a public profile returns FOLLOWING', async () => {
     const user = userEvent.setup()
-    let currentFollowStatus: FollowStatuses = 'NOT_FOLLOWING'
+    let currentFollowStatus: FollowStatus = 'NOT_FOLLOWING'
     let currentProfile = createProfile({
       followStatus: 'NOT_FOLLOWING',
       privacyStatus: 'PUBLIC',
       username: 'publicviewer',
     })
 
-    getProfileMock.mockImplementation(() => Promise.resolve(currentProfile))
+    getProfileByUsernameMock.mockImplementation(() => Promise.resolve(currentProfile))
     getFollowStatusMock.mockImplementation(() => Promise.resolve({ followStatus: currentFollowStatus }))
     followUserMock.mockImplementation(() => {
       currentFollowStatus = 'FOLLOWING'
@@ -298,7 +303,7 @@ describe('ProfilePage', () => {
 
   it('supports unfollowing from a following state', async () => {
     const user = userEvent.setup()
-    let currentFollowStatus: FollowStatuses = 'FOLLOWING'
+    let currentFollowStatus: FollowStatus = 'FOLLOWING'
     let currentProfile = {
       ...createProfile({
         followStatus: 'FOLLOWING',
@@ -318,7 +323,7 @@ describe('ProfilePage', () => {
       },
     }
 
-    getProfileMock.mockImplementation(() => Promise.resolve(currentProfile))
+    getProfileByUsernameMock.mockImplementation(() => Promise.resolve(currentProfile))
     getFollowStatusMock.mockImplementation(() => Promise.resolve({ followStatus: currentFollowStatus }))
     unfollowUserMock.mockImplementation(() => {
       currentFollowStatus = 'NOT_FOLLOWING'
@@ -347,16 +352,16 @@ describe('ProfilePage', () => {
 
   it('supports blocking a visible profile', async () => {
     const user = userEvent.setup()
-    let currentFollowStatus: FollowStatuses = 'NOT_FOLLOWING'
+    let currentFollowStatus: FollowStatus = 'NOT_FOLLOWING'
     let currentProfile = createProfile({
       followStatus: 'NOT_FOLLOWING',
       privacyStatus: 'PUBLIC',
       username: 'publicviewer',
     })
 
-    getProfileMock.mockImplementation(() => Promise.resolve(currentProfile))
+    getProfileByUsernameMock.mockImplementation(() => Promise.resolve(currentProfile))
     getFollowStatusMock.mockImplementation(() => Promise.resolve({ followStatus: currentFollowStatus }))
-    toggleBlockUserMock.mockImplementation(() => {
+    blockUserMock.mockImplementation(() => {
       currentFollowStatus = 'BLOCKED'
       currentProfile = {
         ...currentProfile,
@@ -383,6 +388,81 @@ describe('ProfilePage', () => {
 
     await waitFor(() => {
       expect(screen.getByText('This profile is blocked')).toBeInTheDocument()
+    })
+  })
+
+  it('lets the self profile update privacy visibility', async () => {
+    const user = userEvent.setup()
+    let currentProfile = createProfile({
+      followStatus: 'SELF',
+      privacyStatus: 'PUBLIC',
+      username: 'viewer',
+    })
+
+    getProfileByUsernameMock.mockImplementation(() => Promise.resolve(currentProfile))
+    updateMyPrivacyStatusMock.mockImplementation((privacyStatus: PrivacyStatus) => {
+      currentProfile = {
+        ...currentProfile,
+        privacyStatus,
+      }
+      return Promise.resolve({ privacyStatus, userId: currentProfile.userId })
+    })
+
+    renderWithProviders(
+      <MemoryRouter initialEntries={['/social/profile/viewer']}>
+        <Routes>
+          <Route element={<ProfilePage />} path="/social/profile/:username" />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    await waitFor(() => {
+      expect(screen.getByLabelText(/profile visibility/i)).toHaveValue('PUBLIC')
+    })
+
+    await user.selectOptions(screen.getByLabelText(/profile visibility/i), 'PRIVATE')
+
+    await waitFor(() => {
+      expect(updateMyPrivacyStatusMock).toHaveBeenCalledWith('PRIVATE')
+    })
+  })
+
+  it('supports explicit unblocking for blocked profiles', async () => {
+    const user = userEvent.setup()
+    let currentFollowStatus: FollowStatus = 'BLOCKED'
+    let currentProfile = createProfile({
+      followStatus: 'BLOCKED',
+      privacyStatus: 'PRIVATE',
+      username: 'blockedviewer',
+    })
+
+    getProfileByUsernameMock.mockImplementation(() => Promise.resolve(currentProfile))
+    getFollowStatusMock.mockImplementation(() => Promise.resolve({ followStatus: currentFollowStatus }))
+    unblockUserMock.mockImplementation(() => {
+      currentFollowStatus = 'NOT_FOLLOWING'
+      currentProfile = {
+        ...currentProfile,
+        followStatus: 'NOT_FOLLOWING',
+      }
+      return Promise.resolve({ followStatus: 'NOT_FOLLOWING' })
+    })
+
+    renderWithProviders(
+      <MemoryRouter initialEntries={['/social/profile/blockedviewer']}>
+        <Routes>
+          <Route element={<ProfilePage />} path="/social/profile/:username" />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /unblock profile/i })).toBeInTheDocument()
+    })
+
+    await user.click(screen.getByRole('button', { name: /unblock profile/i }))
+
+    await waitFor(() => {
+      expect(unblockUserMock).toHaveBeenCalledWith(9)
     })
   })
 })

@@ -10,10 +10,11 @@ function getInitial(username: string) {
 
 export function ReviewCard({ review }: { review: ReviewResponseDTO }) {
   return (
-    <Card className="space-y-4 border-white/10 bg-[linear-gradient(145deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.96)_100%)] p-5">
+    <Card className="space-y-4 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.9)_0%,rgba(11,12,16,0.98)_100%)] p-5">
+      <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(173,198,255,0.2)_50%,rgba(255,255,255,0)_100%)]" />
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="flex size-11 items-center justify-center rounded-full border border-white/10 bg-[rgba(216,226,255,0.12)] text-sm font-semibold text-[color:var(--color-accent)]">
+          <div className="flex size-11 items-center justify-center rounded-[14px] border border-white/10 bg-[rgba(216,226,255,0.12)] text-sm font-semibold text-[color:var(--color-accent)]">
             {getInitial(review.username)}
           </div>
           <div>
@@ -23,7 +24,7 @@ export function ReviewCard({ review }: { review: ReviewResponseDTO }) {
             </p>
           </div>
         </div>
-        <div className="inline-flex items-center gap-1.5 rounded-[14px] border border-[rgba(255,222,164,0.22)] bg-[rgba(255,222,164,0.1)] px-3 py-2 text-xs font-semibold text-white">
+        <div className="inline-flex items-center gap-1.5 rounded-[12px] border border-[rgba(255,222,164,0.22)] bg-[rgba(255,222,164,0.1)] px-3 py-2 text-xs font-semibold text-white">
           <Star aria-hidden="true" className="size-3.5 fill-current text-[color:var(--color-warning)]" />
           {review.starRating.toFixed(1)}
         </div>

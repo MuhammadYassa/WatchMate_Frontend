@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Check, Inbox, X } from 'lucide-react'
+import { Check, Inbox, Send, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import { socialApi } from '../api/socialApi'
@@ -19,15 +19,16 @@ import type { FollowRequestDTO } from '../types/api'
 import { ApiClientError } from '../types/errors'
 import { formatDisplayDate } from '../utils/dates'
 
-const PAGE_SIZE = 10
+const PAGE_SIZE = 20
+type RequestTab = 'received' | 'sent'
 
 function FollowRequestsLoadingState() {
   return (
     <PageContainer className="relative isolate space-y-8 overflow-hidden pt-8 md:pt-12">
       <BrowsePageAtmosphere variant="hero" />
-      <Skeleton className="relative z-10 h-60 rounded-[36px]" />
-      <Skeleton className="relative z-10 h-36 rounded-[28px]" />
-      <Skeleton className="relative z-10 h-36 rounded-[28px]" />
+      <Skeleton className="relative z-10 h-60 rounded-[30px]" />
+      <Skeleton className="relative z-10 h-28 rounded-[22px]" />
+      <Skeleton className="relative z-10 h-28 rounded-[22px]" />
     </PageContainer>
   )
 }
@@ -45,20 +46,29 @@ function getConflictMessage(error: unknown) {
 }
 
 export function FollowRequestsPage() {
-  const [page, setPage] = useState(0)
+  const [activeTab, setActiveTab] = useState<RequestTab>('received')
+  const [receivedPage, setReceivedPage] = useState(0)
+  const [sentPage, setSentPage] = useState(0)
   const queryClient = useQueryClient()
   const { pushToast } = useToast()
 
-  const requestsQuery = useQuery({
-    queryFn: () => socialApi.getReceivedFollowRequests(page, PAGE_SIZE),
-    queryKey: ['social', 'follow-requests', 'received', page, PAGE_SIZE],
+  const receivedRequestsQuery = useQuery({
+    queryFn: () => socialApi.getReceivedFollowRequests(receivedPage, PAGE_SIZE),
+    queryKey: ['social', 'follow-requests', 'received', receivedPage, PAGE_SIZE],
+  })
+
+  const sentRequestsQuery = useQuery({
+    queryFn: () => socialApi.getSentFollowRequests(sentPage, PAGE_SIZE),
+    queryKey: ['social', 'follow-requests', 'sent', sentPage, PAGE_SIZE],
   })
 
   async function invalidateSocialState(request: FollowRequestDTO) {
     await Promise.all([
       queryClient.invalidateQueries({ queryKey: ['social', 'follow-requests'] }),
       queryClient.invalidateQueries({ queryKey: ['social', 'follow-status', request.requesterUserId] }),
+      queryClient.invalidateQueries({ queryKey: ['social', 'follow-status', request.targetUserId] }),
       queryClient.invalidateQueries({ queryKey: ['social', 'profile', request.requesterUsername] }),
+      queryClient.invalidateQueries({ queryKey: ['social', 'profile', request.targetUsername] }),
       queryClient.invalidateQueries({ queryKey: ['social', 'search'] }),
     ])
   }
@@ -70,7 +80,7 @@ export function FollowRequestsPage() {
 
       if (conflictMessage) {
         pushToast(conflictMessage, 'info')
-        await requestsQuery.refetch()
+        await receivedRequestsQuery.refetch()
         return
       }
 
@@ -89,7 +99,7 @@ export function FollowRequestsPage() {
 
       if (conflictMessage) {
         pushToast(conflictMessage, 'info')
-        await requestsQuery.refetch()
+        await receivedRequestsQuery.refetch()
         return
       }
 
@@ -101,18 +111,48 @@ export function FollowRequestsPage() {
     },
   })
 
-  if (requestsQuery.isLoading) {
+  const cancelMutation = useMutation({
+    mutationFn: async (request: FollowRequestDTO) => socialApi.cancelFollowRequest(request.requestId),
+    onError: async (error) => {
+      const conflictMessage = getConflictMessage(error)
+
+      if (conflictMessage) {
+        pushToast(conflictMessage, 'info')
+        await sentRequestsQuery.refetch()
+        return
+      }
+
+      pushToast("We couldn't cancel that request right now.", 'error')
+    },
+    onSuccess: async (_, request) => {
+      pushToast(`Canceled request to ${request.targetUsername}.`, 'success')
+      await invalidateSocialState(request)
+    },
+  })
+
+  if (receivedRequestsQuery.isLoading || sentRequestsQuery.isLoading) {
     return <FollowRequestsLoadingState />
   }
 
-  if (requestsQuery.isError || !requestsQuery.data) {
+  if (
+    receivedRequestsQuery.isError
+    || sentRequestsQuery.isError
+    || !receivedRequestsQuery.data
+    || !sentRequestsQuery.data
+  ) {
     return (
       <PageContainer className="relative isolate overflow-hidden pt-8 md:pt-12">
         <BrowsePageAtmosphere />
         <div className="relative z-10">
           <ErrorState
             action={
-              <Button onClick={() => requestsQuery.refetch()} variant="secondary">
+              <Button
+                onClick={() => {
+                  void receivedRequestsQuery.refetch()
+                  void sentRequestsQuery.refetch()
+                }}
+                variant="secondary"
+              >
                 Try again
               </Button>
             }
@@ -124,24 +164,25 @@ export function FollowRequestsPage() {
     )
   }
 
-  const requestPage = requestsQuery.data
+  const requestPage = activeTab === 'received' ? receivedRequestsQuery.data : sentRequestsQuery.data
   const requests = requestPage.content
 
   return (
     <PageContainer className="relative isolate space-y-8 overflow-hidden pt-8 md:space-y-10 md:pt-12">
       <BrowsePageAtmosphere variant="hero" />
 
-      <Card className="relative z-10 overflow-hidden border-white/10 bg-[linear-gradient(145deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.97)_100%)] p-0 shadow-[0_30px_80px_rgba(0,0,0,0.36)]">
+      <section className="relative z-10 overflow-hidden rounded-[30px] border border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.98)_100%)] px-6 py-7 shadow-[0_30px_80px_rgba(0,0,0,0.36)] md:px-8 md:py-9">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(173,198,255,0.15)_0%,rgba(173,198,255,0)_34%),linear-gradient(145deg,rgba(255,255,255,0.05)_0%,rgba(255,255,255,0)_42%)]" />
-        <div className="relative z-10 space-y-4 p-6 md:p-8">
+        <div className="relative z-10 space-y-4">
           <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
             Social
           </p>
-          <h1 className="font-display text-5xl tracking-[-0.05em] text-white md:text-6xl">
+          <h1 className="font-display text-5xl tracking-[-0.055em] text-white md:text-6xl xl:text-[4.75rem]">
             Follow requests
           </h1>
           <p className="max-w-2xl text-base leading-7 text-[color:var(--color-text-secondary)]">
-            Keep incoming requests tidy so the right people can see the watchlists and activity you share.
+            Keep incoming requests tidy so the right people can see the watchlists and activity
+            you share.
           </p>
           <div className="flex flex-wrap gap-3">
             <Link className={getButtonClassName('secondary')} to="/social/search">
@@ -151,8 +192,24 @@ export function FollowRequestsPage() {
               Back to profile
             </Link>
           </div>
+          <div className="flex flex-wrap gap-3 pt-2">
+            <Button
+              aria-pressed={activeTab === 'received'}
+              onClick={() => setActiveTab('received')}
+              variant={activeTab === 'received' ? 'secondary' : 'ghost'}
+            >
+              Received
+            </Button>
+            <Button
+              aria-pressed={activeTab === 'sent'}
+              onClick={() => setActiveTab('sent')}
+              variant={activeTab === 'sent' ? 'secondary' : 'ghost'}
+            >
+              Sent
+            </Button>
+          </div>
         </div>
-      </Card>
+      </section>
 
       {requests.length === 0 ? (
         <div className="relative z-10">
@@ -162,65 +219,92 @@ export function FollowRequestsPage() {
                 Find people
               </Link>
             }
-            body="No one is waiting on a response right now. New requests will show up here when someone asks to follow your profile."
-            heading="No pending requests"
-            icon={<Inbox aria-hidden="true" className="size-5" />}
+            body={
+              activeTab === 'received'
+                ? 'No one is waiting on a response right now. New requests will show up here when someone asks to follow your profile.'
+                : 'You have not sent any pending follow requests right now.'
+            }
+            heading={activeTab === 'received' ? 'No pending requests' : 'No sent requests'}
+            icon={activeTab === 'received' ? <Inbox aria-hidden="true" className="size-5" /> : <Send aria-hidden="true" className="size-5" />}
           />
         </div>
       ) : (
         <section className="relative z-10 space-y-5">
           <SectionHeader
             action={
-              <div className="rounded-[14px] border border-white/10 bg-[rgba(255,255,255,0.04)] px-3 py-2 text-xs text-[color:var(--color-text-secondary)]">
+              <div className="rounded-[12px] border border-white/10 bg-[rgba(255,255,255,0.04)] px-3 py-2 text-xs text-[color:var(--color-text-secondary)]">
                 {requestPage.totalElements} pending
               </div>
             }
-            eyebrow="Awaiting your reply"
-            title="Incoming requests"
+            eyebrow={activeTab === 'received' ? 'Awaiting your reply' : 'Awaiting their reply'}
+            title={activeTab === 'received' ? 'Incoming requests' : 'Sent requests'}
           />
           <div className="space-y-4">
-            {requests.map((request) => {
-              const actionPending =
-                (acceptMutation.isPending && acceptMutation.variables?.requestId === request.requestId)
-                || (rejectMutation.isPending && rejectMutation.variables?.requestId === request.requestId)
+            {requests.map((request, index) => {
+              const acceptPending =
+                acceptMutation.isPending && acceptMutation.variables?.requestId === request.requestId
+              const rejectPending =
+                rejectMutation.isPending && rejectMutation.variables?.requestId === request.requestId
+              const cancelPending =
+                cancelMutation.isPending && cancelMutation.variables?.requestId === request.requestId
+              const actionPending = acceptPending || rejectPending || cancelPending
 
               return (
                 <Card
-                  className="flex flex-col gap-4 border-white/10 bg-[linear-gradient(145deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.96)_100%)] p-5 transition duration-200 ease-out hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(0,0,0,0.3)] md:flex-row md:items-center md:justify-between"
+                  className="motion-slide-up flex flex-col gap-5 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.9)_0%,rgba(11,12,16,0.98)_100%)] p-5 transition duration-300 hover:border-[rgba(173,198,255,0.18)] hover:shadow-[0_28px_68px_rgba(0,0,0,0.38)] md:flex-row md:items-center md:justify-between"
                   key={request.requestId}
+                  style={{ animationDelay: `${Math.min(index * 45, 220)}ms` }}
                 >
-                  <div className="flex items-center gap-4">
-                    <UserInitialBadge size="sm" username={request.requesterUsername} />
+                  <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(173,198,255,0.08)_0%,rgba(173,198,255,0)_72%)] opacity-0 transition duration-300 hover:opacity-100" />
+                  <div className="relative flex items-center gap-4">
+                    <UserInitialBadge
+                      size="sm"
+                      username={activeTab === 'received' ? request.requesterUsername : request.targetUsername}
+                    />
                     <div className="space-y-1.5">
                       <Link
                         className="text-lg font-semibold text-white transition hover:text-[color:var(--color-accent)]"
-                        to={`/social/profile/${encodeURIComponent(request.requesterUsername)}`}
+                        to={`/social/profile/${encodeURIComponent(activeTab === 'received' ? request.requesterUsername : request.targetUsername)}`}
                       >
-                        {request.requesterUsername}
+                        {activeTab === 'received' ? request.requesterUsername : request.targetUsername}
                       </Link>
                       <p className="text-sm text-[color:var(--color-text-tertiary)]">
-                        Requested on {formatDisplayDate(request.requestedAt)}
+                        {activeTab === 'received' ? 'Requested on ' : 'Sent on '}
+                        {formatDisplayDate(request.requestedAt)}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap gap-3">
-                    <Button
-                      disabled={actionPending}
-                      onClick={() => acceptMutation.mutate(request)}
-                      variant="secondary"
-                    >
-                      <Check aria-hidden="true" className="mr-2 size-4" />
-                      Accept
-                    </Button>
-                    <Button
-                      disabled={actionPending}
-                      onClick={() => rejectMutation.mutate(request)}
-                      variant="ghost"
-                    >
-                      <X aria-hidden="true" className="mr-2 size-4" />
-                      Decline
-                    </Button>
+                  <div className="relative flex flex-wrap gap-3">
+                    {activeTab === 'received' ? (
+                      <>
+                        <Button
+                          disabled={actionPending}
+                          onClick={() => acceptMutation.mutate(request)}
+                          variant="secondary"
+                        >
+                          <Check aria-hidden="true" className="mr-2 size-4" />
+                          Accept
+                        </Button>
+                        <Button
+                          disabled={actionPending}
+                          onClick={() => rejectMutation.mutate(request)}
+                          variant="ghost"
+                        >
+                          <X aria-hidden="true" className="mr-2 size-4" />
+                          Decline
+                        </Button>
+                      </>
+                    ) : (
+                      <Button
+                        disabled={actionPending}
+                        onClick={() => cancelMutation.mutate(request)}
+                        variant="ghost"
+                      >
+                        <X aria-hidden="true" className="mr-2 size-4" />
+                        Cancel request
+                      </Button>
+                    )}
                   </div>
                 </Card>
               )
@@ -228,14 +312,36 @@ export function FollowRequestsPage() {
           </div>
 
           {requestPage.totalPages > 1 ? (
-            <Card className="flex items-center justify-between gap-4 border-white/10 bg-[rgba(255,255,255,0.03)] px-5 py-4">
-              <Button disabled={requestPage.first} onClick={() => setPage((current) => current - 1)} variant="ghost">
+            <Card className="flex items-center justify-between gap-4 overflow-hidden border-white/10 bg-[rgba(255,255,255,0.03)] px-5 py-4">
+              <Button
+                disabled={Boolean(requestPage.first)}
+                onClick={() => {
+                  if (activeTab === 'received') {
+                    setReceivedPage((current) => current - 1)
+                    return
+                  }
+
+                  setSentPage((current) => current - 1)
+                }}
+                variant="ghost"
+              >
                 Previous
               </Button>
               <p className="text-sm text-[color:var(--color-text-tertiary)]">
                 Page {requestPage.number + 1} of {requestPage.totalPages}
               </p>
-              <Button disabled={requestPage.last} onClick={() => setPage((current) => current + 1)} variant="ghost">
+              <Button
+                disabled={Boolean(requestPage.last)}
+                onClick={() => {
+                  if (activeTab === 'received') {
+                    setReceivedPage((current) => current + 1)
+                    return
+                  }
+
+                  setSentPage((current) => current + 1)
+                }}
+                variant="ghost"
+              >
                 Next
               </Button>
             </Card>

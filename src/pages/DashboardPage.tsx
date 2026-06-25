@@ -16,7 +16,6 @@ import { ErrorState } from '../components/feedback/ErrorState'
 import { Skeleton, SkeletonPoster } from '../components/feedback/Skeleton'
 import { PageContainer } from '../components/layout/PageContainer'
 import { SectionHeader } from '../components/layout/SectionHeader'
-import { BackdropHero } from '../components/media/BackdropHero'
 import { MediaGrid } from '../components/media/MediaGrid'
 import { MediaRail } from '../components/media/MediaRail'
 import { PosterCard } from '../components/media/PosterCard'
@@ -35,13 +34,20 @@ import {
 } from '../utils/dates'
 import { formatMediaType, formatTmdbShowStatus, formatWatchStatus } from '../utils/labels'
 import { getMediaRoute } from '../utils/mediaRoutes'
+import { getBackdropUrl } from '../utils/tmdbImages'
 
 function DashboardLoadingState() {
   return (
-    <PageContainer className="relative isolate space-y-8 overflow-hidden pt-8 md:pt-12">
+    <PageContainer className="relative isolate space-y-10 overflow-hidden pt-8 md:pt-10">
       <BrowsePageAtmosphere variant="hero" />
-      <Skeleton className="relative z-10 h-[360px] rounded-[36px]" />
-      <div className="relative z-10 space-y-5">
+      <div className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
+        <Skeleton className="h-[34rem] rounded-[20px]" />
+        <div className="grid gap-4">
+          <Skeleton className="h-52 rounded-[18px]" />
+          <Skeleton className="h-52 rounded-[18px]" />
+        </div>
+      </div>
+      <div className="space-y-5">
         <Skeleton className="h-8 w-64 rounded-[14px]" />
         <div className="flex gap-4 overflow-hidden">
           <SkeletonPoster />
@@ -49,9 +55,9 @@ function DashboardLoadingState() {
           <SkeletonPoster />
         </div>
       </div>
-      <div className="relative z-10 grid gap-4 lg:grid-cols-2">
-        <Skeleton className="h-56 rounded-[28px]" />
-        <Skeleton className="h-56 rounded-[28px]" />
+      <div className="grid gap-6">
+        <Skeleton className="h-56 rounded-[18px]" />
+        <Skeleton className="h-56 rounded-[18px]" />
       </div>
     </PageContainer>
   )
@@ -66,6 +72,10 @@ function getDashboardHero(
 
 function groupCalendarItems(items: CalendarItemDTO[]) {
   return items.reduce<Array<{ date: string; items: CalendarItemDTO[] }>>((groups, item) => {
+    if (item.airDate === null) {
+      return groups
+    }
+
     const currentGroup = groups.find((group) => group.date === item.airDate)
 
     if (currentGroup) {
@@ -79,6 +89,53 @@ function groupCalendarItems(items: CalendarItemDTO[]) {
     })
     return groups
   }, [])
+}
+
+function UpcomingStackCard({ item }: { item: UpcomingEpisodeItemDTO }) {
+  return (
+    <Link className="block focus-visible:outline-none" to={getMediaRoute(item.tmdbId, item.type)}>
+      <Card className="h-full border-white/10 bg-[linear-gradient(145deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.96)_100%)] p-5">
+        <div className="space-y-3">
+          <div className="flex items-start justify-between gap-3">
+            <div className="space-y-1.5">
+              <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-accent-strong)]">
+                Upcoming episode
+              </p>
+              <h3 className="font-display text-[2rem] tracking-[-0.04em] text-white">{item.title}</h3>
+            </div>
+            <div className="rounded-[12px] border border-white/10 bg-[rgba(255,255,255,0.04)] px-3 py-2 text-xs text-[color:var(--color-text-secondary)]">
+              {formatDaysUntilLabel(item.daysUntilAirDate)}
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-3 text-sm text-[color:var(--color-text-secondary)]">
+            {item.nextEpisodeName ? (
+              <span className="inline-flex items-center gap-2">
+                <Tv2 aria-hidden="true" className="size-4 text-[color:var(--color-accent)]" />
+                {item.nextEpisodeName}
+              </span>
+            ) : null}
+            {(item.nextEpisodeSeasonNumber !== null && item.nextEpisodeEpisodeNumber !== null) ? (
+              <span className="inline-flex items-center gap-2">
+                <Clock3 aria-hidden="true" className="size-4 text-[color:var(--color-accent)]" />
+                Season {item.nextEpisodeSeasonNumber} Episode {item.nextEpisodeEpisodeNumber}
+              </span>
+            ) : null}
+            {item.nextEpisodeAirDate ? (
+              <span className="inline-flex items-center gap-2">
+                <CalendarDays aria-hidden="true" className="size-4 text-[color:var(--color-accent)]" />
+                {formatDisplayDate(item.nextEpisodeAirDate)}
+              </span>
+            ) : null}
+          </div>
+          {formatTmdbShowStatus(item.tmdbShowStatus) ? (
+            <p className="text-sm text-[color:var(--color-text-tertiary)]">
+              {formatTmdbShowStatus(item.tmdbShowStatus)}
+            </p>
+          ) : null}
+        </div>
+      </Card>
+    </Link>
+  )
 }
 
 export function DashboardPage() {
@@ -115,51 +172,101 @@ export function DashboardPage() {
   const hero = getDashboardHero(continueWatchingItems, upcomingItems)
   const calendarGroups = groupCalendarItems(calendarItems)
   const featuredUpcoming = upcomingItems[0] ?? null
-  const secondaryUpcoming = upcomingItems.slice(1)
+  const secondaryUpcoming = upcomingItems.slice(1, 4)
 
   return (
-    <PageContainer className="relative isolate space-y-10 overflow-hidden pt-8 md:space-y-12 md:pt-12">
+    <PageContainer className="relative isolate space-y-12 overflow-hidden pt-8 md:space-y-14 md:pt-10">
       <BrowsePageAtmosphere variant="hero" />
 
-      <section className="relative z-10 space-y-5">
-        <div className="space-y-3">
-          <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
-            Dashboard
-          </p>
-          <h1 className="font-display text-5xl tracking-[-0.05em] text-white md:text-6xl">
-            What should you watch next?
-          </h1>
-          <p className="max-w-2xl text-base leading-7 text-[color:var(--color-text-secondary)]">
-            Your watch-next command center for resume points, upcoming episodes, and the releases you care about most.
-          </p>
+      <section className="relative z-10 grid gap-5 xl:grid-cols-[1.18fr_0.82fr] xl:items-stretch">
+        <div className="relative min-h-[34rem] overflow-hidden rounded-[20px] border border-white/10 bg-[linear-gradient(145deg,rgba(18,19,23,0.96)_0%,rgba(11,12,15,1)_100%)] shadow-[0_30px_90px_rgba(0,0,0,0.36)]">
+          {hero && 'backdropPath' in hero && hero.backdropPath ? (
+            <img
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover opacity-55"
+              src={getBackdropUrl(hero.backdropPath, 'w1280') ?? undefined}
+            />
+          ) : null}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(173,198,255,0.18),transparent_24%),linear-gradient(180deg,rgba(7,8,11,0.12)_0%,rgba(7,8,11,0.3)_18%,rgba(7,8,11,0.96)_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(10,10,13,0.96)_8%,rgba(10,10,13,0.74)_46%,rgba(10,10,13,0.28)_100%)]" />
+
+          <div className="relative z-10 flex h-full min-h-[34rem] flex-col justify-end px-6 py-7 md:px-8 md:py-8 lg:px-10 lg:py-10">
+            <div className="motion-stagger max-w-3xl space-y-5">
+              <div className="space-y-3">
+                <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
+                  Dashboard
+                </p>
+                <h1 className="font-display text-[3.4rem] leading-[0.92] tracking-[-0.055em] text-white sm:text-[4.4rem] md:text-[5.3rem]">
+                  {hero ? hero.title : 'What should you watch next?'}
+                </h1>
+                <p className="max-w-2xl text-base leading-8 text-[color:var(--color-text-secondary)] md:text-lg">
+                  {hero
+                    ? (
+                      'resumeSeasonNumber' in hero && hero.resumeSeasonNumber && hero.resumeEpisodeNumber
+                        ? `Pick up ${hero.title} at Season ${hero.resumeSeasonNumber} Episode ${hero.resumeEpisodeNumber}, then scan what is airing next.`
+                        : `Your watch-next command center keeps resume points, upcoming episodes, and release timing in one place.`
+                    )
+                    : 'Your watch-next command center for resume points, upcoming episodes, and the releases you care about most.'}
+                </p>
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+                {hero ? (
+                  <Link
+                    className="inline-flex min-h-11 items-center justify-center rounded-[var(--radius-control)] border border-[rgba(216,226,255,0.28)] bg-[color:var(--color-accent)] px-5 py-2.5 text-sm font-semibold text-[#122f5f] shadow-[0_12px_30px_var(--color-accent-glow)] transition duration-300 hover:brightness-[1.04]"
+                    to={getMediaRoute(hero.tmdbId, hero.type)}
+                  >
+                    {'resumeSeasonNumber' in hero ? 'Jump back in' : 'Open title'}
+                  </Link>
+                ) : null}
+                <Button onClick={() => setRangeDays(14)} variant="secondary">
+                  14 day view
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {hero ? (
-          <BackdropHero
-            ctaHref={getMediaRoute(hero.tmdbId, hero.type)}
-            ctaLabel={hero.type === 'SHOW' ? 'Jump back in' : 'Open title'}
-            imagePath={hero.backdropPath}
-            meta="Your next watch"
-            subtitle={
-              'resumeSeasonNumber' in hero && hero.resumeSeasonNumber && hero.resumeEpisodeNumber
-                ? `Pick up ${hero.title} at Season ${hero.resumeSeasonNumber} Episode ${hero.resumeEpisodeNumber}, or browse what is coming up next.`
-                : `Your dashboard keeps upcoming episodes, resume points, and what to queue next in one place.`
-            }
-            title={hero.title}
-          />
-        ) : (
-          <Card className="border-white/10 bg-[linear-gradient(145deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.96)_100%)] p-8">
-            <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
-              Your dashboard
-            </p>
-            <h2 className="mt-3 font-display text-5xl leading-[0.95] tracking-[-0.05em] text-white md:text-6xl">
-              What should you watch next?
-            </h2>
-            <p className="mt-4 max-w-2xl text-base leading-7 text-[color:var(--color-text-secondary)]">
-              This is where resume points, upcoming episodes, and your next picks will come together as you keep tracking titles.
-            </p>
+        <div className="motion-stagger grid gap-4">
+          <Card className="border-white/10 bg-[linear-gradient(145deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.96)_100%)] p-5">
+            <div className="space-y-3">
+              <p className="text-[11px] uppercase tracking-[0.3em] text-[color:var(--color-accent-strong)]">
+                Upcoming episodes
+              </p>
+              <h2 className="font-display text-[2.3rem] tracking-[-0.04em] text-white">
+                Next on your list
+              </h2>
+              <p className="text-sm leading-7 text-[color:var(--color-text-secondary)]">
+                Episodes airing soon stay stacked here so the next watch is always obvious.
+              </p>
+            </div>
           </Card>
-        )}
+
+          {upcomingEpisodesQuery.isError ? (
+            <ErrorState
+              action={
+                <Button onClick={() => upcomingEpisodesQuery.refetch()} variant="secondary">
+                  Try again
+                </Button>
+              }
+              body="We couldn't load your upcoming episodes right now."
+              heading="Upcoming episodes are unavailable"
+            />
+          ) : upcomingItems.length > 0 ? (
+            <>
+              <UpcomingStackCard item={featuredUpcoming ?? upcomingItems[0]} />
+              {secondaryUpcoming.map((item) => (
+                <UpcomingStackCard item={item} key={`${item.tmdbId}-${item.nextEpisodeEpisodeNumber ?? 'x'}`} />
+              ))}
+            </>
+          ) : (
+            <EmptyState
+              body="When shows you track have confirmed upcoming episodes, this section will keep them easy to spot."
+              heading="No upcoming episodes right now"
+              icon={<Sparkles aria-hidden="true" className="size-5" />}
+            />
+          )}
+        </div>
       </section>
 
       <section className="relative z-10 space-y-5">
@@ -175,7 +282,7 @@ export function DashboardPage() {
             heading="Continue watching is unavailable"
           />
         ) : continueWatchingItems.length > 0 ? (
-          <MediaRail className="pr-2">
+          <MediaRail className="pr-0">
             {continueWatchingItems.map((item) => (
               <PosterCard
                 key={`${item.type}-${item.tmdbId}`}
@@ -194,7 +301,10 @@ export function DashboardPage() {
         ) : (
           <EmptyState
             action={
-              <Link className="inline-flex min-h-11 items-center rounded-2xl bg-[color:var(--color-accent)] px-5 text-sm font-semibold text-[#122f5f] transition hover:bg-[color:var(--color-accent-strong)]" to="/discover">
+              <Link
+                className="inline-flex min-h-11 items-center rounded-[var(--radius-control)] bg-[color:var(--color-accent)] px-5 text-sm font-semibold text-[#122f5f] transition hover:bg-[color:var(--color-accent-strong)]"
+                to="/discover"
+              >
                 Find something new
               </Link>
             }
@@ -205,135 +315,7 @@ export function DashboardPage() {
         )}
       </section>
 
-      <section className="relative z-10 space-y-5">
-        <SectionHeader eyebrow="Coming up" title="Upcoming episodes" />
-        {upcomingEpisodesQuery.isError ? (
-          <ErrorState
-            action={
-              <Button onClick={() => upcomingEpisodesQuery.refetch()} variant="secondary">
-                Try again
-              </Button>
-            }
-            body="We couldn't load your upcoming episodes right now."
-            heading="Upcoming episodes are unavailable"
-          />
-        ) : upcomingItems.length > 0 ? (
-          <div className="grid gap-5 lg:grid-cols-[1.25fr_0.95fr]">
-            {featuredUpcoming ? (
-              <Link className="focus-visible:outline-none" to={getMediaRoute(featuredUpcoming.tmdbId, featuredUpcoming.type)}>
-                <Card className="h-full overflow-hidden border-white/10 bg-[linear-gradient(145deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.96)_100%)] p-0 shadow-[0_28px_70px_rgba(0,0,0,0.35)]">
-                  <div className="relative min-h-[320px] overflow-hidden">
-                    {featuredUpcoming.backdropPath ? (
-                      <img
-                        alt=""
-                        className="absolute inset-0 h-full w-full object-cover opacity-45"
-                        src={`https://image.tmdb.org/t/p/w780${featuredUpcoming.backdropPath}`}
-                      />
-                    ) : null}
-                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,8,11,0.15)_0%,rgba(7,8,11,0.82)_72%,rgba(7,8,11,0.98)_100%)]" />
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(173,198,255,0.16)_0%,rgba(173,198,255,0)_34%)]" />
-                    <div className="relative z-10 flex h-full min-h-[320px] flex-col justify-end p-6 md:p-8">
-                      <div className="mb-4 flex items-center gap-3">
-                        <span className="rounded-[14px] border border-[rgba(173,198,255,0.3)] bg-[rgba(216,226,255,0.16)] px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--color-accent)]">
-                          {formatDaysUntilLabel(featuredUpcoming.daysUntilAirDate)}
-                        </span>
-                      </div>
-                      <div className="space-y-3">
-                        <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
-                          Upcoming episode
-                        </p>
-                        <h3 className="font-display text-4xl tracking-[-0.04em] text-white md:text-5xl">
-                          {featuredUpcoming.title}
-                        </h3>
-                        <div className="flex flex-wrap gap-3 text-sm text-[color:var(--color-text-secondary)]">
-                          {featuredUpcoming.nextEpisodeName ? (
-                            <span className="inline-flex items-center gap-2 rounded-[14px] border border-white/10 bg-[rgba(255,255,255,0.05)] px-3 py-2">
-                              <Tv2 aria-hidden="true" className="size-4 text-[color:var(--color-accent)]" />
-                              {featuredUpcoming.nextEpisodeName}
-                            </span>
-                          ) : null}
-                          {(featuredUpcoming.nextEpisodeSeasonNumber !== null && featuredUpcoming.nextEpisodeEpisodeNumber !== null) ? (
-                            <span className="inline-flex items-center gap-2 rounded-[14px] border border-white/10 bg-[rgba(255,255,255,0.05)] px-3 py-2">
-                              <Clock3 aria-hidden="true" className="size-4 text-[color:var(--color-accent)]" />
-                              Season {featuredUpcoming.nextEpisodeSeasonNumber} Episode {featuredUpcoming.nextEpisodeEpisodeNumber}
-                            </span>
-                          ) : null}
-                          {featuredUpcoming.nextEpisodeAirDate ? (
-                            <span className="inline-flex items-center gap-2 rounded-[14px] border border-white/10 bg-[rgba(255,255,255,0.05)] px-3 py-2">
-                              <CalendarDays aria-hidden="true" className="size-4 text-[color:var(--color-accent)]" />
-                              {formatDisplayDate(featuredUpcoming.nextEpisodeAirDate)}
-                            </span>
-                          ) : null}
-                        </div>
-                        {formatTmdbShowStatus(featuredUpcoming.tmdbShowStatus) ? (
-                          <p className="text-sm text-[color:var(--color-text-tertiary)]">
-                            {formatTmdbShowStatus(featuredUpcoming.tmdbShowStatus)}
-                          </p>
-                        ) : null}
-                      </div>
-                    </div>
-                  </div>
-                </Card>
-              </Link>
-            ) : null}
-
-            <div className="grid gap-4">
-              {(secondaryUpcoming.length > 0 ? secondaryUpcoming : featuredUpcoming ? [featuredUpcoming] : []).map((item) => (
-                <Link className="focus-visible:outline-none" key={`${item.tmdbId}-${item.nextEpisodeEpisodeNumber ?? 'x'}`} to={getMediaRoute(item.tmdbId, item.type)}>
-                  <Card className="h-full border-white/10 bg-[linear-gradient(145deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.96)_100%)] p-5 transition duration-200 ease-out hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(0,0,0,0.38)]">
-                    <div className="space-y-3">
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="space-y-1.5">
-                          <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-accent-strong)]">
-                            Upcoming episode
-                          </p>
-                          <h3 className="font-display text-3xl tracking-[-0.04em] text-white">{item.title}</h3>
-                        </div>
-                        <div className="rounded-[14px] border border-white/10 bg-[rgba(255,255,255,0.04)] px-3 py-2 text-xs text-[color:var(--color-text-secondary)]">
-                          {formatDaysUntilLabel(item.daysUntilAirDate)}
-                        </div>
-                      </div>
-                      <div className="flex flex-wrap gap-3 text-sm text-[color:var(--color-text-secondary)]">
-                        {item.nextEpisodeName ? (
-                          <span className="inline-flex items-center gap-2">
-                            <Tv2 aria-hidden="true" className="size-4 text-[color:var(--color-accent)]" />
-                            {item.nextEpisodeName}
-                          </span>
-                        ) : null}
-                        {(item.nextEpisodeSeasonNumber !== null && item.nextEpisodeEpisodeNumber !== null) ? (
-                          <span className="inline-flex items-center gap-2">
-                            <Clock3 aria-hidden="true" className="size-4 text-[color:var(--color-accent)]" />
-                            Season {item.nextEpisodeSeasonNumber} Episode {item.nextEpisodeEpisodeNumber}
-                          </span>
-                        ) : null}
-                        {item.nextEpisodeAirDate ? (
-                          <span className="inline-flex items-center gap-2">
-                            <CalendarDays aria-hidden="true" className="size-4 text-[color:var(--color-accent)]" />
-                            {formatDisplayDate(item.nextEpisodeAirDate)}
-                          </span>
-                        ) : null}
-                      </div>
-                      {formatTmdbShowStatus(item.tmdbShowStatus) ? (
-                        <p className="text-sm text-[color:var(--color-text-tertiary)]">
-                          {formatTmdbShowStatus(item.tmdbShowStatus)}
-                        </p>
-                      ) : null}
-                    </div>
-                  </Card>
-                </Link>
-              ))}
-            </div>
-          </div>
-        ) : (
-          <EmptyState
-            body="When shows you track have confirmed upcoming episodes, this section will keep them easy to spot."
-            heading="No upcoming episodes right now"
-            icon={<Sparkles aria-hidden="true" className="size-5" />}
-          />
-        )}
-      </section>
-
-      <section className="relative z-10 space-y-5">
+      <section className="relative z-10 space-y-6">
         <SectionHeader
           action={
             <div className="flex gap-2">
@@ -362,27 +344,32 @@ export function DashboardPage() {
             heading="Calendar is unavailable"
           />
         ) : calendarGroups.length > 0 ? (
-          <div className="grid gap-5">
+          <div className="grid gap-8">
             {calendarGroups.map((group) => (
-              <Card
-                className="grid gap-5 border-white/10 bg-[linear-gradient(145deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.96)_100%)] p-5 md:grid-cols-[180px_1fr] md:p-6"
+              <div
+                className="grid gap-6 border-t border-white/6 pt-8 first:border-t-0 first:pt-0 lg:grid-cols-[170px_1fr]"
                 key={group.date}
               >
-                <div className="space-y-3 md:pr-4">
+                <div className="space-y-3 lg:sticky lg:top-28 lg:self-start">
                   <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
                     On the calendar
                   </p>
-                  <h3 className="font-display text-3xl tracking-[-0.04em] text-white">
+                  <h3 className="font-display text-[2.6rem] leading-none tracking-[-0.05em] text-white">
                     {formatCalendarDateHeading(group.date)}
                   </h3>
-                  <div className="inline-flex rounded-[14px] border border-white/10 bg-[rgba(255,255,255,0.04)] px-3 py-2 text-xs text-[color:var(--color-text-secondary)]">
+                  <div className="inline-flex rounded-[12px] border border-white/10 bg-[rgba(255,255,255,0.04)] px-3 py-2 text-xs text-[color:var(--color-text-secondary)]">
                     {group.items.length} {group.items.length === 1 ? 'release' : 'releases'}
                   </div>
                 </div>
+
                 <MediaGrid className="gap-4 sm:grid-cols-2 xl:grid-cols-3">
                   {group.items.map((item) => (
-                    <Link className="focus-visible:outline-none" key={`${group.date}-${item.tmdbId}-${item.episodeNumber ?? 'x'}`} to={getMediaRoute(item.tmdbId, item.type)}>
-                      <Card className="h-full border-white/10 bg-[rgba(255,255,255,0.03)] p-4 transition duration-200 ease-out hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(0,0,0,0.38)]">
+                    <Link
+                      className="block focus-visible:outline-none"
+                      key={`${group.date}-${item.tmdbId}-${item.episodeNumber ?? 'x'}`}
+                      to={getMediaRoute(item.tmdbId, item.type)}
+                    >
+                      <Card className="h-full border-white/10 bg-[rgba(255,255,255,0.03)] p-4">
                         <p className="text-sm font-semibold text-white">{item.title}</p>
                         <div className="mt-3 space-y-2 text-sm text-[color:var(--color-text-secondary)]">
                           {item.episodeTitle ? <p>{item.episodeTitle}</p> : null}
@@ -395,7 +382,7 @@ export function DashboardPage() {
                     </Link>
                   ))}
                 </MediaGrid>
-              </Card>
+              </div>
             ))}
           </div>
         ) : (

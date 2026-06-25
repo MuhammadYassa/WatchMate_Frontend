@@ -4,7 +4,7 @@ import { apiClient } from '../api/client'
 import { favouriteApi } from '../api/favouriteApi'
 import { reviewApi } from '../api/reviewApi'
 import { watchlistApi } from '../api/watchlistApi'
-import type { SpringPage, UserFavouritesDTO, WatchListDTO } from '../types/api'
+import type { PageResponse, ReviewResponseDTO, WatchListDTO } from '../types/api'
 
 vi.mock('../api/client', () => ({
   apiClient: {
@@ -22,7 +22,7 @@ describe('media interaction APIs', () => {
     vi.clearAllMocks()
   })
 
-  it('passes media type when toggling favourites', async () => {
+  it('uses the new favourite add and remove endpoints', async () => {
     mockedApiClient.post.mockResolvedValueOnce({
       data: undefined,
       headers: new Headers(),
@@ -34,17 +34,24 @@ describe('media interaction APIs', () => {
       status: 200,
     })
 
-    await favouriteApi.addFavourite(603, 'MOVIE')
-    await favouriteApi.removeFavourite(603, 'MOVIE')
+    await favouriteApi.addFavourite(603)
+    await favouriteApi.removeFavourite(603)
 
-    expect(mockedApiClient.post).toHaveBeenCalledWith('/favourites/add/603?type=MOVIE')
-    expect(mockedApiClient.delete).toHaveBeenCalledWith('/favourites/remove/603?type=MOVIE')
+    expect(mockedApiClient.post).toHaveBeenCalledWith('/favourites/603')
+    expect(mockedApiClient.delete).toHaveBeenCalledWith('/favourites/603')
   })
 
-  it('gets the full favourites collection', async () => {
-    const favourites: UserFavouritesDTO = {
-      favourites: [],
-      totalCount: 0,
+  it('gets the paginated favourites collection', async () => {
+    const favourites: PageResponse<never> = {
+      content: [],
+      empty: true,
+      first: true,
+      last: true,
+      number: 0,
+      numberOfElements: 0,
+      size: 20,
+      totalElements: 0,
+      totalPages: 0,
     }
 
     mockedApiClient.get.mockResolvedValueOnce({
@@ -53,12 +60,27 @@ describe('media interaction APIs', () => {
       status: 200,
     })
 
-    await expect(favouriteApi.getAll()).resolves.toEqual(favourites)
-    expect(mockedApiClient.get).toHaveBeenCalledWith('/favourites/all')
+    await expect(favouriteApi.getFavourites(0, 20)).resolves.toEqual(favourites)
+    expect(mockedApiClient.get).toHaveBeenCalledWith('/favourites?page=0&size=20')
   })
 
-  it('creates reviews with the title type included', async () => {
-    const review = {
+  it('gets favourite status from the new status endpoint', async () => {
+    mockedApiClient.get.mockResolvedValueOnce({
+      data: { isFavourited: true, tmdbId: 603 },
+      headers: new Headers(),
+      status: 200,
+    })
+
+    await expect(favouriteApi.getFavouriteStatus(603)).resolves.toEqual({
+      isFavourited: true,
+      tmdbId: 603,
+    })
+
+    expect(mockedApiClient.get).toHaveBeenCalledWith('/favourites/603/status')
+  })
+
+  it('creates reviews with the new reviews endpoint', async () => {
+    const review: ReviewResponseDTO = {
       comment: 'Excellent.',
       postedAt: '2026-06-20T10:00:00',
       reviewId: 1,
@@ -83,7 +105,7 @@ describe('media interaction APIs', () => {
       }),
     ).resolves.toEqual(review)
 
-    expect(mockedApiClient.post).toHaveBeenCalledWith('/reviews/create', {
+    expect(mockedApiClient.post).toHaveBeenCalledWith('/reviews', {
       body: {
         comment: 'Excellent.',
         starRating: 5,
@@ -93,8 +115,43 @@ describe('media interaction APIs', () => {
     })
   })
 
+  it('gets paginated movie and show reviews', async () => {
+    const movieReviews: PageResponse<ReviewResponseDTO> = {
+      content: [],
+      empty: true,
+      first: true,
+      last: true,
+      number: 0,
+      numberOfElements: 0,
+      size: 20,
+      totalElements: 0,
+      totalPages: 0,
+    }
+    const showReviews: PageResponse<ReviewResponseDTO> = {
+      ...movieReviews,
+    }
+
+    mockedApiClient.get
+      .mockResolvedValueOnce({
+        data: movieReviews,
+        headers: new Headers(),
+        status: 200,
+      })
+      .mockResolvedValueOnce({
+        data: showReviews,
+        headers: new Headers(),
+        status: 200,
+      })
+
+    await expect(reviewApi.getMovieReviews(603, 0, 20)).resolves.toEqual(movieReviews)
+    await expect(reviewApi.getShowReviews(95396, 1, 10)).resolves.toEqual(showReviews)
+
+    expect(mockedApiClient.get).toHaveBeenNthCalledWith(1, '/movies/603/reviews?page=0&size=20')
+    expect(mockedApiClient.get).toHaveBeenNthCalledWith(2, '/shows/95396/reviews?page=1&size=10')
+  })
+
   it('passes media type when adding items to watchlists and returns the paged list', async () => {
-    const watchlists: SpringPage<WatchListDTO> = {
+    const watchlists: PageResponse<WatchListDTO> = {
       content: [
         {
           id: 1,

@@ -32,6 +32,9 @@ describe('movieApi', () => {
       tmdbId: 603,
       type: 'MOVIE',
       watchStatus: 'WATCHED',
+      cast: [],
+      bestTrailer: null,
+      watchProviders: { region: 'US', link: null, flatrate: [], rent: [], buy: [], ads: [], free: [] },
     }
 
     mockedApiClient.get.mockResolvedValueOnce({

@@ -6,7 +6,7 @@ export function MediaGrid({ children, className }: PropsWithChildren<{ className
   return (
     <div
       className={cn(
-        'grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6',
+        'grid grid-cols-2 gap-x-4 gap-y-7 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6',
         className,
       )}
     >

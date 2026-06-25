@@ -1,7 +1,7 @@
 import type {
-  FollowStatuses,
+  FollowStatus,
   MediaType,
-  PrivacyStatuses,
+  PrivacyStatus,
   ShowTrackingJobStatus,
   WatchStatus,
 } from '../types/enums'
@@ -85,18 +85,19 @@ export function formatTmdbShowStatus(status: string | null | undefined) {
     .replace(/\b\w/g, (letter) => letter.toUpperCase())
 }
 
-export function formatFollowStatus(status: FollowStatuses) {
-  const labels: Record<FollowStatuses, string> = {
+export function formatFollowStatus(status: FollowStatus) {
+  const labels: Record<FollowStatus, string> = {
     BLOCKED: 'Blocked',
     FOLLOWING: 'Following',
     NOT_FOLLOWING: 'Not following',
     REQUESTED: 'Requested',
+    SELF: 'You',
   }
 
   return labels[status]
 }
 
-export function formatPrivacyStatus(status: PrivacyStatuses) {
+export function formatPrivacyStatus(status: PrivacyStatus) {
   return status === 'PRIVATE' ? 'Private profile' : 'Public profile'
 }
 

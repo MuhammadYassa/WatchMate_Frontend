@@ -11,16 +11,16 @@ export function FormField({ children, error, hint, label, trailing }: PropsWithC
   return (
     <label className="block space-y-2.5">
       <div className="flex items-center justify-between gap-3">
-        <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--color-text-secondary)]">
+        <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--color-text-secondary)]">
           {label}
         </span>
         {trailing}
       </div>
       {children}
       {error ? (
-        <p className="text-sm text-[color:var(--color-error)]">{error}</p>
+        <p className="text-sm leading-6 text-[color:var(--color-error)]">{error}</p>
       ) : hint ? (
-        <p className="text-sm text-[color:var(--color-text-tertiary)]">{hint}</p>
+        <p className="text-sm leading-6 text-[color:var(--color-text-tertiary)]">{hint}</p>
       ) : null}
     </label>
   )

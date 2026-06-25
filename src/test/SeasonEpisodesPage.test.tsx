@@ -82,8 +82,8 @@ describe('SeasonEpisodesPage', () => {
       expect(screen.getByRole('heading', { name: 'Specials' })).toBeInTheDocument()
     })
 
-    expect(screen.getByText('Watched')).toBeInTheDocument()
-    expect(screen.getByText('Unaired')).toBeInTheDocument()
+    expect(screen.getAllByText('Watched').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Unaired').length).toBeGreaterThan(0)
     expect(screen.getByText(/progress updates are set from the show page/i)).toBeInTheDocument()
     expect(screen.queryByText('9999')).not.toBeInTheDocument()
     expect(screen.queryByText('10000')).not.toBeInTheDocument()

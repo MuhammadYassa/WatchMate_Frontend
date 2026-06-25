@@ -80,7 +80,7 @@ export function WatchlistDialog({
 
   return (
     <div className="fixed inset-0 z-[70] flex items-start justify-center overflow-y-auto bg-[rgba(5,6,8,0.82)] px-4 py-4 backdrop-blur-md sm:items-center sm:py-8">
-      <Card className="w-full max-w-3xl space-y-6 border-white/10 bg-[linear-gradient(145deg,rgba(18,19,23,0.94)_0%,rgba(10,11,15,0.98)_100%)] p-5 shadow-[0_40px_100px_rgba(0,0,0,0.45)] sm:p-6">
+      <Card className="motion-modal w-full max-w-3xl space-y-6 border-white/10 bg-[linear-gradient(145deg,rgba(18,19,23,0.94)_0%,rgba(10,11,15,0.98)_100%)] p-5 shadow-[0_40px_100px_rgba(0,0,0,0.45)] sm:p-6">
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-2.5">
             <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">

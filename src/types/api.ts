@@ -1,8 +1,8 @@
 import type {
   FollowRequestStatuses,
-  FollowStatuses,
+  FollowStatus,
   MediaType,
-  PrivacyStatuses,
+  PrivacyStatus,
   Role,
   SearchMediaType,
   ShowTrackingJobStatus,
@@ -10,16 +10,23 @@ import type {
   WatchStatus,
 } from './enums'
 
-export interface SpringPage<T> {
+export interface PageResponse<T> {
   content: T[]
   totalElements: number
   totalPages: number
   size: number
   number: number
-  numberOfElements: number
+  first?: boolean
+  last?: boolean
+  empty?: boolean
+  numberOfElements?: number
+}
+
+export interface SpringPage<T> extends PageResponse<T> {
   first: boolean
   last: boolean
   empty: boolean
+  numberOfElements: number
 }
 
 export interface LoginRequestDTO {
@@ -62,12 +69,21 @@ export interface CreateReviewRequestDTO {
   comment: string
   starRating: number
   tmdbId: number
-  type: MediaType
+  type?: MediaType
 }
 
 export interface UpdateReviewRequestDTO {
   comment: string
   starRating: number
+}
+
+export interface UpdateProfilePrivacyRequest {
+  privacyStatus: PrivacyStatus
+}
+
+export interface UpdateProfilePrivacyResponse {
+  userId: number
+  privacyStatus: PrivacyStatus
 }
 
 export interface DiscoveryMediaItemDTO {
@@ -90,11 +106,6 @@ export interface HomeResponseDTO {
   recommendedLater: DiscoveryMediaItemDTO[]
   movieGenres: string[]
   showGenres: string[]
-}
-
-export interface HomeStatusDTO {
-  healthy: boolean
-  lastSyncAt: string | null
 }
 
 export interface GenreBrowseResponseDTO {
@@ -139,6 +150,43 @@ export interface MediaDetailsDTO {
   watchStatus: WatchStatus | null
 }
 
+export interface CastMemberDTO {
+  tmdbPersonId: number
+  name: string
+  character: string | null
+  profilePath: string | null
+  order: number | null
+  knownForDepartment: string | null
+}
+
+export interface TrailerDTO {
+  key: string
+  name: string
+  site: string
+  type: string
+  official: boolean | null
+  publishedAt: string | null
+  youtubeUrl: string
+  thumbnailUrl: string
+}
+
+export interface WatchProviderEntryDTO {
+  providerId: number
+  providerName: string
+  logoPath: string | null
+  displayPriority: number | null
+}
+
+export interface WatchProvidersDTO {
+  region: string
+  link: string | null
+  flatrate: WatchProviderEntryDTO[]
+  rent: WatchProviderEntryDTO[]
+  buy: WatchProviderEntryDTO[]
+  ads: WatchProviderEntryDTO[]
+  free: WatchProviderEntryDTO[]
+}
+
 export interface MovieDetailsDTO {
   tmdbId: number
   title: string
@@ -152,14 +200,19 @@ export interface MovieDetailsDTO {
   reviews: ReviewResponseDTO[]
   isFavourited: boolean | null
   watchStatus: WatchStatus | null
+  cast: CastMemberDTO[]
+  bestTrailer: TrailerDTO | null
+  watchProviders: WatchProvidersDTO
 }
 
 export interface ShowSeasonSummaryDTO {
+  tmdbSeasonId: number
   seasonNumber: number
   name: string
-  episodeCount: number
-  posterPath: string | null
+  overview: string
   airDate: string | null
+  episodeCount: number | null
+  posterPath: string | null
 }
 
 export interface ShowDetailsDTO {
@@ -187,6 +240,9 @@ export interface ShowDetailsDTO {
   seasons: ShowSeasonSummaryDTO[]
   isFavourited: boolean | null
   watchStatus: WatchStatus | null
+  cast: CastMemberDTO[]
+  bestTrailer: TrailerDTO | null
+  watchProviders: WatchProvidersDTO
 }
 
 export interface ShowEpisodeDetailsDTO {
@@ -238,9 +294,9 @@ export interface ShowTrackingDTO {
   watchPositionEpisode: number | null
   latestWatchedSeason: number | null
   latestWatchedEpisode: number | null
-  episodesWatchedCount: number
-  seasonsCompletedCount: number
-  completed: boolean
+  episodesWatchedCount: number | null
+  seasonsCompletedCount: number | null
+  completed: boolean | null
   watchedEpisodes: WatchedEpisodeDTO[]
 }
 
@@ -268,7 +324,7 @@ export interface ShowTrackingJobDTO {
   status: ShowTrackingJobStatus
   jobType: ShowTrackingJobType
   mediaId: number | null
-  tmdbId: number
+  tmdbId: number | null
   message: string | null
   totalSeasons: number | null
   completedSeasons: number | null
@@ -301,11 +357,6 @@ export interface RenameWatchListDTO {
 export interface FavouriteStatusDTO {
   tmdbId: number
   isFavourited: boolean
-}
-
-export interface UserFavouritesDTO {
-  favourites: MediaDetailsDTO[]
-  totalCount: number
 }
 
 export interface ContinueWatchingItemDTO {
@@ -347,7 +398,7 @@ export interface UpcomingEpisodesResponseDTO {
 }
 
 export interface CalendarItemDTO {
-  airDate: string
+  airDate: string | null
   tmdbId: number
   type: MediaType
   title: string
@@ -365,7 +416,7 @@ export interface CalendarResponseDTO {
 }
 
 export interface FollowStatusDTO {
-  followStatus: FollowStatuses
+  followStatus: FollowStatus
 }
 
 export interface FollowRequestDTO {
@@ -388,7 +439,7 @@ export interface SearchListUserDetailsDTO {
   username: string
   isFollowing: boolean | null
   isSelf: boolean
-  privacyStatus: PrivacyStatuses
+  privacyStatus: PrivacyStatus
 }
 
 export interface FollowListUserDetailsDTO {
@@ -407,8 +458,8 @@ export interface UserProfileDTO {
   showsWatchedCount?: number
   moviesWatched?: SpringPage<SearchItemDTO>
   showsWatched?: SpringPage<SearchItemDTO>
-  followStatus: FollowStatuses
-  privacyStatus: PrivacyStatuses
+  followStatus: FollowStatus
+  privacyStatus: PrivacyStatus
 }
 
 export interface UserIdentitySnapshot {

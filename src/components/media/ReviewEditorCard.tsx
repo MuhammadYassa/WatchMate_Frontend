@@ -17,6 +17,7 @@ interface ReviewEditorCardProps {
   detailQueryKey: readonly unknown[]
   existingReview: ReviewResponseDTO | null
   mediaType: MediaType
+  reviewQueryKey: readonly unknown[]
   tmdbId: number
 }
 
@@ -24,6 +25,7 @@ export function ReviewEditorCard({
   detailQueryKey,
   existingReview,
   mediaType,
+  reviewQueryKey,
   tmdbId,
 }: ReviewEditorCardProps) {
   const queryClient = useQueryClient()
@@ -31,11 +33,18 @@ export function ReviewEditorCard({
   const [comment, setComment] = useState(existingReview?.comment ?? '')
   const [starRating, setStarRating] = useState(existingReview?.starRating ?? 4)
 
+  async function invalidateReviewData() {
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: detailQueryKey }),
+      queryClient.invalidateQueries({ queryKey: reviewQueryKey }),
+    ])
+  }
+
   const createMutation = useMutation({
     mutationFn: reviewApi.createReview,
     onSuccess: async () => {
       pushToast('Review saved.', 'success')
-      await queryClient.invalidateQueries({ queryKey: detailQueryKey })
+      await invalidateReviewData()
     },
   })
 
@@ -47,7 +56,7 @@ export function ReviewEditorCard({
       }),
     onSuccess: async () => {
       pushToast('Review updated.', 'success')
-      await queryClient.invalidateQueries({ queryKey: detailQueryKey })
+      await invalidateReviewData()
     },
   })
 
@@ -55,7 +64,7 @@ export function ReviewEditorCard({
     mutationFn: reviewApi.deleteReview,
     onSuccess: async () => {
       pushToast('Review deleted.', 'success')
-      await queryClient.invalidateQueries({ queryKey: detailQueryKey })
+      await invalidateReviewData()
     },
   })
 
@@ -65,7 +74,8 @@ export function ReviewEditorCard({
   )
 
   return (
-    <Card className="space-y-5 border-white/10 bg-[linear-gradient(145deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.96)_100%)] p-6">
+    <Card className="space-y-5 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.98)_100%)] p-6">
+      <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(173,198,255,0.22)_50%,rgba(255,255,255,0)_100%)]" />
       <div className="space-y-2.5">
         <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
           Your review

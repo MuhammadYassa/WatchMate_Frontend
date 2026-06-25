@@ -23,14 +23,14 @@ export function ToastProvider({ children }: PropsWithChildren) {
   const value = useMemo(() => ({ pushToast }), [pushToast])
 
   return (
-      <ToastContext.Provider value={value}>
+    <ToastContext.Provider value={value}>
       {children}
-      <div className="pointer-events-none fixed inset-x-0 bottom-24 z-50 mx-auto flex w-full max-w-sm flex-col gap-3 px-4 sm:bottom-6 sm:right-6 sm:left-auto">
+      <div className="pointer-events-none fixed inset-x-0 bottom-24 z-50 mx-auto flex w-full max-w-sm flex-col gap-3 px-4 sm:bottom-6 sm:left-auto sm:right-6">
         {toasts.map((toast) => (
           <div
             key={toast.id}
             className={[
-              'rounded-2xl border px-4 py-3.5 text-sm shadow-[0_18px_40px_rgba(0,0,0,0.42)] backdrop-blur-xl transition duration-200 ease-out',
+              'motion-scale-in rounded-[14px] border px-4 py-3.5 text-sm shadow-[0_18px_40px_rgba(0,0,0,0.42)] backdrop-blur-xl transition duration-200 ease-out',
               toast.tone === 'error'
                 ? 'border-[rgba(255,180,171,0.28)] bg-[rgba(147,0,10,0.72)] text-white'
                 : toast.tone === 'success'

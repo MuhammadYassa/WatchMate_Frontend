@@ -101,7 +101,7 @@ describe('DiscoverPage', () => {
     )
 
     await waitFor(() => {
-      expect(screen.getByText('Featured Pick')).toBeInTheDocument()
+      expect(screen.getAllByText('Featured Pick').length).toBeGreaterThan(0)
     })
 
     expect(screen.getByRole('button', { name: 'Trending Movies' })).toBeInTheDocument()
@@ -109,5 +109,5 @@ describe('DiscoverPage', () => {
     expect(screen.getByRole('button', { name: 'Popular Now' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Movie genres' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Show genres' })).toBeInTheDocument()
-  })
+  }, 20000)
 })

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { ArrowLeft, ListVideo } from 'lucide-react'
+import { ArrowLeft, Clock3, ListVideo } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
 
 import { showApi } from '../api/showApi'
@@ -24,8 +24,8 @@ function SeasonEpisodesLoadingState() {
     <div className="relative isolate overflow-hidden pb-28">
       <section className="relative overflow-hidden border-b border-white/10 bg-[#0d0e11]">
         <BrowsePageAtmosphere variant="hero" />
-        <div className="relative z-10 mx-auto max-w-[1320px] px-4 pb-12 pt-24 sm:px-6 md:pb-14 md:pt-28 lg:px-8 xl:px-12">
-          <div className="grid items-end gap-8 lg:min-h-[26rem] lg:grid-cols-[260px_minmax(0,1fr)]">
+        <div className="relative z-10 mx-auto max-w-[1380px] px-4 pb-16 pt-24 sm:px-6 md:pb-20 md:pt-28 lg:px-8 xl:px-12">
+          <div className="grid items-end gap-8 lg:min-h-[30rem] lg:grid-cols-[292px_minmax(0,1fr)]">
             <SkeletonPoster />
             <div className="space-y-5">
               <Skeleton className="h-9 w-32 rounded-[14px]" />
@@ -35,9 +35,9 @@ function SeasonEpisodesLoadingState() {
           </div>
         </div>
       </section>
-      <PageContainer className="relative z-10 -mt-8 space-y-6 pt-0 md:-mt-12">
-        <Skeleton className="h-44 rounded-[28px]" />
-        <Skeleton className="h-44 rounded-[28px]" />
+      <PageContainer className="relative z-10 -mt-10 space-y-6 pt-0 md:-mt-14">
+        <Skeleton className="h-44 rounded-[24px]" />
+        <Skeleton className="h-44 rounded-[24px]" />
       </PageContainer>
     </div>
   )
@@ -89,6 +89,9 @@ export function SeasonEpisodesPage() {
 
   const season = seasonQuery.data
   const seasonLabel = formatSeasonLabel(season.seasonNumber)
+  const airedEpisodes = season.episodes.filter((episode) => episode.isAired !== false).length
+  const watchedEpisodes = season.episodes.filter((episode) => episode.watched).length
+  const runtimeMinutes = season.episodes.reduce((total, episode) => total + (episode.runtime ?? 0), 0)
 
   return (
     <div className="relative isolate overflow-hidden pb-28">
@@ -96,14 +99,14 @@ export function SeasonEpisodesPage() {
         {hasImagePath(season.posterPath) ? (
           <img
             alt=""
-            className="absolute inset-0 h-full w-full object-cover opacity-20"
+            className="absolute inset-0 h-full w-full object-cover opacity-24"
             src={getPosterUrl(season.posterPath, 'w500') ?? undefined}
           />
         ) : null}
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,8,11,0.3)_0%,rgba(7,8,11,0.82)_58%,rgba(7,8,11,0.98)_100%)] lg:bg-[linear-gradient(90deg,rgba(7,8,11,0.96)_14%,rgba(7,8,11,0.82)_52%,rgba(7,8,11,0.52)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,8,11,0.24)_0%,rgba(7,8,11,0.84)_58%,rgba(7,8,11,0.98)_100%)] lg:bg-[linear-gradient(90deg,rgba(7,8,11,0.98)_14%,rgba(7,8,11,0.86)_52%,rgba(7,8,11,0.52)_100%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(173,198,255,0.18)_0%,rgba(173,198,255,0)_34%)]" />
 
-        <div className="relative z-10 mx-auto max-w-[1320px] px-4 pb-12 pt-24 sm:px-6 md:pb-14 md:pt-28 lg:px-8 xl:px-12">
+        <div className="relative z-10 mx-auto max-w-[1380px] px-4 pb-16 pt-24 sm:px-6 md:pb-20 md:pt-28 lg:px-8 xl:px-12">
           <div className="flex flex-wrap items-center justify-between gap-3 pb-6">
             <Link
               className="inline-flex items-center gap-2 text-sm text-[color:var(--color-accent)] transition hover:text-white"
@@ -115,9 +118,9 @@ export function SeasonEpisodesPage() {
             <GenrePill>{season.seasonNumber === 0 ? 'Specials' : seasonLabel}</GenrePill>
           </div>
 
-          <div className="grid items-end gap-8 lg:min-h-[26rem] lg:grid-cols-[260px_minmax(0,1fr)] xl:grid-cols-[300px_minmax(0,1fr)]">
-            <div className="w-full max-w-[260px] lg:max-w-none">
-              <div className="relative overflow-hidden rounded-[30px] border border-white/12 bg-[rgba(255,255,255,0.04)] shadow-[0_30px_80px_rgba(0,0,0,0.42)]">
+          <div className="grid items-end gap-8 lg:min-h-[30rem] lg:grid-cols-[292px_minmax(0,1fr)] xl:grid-cols-[336px_minmax(0,1fr)]">
+            <div className="w-full max-w-[280px] lg:max-w-none">
+              <div className="motion-poster relative overflow-hidden rounded-[22px] border border-white/12 bg-[rgba(255,255,255,0.04)] shadow-[0_30px_80px_rgba(0,0,0,0.42)]">
                 {hasImagePath(season.posterPath) ? (
                   <img
                     alt={`${season.name || seasonLabel} poster`}
@@ -130,28 +133,57 @@ export function SeasonEpisodesPage() {
               </div>
             </div>
 
-            <div className="space-y-5">
-              <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
-                {seasonLabel}
-              </p>
-              <h1 className="font-display text-5xl leading-[0.94] tracking-[-0.05em] text-white md:text-6xl">
-                {season.name || seasonLabel}
-              </h1>
-              <p className="max-w-3xl text-sm leading-7 text-[color:var(--color-text-secondary)] md:text-base">
-                {season.overview || 'No season overview is available yet.'}
-              </p>
+            <div className="space-y-6 pb-2">
+              <div className="space-y-4">
+                <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
+                  {seasonLabel}
+                </p>
+                <h1 className="font-display text-5xl leading-[0.92] tracking-[-0.055em] text-white md:text-6xl xl:text-[5rem]">
+                  {season.name || seasonLabel}
+                </h1>
+                <p className="max-w-3xl text-sm leading-7 text-[color:var(--color-text-secondary)] md:text-base">
+                  {season.overview || 'No season overview is available yet.'}
+                </p>
+              </div>
+
               <div className="flex flex-wrap gap-2.5">
                 <GenrePill>{season.episodeCount} episodes</GenrePill>
                 <GenrePill>{formatDisplayDate(season.airDate)}</GenrePill>
                 {season.seasonNumber === 0 ? <GenrePill>Special collection</GenrePill> : null}
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-3">
+                <div className="rounded-[18px] border border-white/10 bg-white/[0.03] p-4">
+                  <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-text-tertiary)]">
+                    Watched
+                  </p>
+                  <p className="mt-3 text-sm text-white">
+                    {watchedEpisodes} of {season.episodes.length}
+                  </p>
+                </div>
+                <div className="rounded-[18px] border border-white/10 bg-white/[0.03] p-4">
+                  <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-text-tertiary)]">
+                    Aired now
+                  </p>
+                  <p className="mt-3 text-sm text-white">{airedEpisodes} available</p>
+                </div>
+                <div className="rounded-[18px] border border-white/10 bg-white/[0.03] p-4">
+                  <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-text-tertiary)]">
+                    Runtime
+                  </p>
+                  <p className="mt-3 inline-flex items-center gap-2 text-sm text-white">
+                    <Clock3 aria-hidden="true" className="size-4 text-[color:var(--color-warning)]" />
+                    {runtimeMinutes > 0 ? `${runtimeMinutes}m total` : 'Unavailable'}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <PageContainer className="relative z-10 -mt-8 space-y-8 pt-0 md:-mt-12">
-        <Card className="space-y-4 border-white/10 bg-[linear-gradient(145deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.96)_100%)] p-6">
+      <PageContainer className="relative z-10 -mt-10 space-y-8 pt-0 md:-mt-14">
+        <Card className="space-y-4 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.9)_0%,rgba(11,12,16,0.98)_100%)] p-6">
           <SectionHeader eyebrow="Progress note" title="Episode progress is shown here only." />
           <p className="text-sm leading-7 text-[color:var(--color-text-secondary)]">
             {isAuthenticated
@@ -161,11 +193,34 @@ export function SeasonEpisodesPage() {
         </Card>
 
         <section className="space-y-5">
-          <SectionHeader eyebrow="Episodes" title="Season lineup" />
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <SectionHeader eyebrow="Episodes" title="Season lineup" />
+            <div className="flex flex-wrap gap-4 text-[11px] uppercase tracking-[0.2em] text-[color:var(--color-text-tertiary)]">
+              <span className="inline-flex items-center gap-2">
+                <span className="size-2 rounded-full bg-[color:var(--color-accent)]" />
+                Watched
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <span className="size-2 rounded-full bg-white/25" />
+                Remaining
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <span className="size-2 rounded-full bg-[color:var(--color-warning)]" />
+                Unaired
+              </span>
+            </div>
+          </div>
+
           {season.episodes.length > 0 ? (
             <div className="grid gap-4">
-              {season.episodes.map((episode) => (
-                <EpisodeCard episode={episode} key={`${episode.seasonNumber}-${episode.episodeNumber}`} />
+              {season.episodes.map((episode, index) => (
+                <div
+                  className="motion-slide-up"
+                  key={`${episode.seasonNumber}-${episode.episodeNumber}`}
+                  style={{ animationDelay: `${Math.min(index * 45, 220)}ms` }}
+                >
+                  <EpisodeCard episode={episode} />
+                </div>
               ))}
             </div>
           ) : (

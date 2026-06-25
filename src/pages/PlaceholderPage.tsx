@@ -24,13 +24,17 @@ export function PlaceholderPage({ eyebrow, heading, summary }: PlaceholderPagePr
     <PageContainer className="space-y-8 pt-8 md:pt-16">
       <section className="grid gap-6 lg:grid-cols-[1.3fr_0.9fr]">
         <Card className="relative overflow-hidden p-8 md:p-10">
-          <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(168,85,247,0.2),transparent_35%,rgba(255,255,255,0.04)_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(173,198,255,0.18),transparent_35%,rgba(255,255,255,0.04)_100%)]" />
           <div className="relative z-10 max-w-2xl space-y-5">
-            <p className="text-[11px] uppercase tracking-[0.3em] text-fuchsia-300">{eyebrow}</p>
+            <p className="text-[11px] uppercase tracking-[0.3em] text-[color:var(--color-accent-strong)]">
+              {eyebrow}
+            </p>
             <h1 className="font-display text-5xl leading-none tracking-[-0.03em] text-white md:text-7xl">
               {heading}
             </h1>
-            <p className="max-w-xl text-base leading-7 text-slate-300 md:text-lg">{summary}</p>
+            <p className="max-w-xl text-base leading-7 text-[color:var(--color-text-secondary)] md:text-lg">
+              {summary}
+            </p>
             <div className="flex flex-wrap gap-3">
               <Button>Route ready</Button>
               <Button variant="secondary">More coming soon</Button>
@@ -43,12 +47,14 @@ export function PlaceholderPage({ eyebrow, heading, summary }: PlaceholderPagePr
       <section className="grid gap-5 lg:grid-cols-3">
         {foundations.map((item) => (
           <Card key={item} className="space-y-3 p-5">
-            <div className="flex size-10 items-center justify-center rounded-full bg-white/8 text-fuchsia-200">
+            <div className="flex size-10 items-center justify-center rounded-[12px] bg-white/8 text-[color:var(--color-accent-strong)]">
               <Sparkles aria-hidden="true" className="size-4" />
             </div>
-            <p className="text-sm uppercase tracking-[0.24em] text-slate-500">Foundation</p>
+            <p className="text-sm uppercase tracking-[0.24em] text-[color:var(--color-text-tertiary)]">
+              Foundation
+            </p>
             <h2 className="font-display text-2xl text-white">{item}</h2>
-            <p className="text-sm text-slate-300">
+            <p className="text-sm text-[color:var(--color-text-secondary)]">
               This screen stays intentionally focused until its full product flow is ready.
             </p>
           </Card>
@@ -58,11 +64,13 @@ export function PlaceholderPage({ eyebrow, heading, summary }: PlaceholderPagePr
       <section className="grid gap-5 lg:grid-cols-[0.95fr_1.05fr]">
         <Card className="space-y-4 p-6">
           <div className="flex items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-full bg-white/8 text-slate-200">
+            <div className="flex size-10 items-center justify-center rounded-[12px] bg-white/8 text-[color:var(--color-text-secondary)]">
               <Layers3 aria-hidden="true" className="size-4" />
             </div>
             <div>
-              <p className="text-[11px] uppercase tracking-[0.24em] text-slate-500">Shared Primitives</p>
+              <p className="text-[11px] uppercase tracking-[0.24em] text-[color:var(--color-text-tertiary)]">
+                Shared Primitives
+              </p>
               <h2 className="font-display text-2xl text-white">Loading, layout, and polish</h2>
             </div>
           </div>

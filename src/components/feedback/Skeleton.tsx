@@ -5,10 +5,7 @@ import { cn } from '../../utils/cn'
 export function Skeleton({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn(
-        'animate-[shimmer_1.6s_ease-in-out_infinite] rounded-2xl bg-[linear-gradient(90deg,#1a1b1f_20%,#262a33_48%,#1a1b1f_78%)] bg-[length:200%_100%]',
-        className,
-      )}
+      className={cn('shimmer-nocturne rounded-[var(--radius-control)]', className)}
       {...props}
     />
   )
@@ -25,5 +22,5 @@ export function SkeletonText() {
 }
 
 export function SkeletonPoster() {
-  return <Skeleton className="aspect-[2/3] w-full max-w-[180px] rounded-[20px]" />
+  return <Skeleton className="aspect-[2/3] w-full max-w-[180px] rounded-[var(--radius-media)]" />
 }

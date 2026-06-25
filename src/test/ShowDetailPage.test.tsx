@@ -6,9 +6,16 @@ import userEvent from '@testing-library/user-event'
 import { useAuthStore } from '../auth/authStore'
 import { ShowDetailPage } from '../pages/ShowDetailPage'
 import { renderWithProviders } from './renderWithProviders'
-import type { NextEpisodeAiringDTO, ShowDetailsDTO, ShowTrackingDTO } from '../types/api'
+import type {
+  NextEpisodeAiringDTO,
+  PageResponse,
+  ReviewResponseDTO,
+  ShowDetailsDTO,
+  ShowTrackingDTO,
+} from '../types/api'
 
 const getNextEpisodeMock = vi.fn()
+const getShowReviewsMock = vi.fn()
 const getShowDetailsMock = vi.fn()
 const getShowProgressMock = vi.fn()
 const getSeasonEpisodesMock = vi.fn()
@@ -30,6 +37,26 @@ vi.mock('../api/showApi', () => ({
 vi.mock('../api/jobsApi', () => ({
   pollShowTrackingJob: (...args: unknown[]) => pollShowTrackingJobMock(...args),
 }))
+
+vi.mock('../api/reviewApi', () => ({
+  reviewApi: {
+    getShowReviews: (...args: unknown[]) => getShowReviewsMock(...args),
+  },
+}))
+
+function createReviewPage(content: ReviewResponseDTO[]): PageResponse<ReviewResponseDTO> {
+  return {
+    content,
+    empty: content.length === 0,
+    first: true,
+    last: true,
+    number: 0,
+    numberOfElements: content.length,
+    size: 20,
+    totalElements: content.length,
+    totalPages: content.length > 0 ? 1 : 0,
+  }
+}
 
 describe('ShowDetailPage', () => {
   beforeEach(() => {
@@ -69,15 +96,19 @@ describe('ShowDetailPage', () => {
           airDate: '2022-02-18',
           episodeCount: 9,
           name: 'Season 1',
+          overview: 'Season overview',
           posterPath: '/season-1.jpg',
           seasonNumber: 1,
+          tmdbSeasonId: 1,
         },
         {
           airDate: '2026-02-18',
           episodeCount: 3,
           name: 'Specials',
+          overview: 'Specials overview',
           posterPath: '/specials.jpg',
           seasonNumber: 0,
+          tmdbSeasonId: 2,
         },
       ],
       title: 'Severance',
@@ -85,6 +116,9 @@ describe('ShowDetailPage', () => {
       tmdbShowStatus: 'Returning Series',
       type: 'SHOW',
       watchStatus: 'WATCHING',
+      cast: [],
+      bestTrailer: null,
+      watchProviders: { region: 'US', link: null, flatrate: [], rent: [], buy: [], ads: [], free: [] },
     }
 
     const nextEpisode: NextEpisodeAiringDTO = {
@@ -99,6 +133,7 @@ describe('ShowDetailPage', () => {
     }
 
     getShowDetailsMock.mockResolvedValueOnce(show)
+    getShowReviewsMock.mockResolvedValueOnce(createReviewPage([]))
     getNextEpisodeMock.mockResolvedValueOnce(nextEpisode)
     getShowProgressMock.mockResolvedValueOnce(null)
     getSeasonEpisodesMock.mockResolvedValueOnce({
@@ -151,24 +186,16 @@ describe('ShowDetailPage', () => {
       overview: 'Workers split their memories between work and life.',
       posterPath: '/poster.jpg',
       rating: 8.6,
-      reviews: [
-        {
-          comment: 'Need this back immediately.',
-          postedAt: '2026-01-01',
-          reviewId: 3,
-          starRating: 5,
-          tmdbId: 95396,
-          updatedAt: '2026-01-01',
-          username: 'viewer',
-        },
-      ],
+      reviews: [],
       seasons: [
         {
           airDate: '2022-02-18',
           episodeCount: 9,
           name: 'Season 1',
+          overview: 'Season overview',
           posterPath: '/season-1.jpg',
           seasonNumber: 1,
+          tmdbSeasonId: 1,
         },
       ],
       title: 'Severance',
@@ -176,6 +203,9 @@ describe('ShowDetailPage', () => {
       tmdbShowStatus: 'Returning Series',
       type: 'SHOW',
       watchStatus: 'WATCHING',
+      cast: [],
+      bestTrailer: null,
+      watchProviders: { region: 'US', link: null, flatrate: [], rent: [], buy: [], ads: [], free: [] },
     }
 
     const progress: ShowTrackingDTO = {
@@ -193,6 +223,19 @@ describe('ShowDetailPage', () => {
     }
 
     getShowDetailsMock.mockResolvedValue(show)
+    getShowReviewsMock.mockResolvedValue(
+      createReviewPage([
+        {
+          comment: 'Need this back immediately.',
+          postedAt: '2026-01-01',
+          reviewId: 3,
+          starRating: 5,
+          tmdbId: 95396,
+          updatedAt: '2026-01-01',
+          username: 'viewer',
+        },
+      ]),
+    )
     getNextEpisodeMock.mockResolvedValue(null)
     getShowProgressMock.mockResolvedValue(progress)
     getSeasonEpisodesMock.mockResolvedValue({

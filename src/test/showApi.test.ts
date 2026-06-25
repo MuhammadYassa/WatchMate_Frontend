@@ -45,6 +45,9 @@ describe('showApi', () => {
       tmdbShowStatus: 'Returning Series',
       type: 'SHOW',
       watchStatus: 'WATCHING',
+      cast: [],
+      bestTrailer: null,
+      watchProviders: { region: 'US', link: null, flatrate: [], rent: [], buy: [], ads: [], free: [] },
     }
 
     mockedApiClient.get.mockResolvedValueOnce({

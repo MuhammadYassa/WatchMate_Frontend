@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Heart, Search, Sparkles } from 'lucide-react'
+import { Heart, Search, Sparkles, Trash2 } from 'lucide-react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import { favouriteApi } from '../api/favouriteApi'
@@ -9,22 +10,25 @@ import { ErrorState } from '../components/feedback/ErrorState'
 import { Skeleton, SkeletonPoster } from '../components/feedback/Skeleton'
 import { useToast } from '../components/feedback/toastContext'
 import { PageContainer } from '../components/layout/PageContainer'
-import { SectionHeader } from '../components/layout/SectionHeader'
 import { MediaGrid } from '../components/media/MediaGrid'
 import { PosterCard } from '../components/media/PosterCard'
 import { Button } from '../components/ui/Button'
-import { Card } from '../components/ui/Card'
-import type { MediaDetailsDTO, UserFavouritesDTO } from '../types/api'
+import { getButtonClassName } from '../components/ui/buttonStyles'
+import type { MediaDetailsDTO, PageResponse } from '../types/api'
 import { formatMediaType } from '../utils/labels'
 import { getMediaRoute } from '../utils/mediaRoutes'
+
+const PAGE_SIZE = 20
 
 function FavouritesLoadingState() {
   return (
     <PageContainer className="relative isolate space-y-8 overflow-hidden pt-8 md:pt-12">
       <BrowsePageAtmosphere variant="hero" />
-      <Skeleton className="relative z-10 h-[260px] rounded-[36px]" />
+      <Skeleton className="relative z-10 h-[220px] rounded-[28px]" />
       <div className="relative z-10">
-        <MediaGrid>
+        <MediaGrid className="gap-x-4 gap-y-8 sm:gap-x-5 xl:grid-cols-6">
+          <SkeletonPoster />
+          <SkeletonPoster />
           <SkeletonPoster />
           <SkeletonPoster />
           <SkeletonPoster />
@@ -36,31 +40,39 @@ function FavouritesLoadingState() {
 }
 
 export function FavouritesPage() {
+  const [page, setPage] = useState(0)
   const queryClient = useQueryClient()
   const { pushToast } = useToast()
 
   const favouritesQuery = useQuery({
-    queryFn: favouriteApi.getAll,
-    queryKey: ['favourites'],
+    queryFn: () => favouriteApi.getFavourites(page, PAGE_SIZE),
+    queryKey: ['favourites', page, PAGE_SIZE],
   })
 
   const removeFavouriteMutation = useMutation({
-    mutationFn: (item: MediaDetailsDTO) => favouriteApi.removeFavourite(item.tmdbId, item.type),
+    mutationFn: (item: MediaDetailsDTO) => favouriteApi.removeFavourite(item.tmdbId),
     onSuccess: async (_, item) => {
-      queryClient.setQueryData<UserFavouritesDTO>(['favourites'], (current) => {
-        if (!current) {
-          return current
-        }
+      queryClient.setQueryData<PageResponse<MediaDetailsDTO>>(
+        ['favourites', page, PAGE_SIZE],
+        (current) => {
+          if (!current) {
+            return current
+          }
 
-        const nextFavourites = current.favourites.filter(
-          (entry) => !(entry.tmdbId === item.tmdbId && entry.type === item.type),
-        )
+          const nextFavourites = current.content.filter(
+            (entry) => !(entry.tmdbId === item.tmdbId && entry.type === item.type),
+          )
 
-        return {
-          favourites: nextFavourites,
-          totalCount: nextFavourites.length,
-        }
-      })
+          return {
+            ...current,
+            content: nextFavourites,
+            empty: nextFavourites.length === 0,
+            numberOfElements: nextFavourites.length,
+            totalElements: Math.max(0, current.totalElements - 1),
+            totalPages: Math.max(0, Math.ceil(Math.max(0, current.totalElements - 1) / current.size)),
+          }
+        },
+      )
 
       pushToast('Removed from favourites.', 'success')
 
@@ -97,40 +109,42 @@ export function FavouritesPage() {
     )
   }
 
-  const favourites = favouritesQuery.data.favourites
+  const favourites = favouritesQuery.data.content
+  const favouritePage = favouritesQuery.data
 
   return (
     <PageContainer className="relative isolate space-y-8 overflow-hidden pt-8 md:space-y-10 md:pt-12">
       <BrowsePageAtmosphere variant="hero" />
 
-      <Card className="relative z-10 overflow-hidden border-white/10 bg-[linear-gradient(145deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.97)_100%)] p-0 shadow-[0_30px_80px_rgba(0,0,0,0.36)]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(173,198,255,0.15)_0%,rgba(173,198,255,0)_34%),linear-gradient(145deg,rgba(255,255,255,0.05)_0%,rgba(255,255,255,0)_42%)]" />
-        <div className="relative z-10 space-y-4 p-6 md:p-8">
+      <section className="relative z-10 overflow-hidden rounded-[30px] border border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.98)_100%)] px-6 py-7 shadow-[0_30px_80px_rgba(0,0,0,0.36)] md:px-8 md:py-9">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(173,198,255,0.14)_0%,rgba(173,198,255,0)_32%),linear-gradient(145deg,rgba(255,255,255,0.04)_0%,rgba(255,255,255,0)_42%)]" />
+        <div className="relative z-10 space-y-4">
           <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
             Library
           </p>
-          <h1 className="font-display text-5xl leading-[0.95] tracking-[-0.05em] text-white md:text-6xl">
+          <h1 className="font-display text-5xl leading-[0.94] tracking-[-0.055em] text-white md:text-6xl xl:text-[4.75rem]">
             Your favourites, all in one place.
           </h1>
           <p className="max-w-2xl text-base leading-7 text-[color:var(--color-text-secondary)]">
-            Keep the titles you love close, and jump back into any movie or show from one clean shelf.
+            Keep the titles you love close, and jump back into any movie or show from one clean,
+            uninterrupted shelf.
           </p>
           <p className="text-sm text-[color:var(--color-text-tertiary)]">
-            {favouritesQuery.data.totalCount} saved {favouritesQuery.data.totalCount === 1 ? 'favourite' : 'favourites'}
+            {favouritePage.totalElements} saved {favouritePage.totalElements === 1 ? 'favourite' : 'favourites'}
           </p>
         </div>
-      </Card>
+      </section>
 
       {favourites.length === 0 ? (
         <div className="relative z-10">
           <EmptyState
             action={
               <div className="flex flex-wrap gap-3">
-                <Link className="inline-flex min-h-11 items-center rounded-2xl bg-[color:var(--color-accent)] px-5 text-sm font-semibold text-[#122f5f] transition hover:bg-[color:var(--color-accent-strong)]" to="/discover">
+                <Link className={getButtonClassName('primary')} to="/discover">
                   <Sparkles aria-hidden="true" className="mr-2 size-4" />
                   Explore picks
                 </Link>
-                <Link className="inline-flex min-h-11 items-center rounded-2xl border border-white/10 px-5 text-sm font-semibold text-[color:var(--color-text-primary)] transition hover:border-white/18 hover:bg-[rgba(255,255,255,0.08)] hover:text-white" to="/search">
+                <Link className={getButtonClassName('secondary')} to="/search">
                   <Search aria-hidden="true" className="mr-2 size-4" />
                   Search titles
                 </Link>
@@ -143,29 +157,60 @@ export function FavouritesPage() {
         </div>
       ) : (
         <section className="relative z-10 space-y-5">
-          <SectionHeader eyebrow="Saved now" title="Your current shelf" />
-          <MediaGrid className="gap-5">
-            {favourites.map((item) => (
-              <Card
-                className="space-y-4 border-white/10 bg-[linear-gradient(145deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.96)_100%)] p-4"
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div className="space-y-1.5">
+              <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
+                Saved now
+              </p>
+              <h2 className="font-display text-3xl tracking-[-0.045em] text-white md:text-5xl">
+                Your current shelf
+              </h2>
+            </div>
+            {favouritePage.totalPages > 1 ? (
+              <div className="flex items-center gap-3">
+                <Button disabled={page === 0} onClick={() => setPage((current) => current - 1)} variant="ghost">
+                  Previous
+                </Button>
+                <p className="text-sm text-[color:var(--color-text-tertiary)]">
+                  Page {favouritePage.number + 1} of {favouritePage.totalPages}
+                </p>
+                <Button
+                  disabled={Boolean(favouritePage.last)}
+                  onClick={() => setPage((current) => current + 1)}
+                  variant="ghost"
+                >
+                  Next
+                </Button>
+              </div>
+            ) : null}
+          </div>
+          <MediaGrid className="gap-x-4 gap-y-8 sm:gap-x-5 xl:grid-cols-6">
+            {favourites.map((item, index) => (
+              <div
+                className="group relative space-y-3"
                 key={`${item.type}-${item.tmdbId}`}
+                style={{ animationDelay: `${Math.min(index * 35, 220)}ms` }}
               >
+                <Button
+                  className="absolute right-3 top-3 z-20 min-h-0 rounded-full border border-white/10 bg-[rgba(8,9,12,0.72)] px-2.5 py-2 text-white opacity-0 shadow-[0_10px_30px_rgba(0,0,0,0.28)] backdrop-blur-xl transition duration-300 group-hover:opacity-100"
+                  disabled={removeFavouriteMutation.isPending}
+                  onClick={() => removeFavouriteMutation.mutate(item)}
+                  variant="ghost"
+                >
+                  <Trash2 aria-hidden="true" className="size-4" />
+                  <span className="sr-only">Remove favourite</span>
+                </Button>
                 <PosterCard
+                  className="motion-slide-up"
                   href={getMediaRoute(item.tmdbId, item.type)}
                   imagePath={item.posterPath}
                   mediaTypeLabel={formatMediaType(item.type)}
                   rating={item.rating}
                   releaseDate={item.releaseDate}
                   title={item.title}
+                  variant="grid"
                 />
-                <Button
-                  disabled={removeFavouriteMutation.isPending}
-                  onClick={() => removeFavouriteMutation.mutate(item)}
-                  variant="ghost"
-                >
-                  Remove favourite
-                </Button>
-              </Card>
+              </div>
             ))}
           </MediaGrid>
         </section>

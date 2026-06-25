@@ -7,24 +7,58 @@ export type NavIcon =
   | 'user'
   | 'layout-dashboard'
   | 'bookmark'
+  | 'heart'
+  | 'users'
+  | 'bell'
 
-export const publicDesktopNavItems = [
+export interface DesktopNavItem {
+  label: string
+  to: string
+}
+
+export interface IconNavItem extends DesktopNavItem {
+  icon: NavIcon
+}
+
+export const publicDesktopNavItems: DesktopNavItem[] = [
   { label: 'Landing', to: '/' },
   { label: 'Home', to: '/home' },
   { label: 'Discover', to: '/discover' },
   { label: 'Search', to: '/search' },
 ]
 
-export const privateDesktopNavItems = [
+export const privateDesktopBrowseNavItems: DesktopNavItem[] = [
   { label: 'Home', to: '/home' },
   { label: 'Discover', to: '/discover' },
   { label: 'Search', to: '/search' },
+]
+
+export const privateDesktopUtilityNavItems: DesktopNavItem[] = [
   { label: 'Dashboard', to: '/dashboard' },
   { label: 'Watchlists', to: '/watchlists' },
   { label: 'Favourites', to: '/favourites' },
 ]
 
-export const publicMobileNavItems: Array<{ icon: NavIcon; label: string; to: string }> = [
+export const privateDesktopNavItems: DesktopNavItem[] = [
+  ...privateDesktopBrowseNavItems,
+  ...privateDesktopUtilityNavItems,
+]
+
+export const privateDesktopSideRailPrimaryItems: IconNavItem[] = [
+  { icon: 'layout-dashboard', label: 'Dashboard', to: '/dashboard' },
+  { icon: 'bookmark', label: 'Watchlists', to: '/watchlists' },
+  { icon: 'heart', label: 'Favourites', to: '/favourites' },
+]
+
+export const privateDesktopSideRailSecondaryItems: IconNavItem[] = [
+  { icon: 'clapperboard', label: 'Home', to: '/home' },
+  { icon: 'compass', label: 'Discover', to: '/discover' },
+  { icon: 'search', label: 'Search', to: '/search' },
+  { icon: 'users', label: 'Social Search', to: '/social/search' },
+  { icon: 'bell', label: 'Follow Requests', to: '/follow-requests' },
+]
+
+export const publicMobileNavItems: IconNavItem[] = [
   { icon: 'sparkles', label: 'Landing', to: '/' },
   { icon: 'clapperboard', label: 'Home', to: '/home' },
   { icon: 'compass', label: 'Discover', to: '/discover' },
@@ -32,7 +66,7 @@ export const publicMobileNavItems: Array<{ icon: NavIcon; label: string; to: str
   { icon: 'log-in', label: 'Log in', to: '/login' },
 ]
 
-export const privateMobileNavItems: Array<{ icon: NavIcon; label: string; to: string }> = [
+export const privateMobileNavItems: IconNavItem[] = [
   { icon: 'clapperboard', label: 'Home', to: '/home' },
   { icon: 'search', label: 'Search', to: '/search' },
   { icon: 'layout-dashboard', label: 'Dashboard', to: '/dashboard' },

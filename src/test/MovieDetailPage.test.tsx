@@ -6,9 +6,10 @@ import userEvent from '@testing-library/user-event'
 import { useAuthStore } from '../auth/authStore'
 import { MovieDetailPage } from '../pages/MovieDetailPage'
 import { renderWithProviders } from './renderWithProviders'
-import type { MovieDetailsDTO } from '../types/api'
+import type { MovieDetailsDTO, PageResponse, ReviewResponseDTO } from '../types/api'
 
 const getMovieDetailsMock = vi.fn()
+const getMovieReviewsMock = vi.fn()
 const updateMovieStatusMock = vi.fn()
 const addFavouriteMock = vi.fn()
 const removeFavouriteMock = vi.fn()
@@ -26,6 +27,26 @@ vi.mock('../api/favouriteApi', () => ({
     removeFavourite: (...args: unknown[]) => removeFavouriteMock(...args),
   },
 }))
+
+vi.mock('../api/reviewApi', () => ({
+  reviewApi: {
+    getMovieReviews: (...args: unknown[]) => getMovieReviewsMock(...args),
+  },
+}))
+
+function createReviewPage(content: ReviewResponseDTO[]): PageResponse<ReviewResponseDTO> {
+  return {
+    content,
+    empty: content.length === 0,
+    first: true,
+    last: true,
+    number: 0,
+    numberOfElements: content.length,
+    size: 20,
+    totalElements: content.length,
+    totalPages: content.length > 0 ? 1 : 0,
+  }
+}
 
 describe('MovieDetailPage', () => {
   beforeEach(() => {
@@ -49,7 +70,19 @@ describe('MovieDetailPage', () => {
       posterPath: '/poster.jpg',
       rating: 8.7,
       releaseDate: '1999-03-31',
-      reviews: [
+      reviews: [],
+      title: 'The Matrix',
+      tmdbId: 603,
+      type: 'MOVIE',
+      watchStatus: null,
+      cast: [],
+      bestTrailer: null,
+      watchProviders: { region: 'US', link: null, flatrate: [], rent: [], buy: [], ads: [], free: [] },
+    }
+
+    getMovieDetailsMock.mockResolvedValueOnce(movie)
+    getMovieReviewsMock.mockResolvedValueOnce(
+      createReviewPage([
         {
           comment: 'Still incredible.',
           postedAt: '2026-01-01',
@@ -59,14 +92,8 @@ describe('MovieDetailPage', () => {
           updatedAt: '2026-01-02',
           username: 'neo_fan',
         },
-      ],
-      title: 'The Matrix',
-      tmdbId: 603,
-      type: 'MOVIE',
-      watchStatus: null,
-    }
-
-    getMovieDetailsMock.mockResolvedValueOnce(movie)
+      ]),
+    )
 
     renderWithProviders(
       <MemoryRouter initialEntries={['/movies/603']}>
@@ -106,7 +133,19 @@ describe('MovieDetailPage', () => {
       posterPath: '/poster.jpg',
       rating: 8.7,
       releaseDate: '1999-03-31',
-      reviews: [
+      reviews: [],
+      title: 'The Matrix',
+      tmdbId: 603,
+      type: 'MOVIE',
+      watchStatus: 'TO_WATCH',
+      cast: [],
+      bestTrailer: null,
+      watchProviders: { region: 'US', link: null, flatrate: [], rent: [], buy: [], ads: [], free: [] },
+    }
+
+    getMovieDetailsMock.mockResolvedValue(movie)
+    getMovieReviewsMock.mockResolvedValue(
+      createReviewPage([
         {
           comment: 'My own review',
           postedAt: '2026-01-01',
@@ -116,14 +155,8 @@ describe('MovieDetailPage', () => {
           updatedAt: '2026-01-02',
           username: 'viewer',
         },
-      ],
-      title: 'The Matrix',
-      tmdbId: 603,
-      type: 'MOVIE',
-      watchStatus: 'TO_WATCH',
-    }
-
-    getMovieDetailsMock.mockResolvedValue(movie)
+      ]),
+    )
     addFavouriteMock.mockResolvedValue(undefined)
     updateMovieStatusMock.mockResolvedValue({ status: 'WATCHED', tmdbId: 603 })
 
@@ -144,7 +177,7 @@ describe('MovieDetailPage', () => {
 
     await user.click(screen.getByRole('button', { name: /add to favourites/i }))
     await waitFor(() => {
-      expect(addFavouriteMock).toHaveBeenCalledWith(603, 'MOVIE')
+      expect(addFavouriteMock).toHaveBeenCalledWith(603)
     })
 
     await user.selectOptions(screen.getByLabelText(/watch status/i), 'WATCHED')

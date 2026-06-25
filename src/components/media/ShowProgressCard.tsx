@@ -50,7 +50,8 @@ export function ShowProgressCard({
     episodeOverride ?? progressEpisodeForSelectedSeason ?? latestAiredEpisode?.episodeNumber ?? null
 
   return (
-    <Card className="space-y-5 border-white/10 bg-[linear-gradient(145deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.96)_100%)] p-6 shadow-[0_24px_60px_rgba(0,0,0,0.34)]">
+    <Card className="space-y-5 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.98)_100%)] p-6 shadow-[0_24px_60px_rgba(0,0,0,0.34)]">
+      <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(173,198,255,0.34)_50%,rgba(255,255,255,0)_100%)]" />
       <div className="space-y-2.5">
         <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
           Progress
@@ -62,7 +63,7 @@ export function ShowProgressCard({
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">
-        <div className="rounded-[22px] border border-white/10 bg-[rgba(255,255,255,0.04)] p-4 text-sm text-[color:var(--color-text-secondary)]">
+        <div className="rounded-[18px] border border-white/10 bg-[rgba(255,255,255,0.04)] p-4 text-sm text-[color:var(--color-text-secondary)]">
           {progress ? (
             <div className="space-y-2">
               <p className="inline-flex items-center gap-2 text-white">
@@ -77,10 +78,10 @@ export function ShowProgressCard({
             <p>No progress saved yet.</p>
           )}
         </div>
-        <div className="rounded-[22px] border border-white/10 bg-[rgba(255,255,255,0.04)] p-4 text-sm text-[color:var(--color-text-secondary)]">
+        <div className="rounded-[18px] border border-white/10 bg-[rgba(255,255,255,0.04)] p-4 text-sm text-[color:var(--color-text-secondary)]">
           {progress ? (
             <p>
-              {progress.episodesWatchedCount} watched episodes across {progress.seasonsCompletedCount} completed seasons.
+              {progress.episodesWatchedCount ?? 0} watched episodes across {progress.seasonsCompletedCount ?? 0} completed seasons.
             </p>
           ) : (
             <p>Pick a season and episode to start tracking.</p>
