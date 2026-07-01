@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { apiClient } from '../api/client'
 import { showApi } from '../api/showApi'
 import { ApiClientError } from '../types/errors'
-import type { NextEpisodeAiringDTO, ShowDetailsDTO, ShowSeasonsDetailsDTO } from '../types/api'
+import type { NextEpisodeAiringDTO, PageResponse, ShowDetailsDTO, ShowEpisodeDetailsDTO } from '../types/api'
 
 vi.mock('../api/client', () => ({
   apiClient: {
@@ -82,26 +82,27 @@ describe('showApi', () => {
     expect(mockedApiClient.get).toHaveBeenCalledWith('/shows/95396/next-episode')
   })
 
-  it('gets season episodes', async () => {
-    const season: ShowSeasonsDetailsDTO = {
-      airDate: '2022-02-18',
-      episodeCount: 2,
-      episodes: [],
-      name: 'Season 1',
-      overview: 'The first run.',
-      posterPath: '/season.jpg',
-      seasonNumber: 1,
-      tmdbId: 95396,
+  it('gets season episodes as a paginated response', async () => {
+    const episodesPage: PageResponse<ShowEpisodeDetailsDTO> = {
+      content: [],
+      empty: true,
+      first: true,
+      last: true,
+      number: 0,
+      numberOfElements: 0,
+      size: 20,
+      totalElements: 0,
+      totalPages: 0,
     }
 
     mockedApiClient.get.mockResolvedValueOnce({
-      data: season,
+      data: episodesPage,
       headers: new Headers(),
       status: 200,
     })
 
-    await expect(showApi.getSeasonEpisodes(95396, 1)).resolves.toEqual(season)
-    expect(mockedApiClient.get).toHaveBeenCalledWith('/shows/95396/seasons/1/episodes')
+    await expect(showApi.getSeasonEpisodes(95396, 1)).resolves.toEqual(episodesPage)
+    expect(mockedApiClient.get).toHaveBeenCalledWith('/shows/95396/seasons/1/episodes?page=0&size=20')
   })
 
   it('returns null when no show progress row exists yet', async () => {

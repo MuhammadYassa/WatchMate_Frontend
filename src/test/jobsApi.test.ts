@@ -55,7 +55,7 @@ describe('jobsApi', () => {
       }),
     )
 
-    expect(target.path).toBe('/api/v1/show-tracking-jobs/9')
+    expect(target.path).toBe('/show-tracking-jobs/9')
     expect(target.intervalMs).toBe(5000)
   })
 

@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+﻿import { useQuery } from '@tanstack/react-query'
 import { ArrowRight, Layers3, PlayCircle } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -74,11 +74,9 @@ function CompactGenreShelf({
   const featuredShowGenres = showGenres.slice(0, 4)
 
   return (
-    <div className="rounded-[18px] border border-white/8 bg-[rgba(12,13,17,0.84)] px-4 py-4 shadow-[0_18px_42px_rgba(0,0,0,0.28)] backdrop-blur-xl sm:px-5">
+    <div className="rounded-[var(--radius-panel)] border border-white/8 bg-[rgba(12,13,17,0.84)] px-4 py-4 shadow-[0_18px_42px_rgba(0,0,0,0.28)] backdrop-blur-xl sm:px-5">
       <div className="grid gap-4 lg:grid-cols-[auto_1fr_auto_1fr] lg:items-center">
-        <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-accent-strong)]">
-          Browse genres
-        </p>
+        <p className="text-sm font-medium text-[color:var(--color-text-secondary)]">Movies</p>
         <div className="flex flex-wrap gap-2.5">
           <span className="sr-only">Browse movie genres</span>
           {featuredMovieGenres.map((genre) => (
@@ -87,9 +85,7 @@ function CompactGenreShelf({
             </GenreChip>
           ))}
         </div>
-        <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-text-tertiary)]">
-          Browse show genres
-        </p>
+        <p className="text-sm font-medium text-[color:var(--color-text-secondary)]">Shows</p>
         <div className="flex flex-wrap gap-2.5">
           {featuredShowGenres.map((genre) => (
             <GenreChip key={`show-${genre}`} onClick={() => onShowGenre(genre)}>
@@ -166,16 +162,13 @@ export function HomePage() {
               src={getBackdropUrl(hero.backdropPath, 'w1280') ?? undefined}
             />
           ) : null}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_18%,rgba(173,198,255,0.16),transparent_22%),linear-gradient(180deg,rgba(9,10,13,0.14)_0%,rgba(9,10,13,0.34)_24%,rgba(9,10,13,0.96)_100%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_18%,rgba(47,174,126,0.12),transparent_22%),linear-gradient(180deg,rgba(8,7,6,0.14)_0%,rgba(8,7,6,0.34)_24%,rgba(8,7,6,0.96)_100%)]" />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(10,10,13,0.96)_8%,rgba(10,10,13,0.78)_38%,rgba(10,10,13,0.3)_100%)]" />
 
           <div className="relative mx-auto flex min-h-[84vh] max-w-[1440px] items-end px-4 pb-18 pt-28 sm:px-6 lg:px-8 xl:px-12">
             <div className="motion-stagger max-w-3xl space-y-6">
               <div className="space-y-4">
-                <span className="inline-flex rounded-[10px] border border-[rgba(173,198,255,0.24)] bg-[rgba(216,226,255,0.12)] px-3 py-1.5 text-[11px] uppercase tracking-[0.22em] text-[color:var(--color-accent)]">
-                  Featured today
-                </span>
-                <h1 className="font-display text-[3.6rem] leading-[0.92] tracking-[-0.055em] text-white sm:text-[4.7rem] md:text-[5.8rem]">
+                <h1 className="font-display text-[3.6rem] leading-[0.92] tracking-[-0.03em] text-white sm:text-[4.7rem] md:text-[5.8rem]">
                   {hero.title}
                 </h1>
                 <p className="max-w-2xl text-base leading-8 text-[color:var(--color-text-secondary)] md:text-lg">
@@ -224,7 +217,7 @@ export function HomePage() {
         <section className="relative z-10 mt-12">
           <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8 xl:px-12">
             <div className="motion-stagger space-y-5">
-              <SectionHeader eyebrow="Your queue" title="Continue watching" />
+              <SectionHeader  title="Continue watching" />
               <MediaRail className="pr-0">
                 {continueWatchingItems.map((item) => (
                   <PosterCard
@@ -250,12 +243,12 @@ export function HomePage() {
         section.items.length > 0 ? (
           <section className="relative z-10 mt-14" key={section.title}>
             <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8 xl:px-12">
-              <div className="motion-stagger space-y-5">
+              <div className="space-y-5">
                 <SectionHeader
                   action={
                     index < 2 ? <PosterCardActionLink href="/discover" label="Explore more" /> : undefined
                   }
-                  eyebrow="Browse"
+                  
                   title={section.title}
                 />
                 <MediaRail className="pr-0">
@@ -280,13 +273,10 @@ export function HomePage() {
       {!isAuthenticated ? (
         <section className="relative z-10 mt-16">
           <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8 xl:px-12">
-            <div className="overflow-hidden rounded-[18px] border border-[rgba(173,198,255,0.18)] bg-[linear-gradient(145deg,rgba(26,30,38,0.92)_0%,rgba(13,15,20,0.98)_100%)] px-5 py-6 shadow-[0_26px_60px_rgba(0,0,0,0.28)]">
-              <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(173,198,255,0.14)_0%,rgba(173,198,255,0)_72%)]" />
+            <div className="overflow-hidden rounded-[var(--radius-panel)] border border-[rgba(47,174,126,0.14)] bg-[linear-gradient(145deg,rgba(22,20,18,0.92)_0%,rgba(12,10,9,0.98)_100%)] px-5 py-6 shadow-[0_26px_60px_rgba(0,0,0,0.32)]">
+              <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(47,174,126,0.10)_0%,rgba(47,174,126,0)_72%)]" />
               <div className="relative flex flex-wrap items-center justify-between gap-4">
-                <div className="space-y-2">
-                  <p className="text-[11px] uppercase tracking-[0.3em] text-[color:var(--color-accent-strong)]">
-                    Join WatchMate
-                  </p>
+                <div>
                   <span className="text-sm text-[color:var(--color-text-secondary)]">
                     Create an account to carry your progress, favourites, and watchlists with you.
                   </span>

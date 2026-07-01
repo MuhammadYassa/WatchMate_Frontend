@@ -1,4 +1,4 @@
-import { CheckCircle2, Clock3, Heart, Sparkles } from 'lucide-react'
+﻿import { CheckCircle2, Clock3, Heart, Sparkles } from 'lucide-react'
 
 import { formatFavouriteState, formatWatchStatus } from '../../utils/labels'
 import { MetadataPill } from './MetadataPill'
@@ -11,7 +11,7 @@ function getToneClassName(tone: StatusBadgeTone) {
   }
 
   if (tone === 'accent') {
-    return 'border-[rgba(173,198,255,0.28)] bg-[rgba(216,226,255,0.12)] text-[color:var(--color-accent)]'
+    return 'border-[rgba(47,174,126,0.24)] bg-[rgba(47,174,126,0.09)] text-[color:var(--color-accent)]'
   }
 
   return 'border-white/10 bg-[rgba(10,12,16,0.6)] text-[color:var(--color-text-secondary)]'

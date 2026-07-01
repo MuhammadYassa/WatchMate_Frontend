@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+﻿import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Heart, Search, Sparkles, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -13,6 +13,7 @@ import { PageContainer } from '../components/layout/PageContainer'
 import { MediaGrid } from '../components/media/MediaGrid'
 import { PosterCard } from '../components/media/PosterCard'
 import { Button } from '../components/ui/Button'
+import { Pagination } from '../components/ui/Pagination'
 import { getButtonClassName } from '../components/ui/buttonStyles'
 import type { MediaDetailsDTO, PageResponse } from '../types/api'
 import { formatMediaType } from '../utils/labels'
@@ -24,7 +25,7 @@ function FavouritesLoadingState() {
   return (
     <PageContainer className="relative isolate space-y-8 overflow-hidden pt-8 md:pt-12">
       <BrowsePageAtmosphere variant="hero" />
-      <Skeleton className="relative z-10 h-[220px] rounded-[28px]" />
+      <Skeleton className="relative z-10 h-[220px] rounded-[var(--radius-panel)]" />
       <div className="relative z-10">
         <MediaGrid className="gap-x-4 gap-y-8 sm:gap-x-5 xl:grid-cols-6">
           <SkeletonPoster />
@@ -116,13 +117,13 @@ export function FavouritesPage() {
     <PageContainer className="relative isolate space-y-8 overflow-hidden pt-8 md:space-y-10 md:pt-12">
       <BrowsePageAtmosphere variant="hero" />
 
-      <section className="relative z-10 overflow-hidden rounded-[30px] border border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.98)_100%)] px-6 py-7 shadow-[0_30px_80px_rgba(0,0,0,0.36)] md:px-8 md:py-9">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(173,198,255,0.14)_0%,rgba(173,198,255,0)_32%),linear-gradient(145deg,rgba(255,255,255,0.04)_0%,rgba(255,255,255,0)_42%)]" />
+      <section className="relative z-10 overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.98)_100%)] px-6 py-7 shadow-[0_30px_80px_rgba(0,0,0,0.36)] md:px-8 md:py-9">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(47,174,126,0.14)_0%,rgba(47,174,126,0)_32%),linear-gradient(145deg,rgba(255,255,255,0.04)_0%,rgba(255,255,255,0)_42%)]" />
         <div className="relative z-10 space-y-4">
           <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
             Library
           </p>
-          <h1 className="font-display text-5xl leading-[0.94] tracking-[-0.055em] text-white md:text-6xl xl:text-[4.75rem]">
+          <h1 className="font-display text-5xl leading-[0.94] tracking-[-0.03em] text-white md:text-6xl xl:text-[4.75rem]">
             Your favourites, all in one place.
           </h1>
           <p className="max-w-2xl text-base leading-7 text-[color:var(--color-text-secondary)]">
@@ -162,27 +163,16 @@ export function FavouritesPage() {
               <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
                 Saved now
               </p>
-              <h2 className="font-display text-3xl tracking-[-0.045em] text-white md:text-5xl">
+              <h2 className="font-display text-3xl tracking-[-0.04em] text-white md:text-5xl">
                 Your current shelf
               </h2>
             </div>
-            {favouritePage.totalPages > 1 ? (
-              <div className="flex items-center gap-3">
-                <Button disabled={page === 0} onClick={() => setPage((current) => current - 1)} variant="ghost">
-                  Previous
-                </Button>
-                <p className="text-sm text-[color:var(--color-text-tertiary)]">
-                  Page {favouritePage.number + 1} of {favouritePage.totalPages}
-                </p>
-                <Button
-                  disabled={Boolean(favouritePage.last)}
-                  onClick={() => setPage((current) => current + 1)}
-                  variant="ghost"
-                >
-                  Next
-                </Button>
-              </div>
-            ) : null}
+            <Pagination
+              className="w-auto justify-start"
+              onPageChange={setPage}
+              page={page}
+              totalPages={favouritePage.totalPages}
+            />
           </div>
           <MediaGrid className="gap-x-4 gap-y-8 sm:gap-x-5 xl:grid-cols-6">
             {favourites.map((item, index) => (

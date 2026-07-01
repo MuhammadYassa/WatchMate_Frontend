@@ -37,7 +37,7 @@ export function BackdropHero({
             {meta}
           </p>
         ) : null}
-        <h1 className="font-display text-5xl leading-[0.94] tracking-[-0.05em] text-white md:text-7xl">
+        <h1 className="font-display text-5xl leading-[0.94] tracking-[-0.03em] text-white md:text-7xl">
           {title}
         </h1>
         <p className="max-w-2xl text-sm leading-7 text-[color:var(--color-text-secondary)] md:text-base">

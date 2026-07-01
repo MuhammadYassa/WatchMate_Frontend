@@ -1,7 +1,6 @@
-import type { ReactNode } from 'react'
+﻿import type { ReactNode } from 'react'
 import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { Film, Sparkles } from 'lucide-react'
 import { Link, useSearchParams } from 'react-router-dom'
 
 import { discoverApi } from '../api/discoverApi'
@@ -63,9 +62,9 @@ function GenrePanel({
   title: string
 }) {
   return (
-    <div className="overflow-hidden rounded-[24px] border border-white/10 bg-[linear-gradient(160deg,rgba(18,19,23,0.86)_0%,rgba(10,11,15,0.96)_100%)] px-5 py-5 shadow-[0_22px_58px_rgba(0,0,0,0.24)] md:px-6 md:py-6">
+    <div className="overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(160deg,rgba(18,19,23,0.86)_0%,rgba(10,11,15,0.96)_100%)] px-5 py-5 shadow-[0_22px_58px_rgba(0,0,0,0.24)] md:px-6 md:py-6">
       <div className="space-y-4">
-        <SectionHeader eyebrow="Genres" title={title} />
+        <SectionHeader title={title} />
         <div className="flex flex-wrap gap-3">{children}</div>
       </div>
     </div>
@@ -90,12 +89,9 @@ function PosterGridSkeleton() {
 function DiscoverFeatureCard({ item }: { item: DiscoveryMediaItemDTO | null }) {
   if (!item) {
     return (
-      <div className="motion-scale-in relative overflow-hidden rounded-[26px] border border-white/10 bg-[linear-gradient(160deg,rgba(18,19,23,0.86)_0%,rgba(10,11,15,0.96)_100%)] p-6 shadow-[0_26px_70px_rgba(0,0,0,0.34)]">
+      <div className="motion-scale-in relative overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(160deg,rgba(18,19,23,0.86)_0%,rgba(10,11,15,0.96)_100%)] p-6 shadow-[0_26px_70px_rgba(0,0,0,0.34)]">
         <div className="space-y-4">
-          <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
-            Featured pick
-          </p>
-          <h2 className="font-display text-3xl tracking-[-0.045em] text-white md:text-4xl">
+          <h2 className="font-display text-3xl tracking-[-0.04em] text-white md:text-4xl">
             Queue up the next thing worth watching.
           </h2>
           <p className="max-w-lg text-sm leading-7 text-[color:var(--color-text-secondary)]">
@@ -108,26 +104,21 @@ function DiscoverFeatureCard({ item }: { item: DiscoveryMediaItemDTO | null }) {
   }
 
   return (
-    <div className="motion-scale-in relative overflow-hidden rounded-[26px] border border-white/10 bg-[linear-gradient(160deg,rgba(18,19,23,0.86)_0%,rgba(10,11,15,0.96)_100%)] p-6 shadow-[0_26px_70px_rgba(0,0,0,0.34)]">
-      <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(173,198,255,0.12)_0%,rgba(173,198,255,0)_74%)]" />
+    <div className="motion-scale-in relative overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(160deg,rgba(18,19,23,0.86)_0%,rgba(10,11,15,0.96)_100%)] p-6 shadow-[0_26px_70px_rgba(0,0,0,0.34)]">
+      <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(47,174,126,0.12)_0%,rgba(47,174,126,0)_74%)]" />
       <div className="relative flex flex-col gap-6 sm:flex-row sm:items-end">
         <div className="min-w-0 flex-1 space-y-4">
-          <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
-            Featured pick
-          </p>
           <div className="space-y-3">
-            <h2 className="font-display text-3xl tracking-[-0.045em] text-white md:text-4xl">
+            <h2 className="font-display text-3xl tracking-[-0.04em] text-white md:text-4xl">
               {item.title}
             </h2>
             <p className="line-clamp-4 max-w-xl text-sm leading-7 text-[color:var(--color-text-secondary)]">
               {item.overview || 'No overview is available for this title yet.'}
             </p>
           </div>
-          <div className="flex flex-wrap gap-2 text-[11px] uppercase tracking-[0.24em] text-[color:var(--color-text-tertiary)]">
-            <span>{formatMediaType(item.type)}</span>
-            {item.releaseDate ? <span>{item.releaseDate.slice(0, 4)}</span> : null}
-            {typeof item.rating === 'number' ? <span>{item.rating.toFixed(1)} rating</span> : null}
-          </div>
+          <p className="text-[12px] text-[color:var(--color-text-tertiary)]">
+            {[formatMediaType(item.type), item.releaseDate?.slice(0, 4), typeof item.rating === 'number' ? `${item.rating.toFixed(1)} rating` : null].filter(Boolean).join(' Â· ')}
+          </p>
         </div>
         <Link className={getButtonClassName('secondary', 'shrink-0')} to={getMediaRoute(item.tmdbId, item.type)}>
           Open title
@@ -179,31 +170,18 @@ export function DiscoverPage() {
     <PageContainer className="relative isolate space-y-12 overflow-hidden pt-8 md:space-y-14 md:pt-12">
       <BrowsePageAtmosphere variant="hero" />
 
-      <section className="relative z-10 space-y-8 overflow-hidden rounded-[32px] border border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.9)_0%,rgba(10,11,14,0.98)_100%)] px-5 py-6 shadow-[0_30px_80px_rgba(0,0,0,0.34)] md:px-8 md:py-8 lg:px-10 lg:py-10">
-        <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(173,198,255,0.14)_0%,rgba(173,198,255,0)_72%)]" />
+      <section className="relative z-10 space-y-8 overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.9)_0%,rgba(10,11,14,0.98)_100%)] px-5 py-6 shadow-[0_30px_80px_rgba(0,0,0,0.34)] md:px-8 md:py-8 lg:px-10 lg:py-10">
+        <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(47,174,126,0.14)_0%,rgba(47,174,126,0)_72%)]" />
         <div className="relative grid gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.82fr)] lg:items-end">
           <div className="space-y-6">
             <div className="space-y-4">
-              <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
-                Discover
-              </p>
-              <h1 className="max-w-4xl font-display text-5xl tracking-[-0.06em] text-white md:text-6xl xl:text-[5.2rem]">
+              <h1 className="max-w-4xl font-display text-5xl tracking-[-0.03em] text-white md:text-6xl xl:text-[5.2rem]">
                 Browse what&apos;s moving right now.
               </h1>
               <p className="max-w-2xl text-sm leading-7 text-[color:var(--color-text-secondary)] md:text-base">
                 Shift between the supported WatchMate shelves, then narrow the canvas with genre
                 browsing when you want a specific mood.
               </p>
-            </div>
-            <div className="flex flex-wrap items-center gap-5 text-[12px] uppercase tracking-[0.24em] text-[color:var(--color-text-tertiary)]">
-              <span className="inline-flex items-center gap-2">
-                <Sparkles aria-hidden="true" className="size-4 text-[color:var(--color-accent)]" />
-                Editorial browse
-              </span>
-              <span className="inline-flex items-center gap-2">
-                <Film aria-hidden="true" className="size-4 text-[color:var(--color-warning)]" />
-                Supported genres only
-              </span>
             </div>
             <div className="flex flex-wrap gap-5 border-b border-white/10 pb-1">
               {(Object.keys(categoryMap) as CategoryId[]).map((category) => (
@@ -231,7 +209,7 @@ export function DiscoverPage() {
       </section>
 
       <section className="relative z-10 space-y-6">
-        <SectionHeader eyebrow="Category" title={currentCategoryLabel} />
+        <SectionHeader title={currentCategoryLabel} />
         {categoryQuery.isLoading ? (
           <PosterGridSkeleton />
         ) : categoryQuery.isError ? (
@@ -317,7 +295,6 @@ export function DiscoverPage() {
                 Clear genre
               </Button>
             }
-            eyebrow="Genre browse"
             title={`${selectedGenre} ${selectedGenreType === 'movie' ? 'movies' : 'shows'}`}
           />
           {genreQuery.isLoading ? (

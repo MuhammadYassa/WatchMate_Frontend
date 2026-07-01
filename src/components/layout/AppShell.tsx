@@ -19,9 +19,9 @@ export function AppShell() {
         className="relative min-h-screen overflow-hidden bg-[color:var(--color-bg)] text-[color:var(--color-text-primary)]"
         data-shell-mode={shellMode}
       >
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(173,198,255,0.16),_transparent_24%),radial-gradient(circle_at_82%_18%,_rgba(255,222,164,0.07),_transparent_20%),linear-gradient(180deg,rgba(255,255,255,0.02)_0%,rgba(255,255,255,0)_18%)]" />
-        <div className="ambient-drift pointer-events-none absolute left-[-10rem] top-16 h-[24rem] w-[24rem] rounded-full bg-[radial-gradient(circle,_rgba(173,198,255,0.12)_0%,rgba(173,198,255,0)_72%)] blur-[110px]" />
-        <div className="ambient-drift pointer-events-none absolute bottom-[-8rem] right-[-6rem] h-[22rem] w-[22rem] rounded-full bg-[radial-gradient(circle,_rgba(255,222,164,0.08)_0%,rgba(255,222,164,0)_70%)] blur-[120px] [animation-delay:-4s]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(47,174,126,0.08),_transparent_26%),radial-gradient(circle_at_82%_18%,_rgba(111,209,168,0.05),_transparent_20%),linear-gradient(180deg,rgba(255,252,248,0.015)_0%,rgba(255,252,248,0)_18%)]" />
+        <div className="ambient-drift pointer-events-none absolute left-[-10rem] top-16 h-[24rem] w-[24rem] rounded-full bg-[radial-gradient(circle,_rgba(47,174,126,0.09)_0%,rgba(47,174,126,0)_72%)] blur-[110px]" />
+        <div className="ambient-drift pointer-events-none absolute bottom-[-8rem] right-[-6rem] h-[22rem] w-[22rem] rounded-full bg-[radial-gradient(circle,_rgba(111,209,168,0.08)_0%,rgba(111,209,168,0)_70%)] blur-[120px] [animation-delay:-4s]" />
         <DesktopNav mode={shellMode} />
         <MobileTopBar />
         <main

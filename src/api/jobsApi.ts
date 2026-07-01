@@ -7,10 +7,15 @@ export interface ShowJobPollingTarget {
   path: string
 }
 
+const API_PREFIX = '/api/v1'
+
 export function getShowJobPollingTarget(
   result: ApiResult<ShowTrackingJobDTO>,
 ): ShowJobPollingTarget {
-  const location = result.headers.get('Location')
+  const rawLocation = result.headers.get('Location')
+  const location = rawLocation?.startsWith(API_PREFIX)
+    ? rawLocation.slice(API_PREFIX.length)
+    : rawLocation
   const retryAfter = Number.parseInt(result.headers.get('Retry-After') ?? '', 10)
   const intervalMs = Number.isFinite(retryAfter) ? retryAfter * 1000 : 2000
   const fallbackPath = `/show-tracking-jobs/${result.data.jobId}`

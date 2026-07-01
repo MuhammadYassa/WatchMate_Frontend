@@ -1,12 +1,12 @@
 import { createBrowserRouter } from 'react-router-dom'
 
+import { AuthGuardedRoute } from '../../auth/AuthGuardedRoute'
 import { ProtectedRoute } from '../../auth/ProtectedRoute'
 import { AppShell } from '../../components/layout/AppShell'
 import { DiscoverPage } from '../../pages/DiscoverPage'
 import { DashboardPage } from '../../pages/DashboardPage'
 import { FavouritesPage } from '../../pages/FavouritesPage'
 import { HomePage } from '../../pages/HomePage'
-import { LandingPage } from '../../pages/LandingPage'
 import { LoginPage } from '../../pages/LoginPage'
 import { MovieDetailPage } from '../../pages/MovieDetailPage'
 import { FollowRequestsPage } from '../../pages/FollowRequestsPage'
@@ -26,15 +26,15 @@ export const appRouter = createBrowserRouter([
     path: '/',
     children: [
       {
-        element: <LandingPage />,
+        element: <HomePage />,
         path: '/',
       },
       {
-        element: <LoginPage />,
+        element: <AuthGuardedRoute element={<LoginPage />} />,
         path: '/login',
       },
       {
-        element: <RegisterPage />,
+        element: <AuthGuardedRoute element={<RegisterPage />} />,
         path: '/register',
       },
       {

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+﻿import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { ArrowUpRight, Search as SearchIcon, UserRoundSearch, Users } from 'lucide-react'
 import { Link, useSearchParams } from 'react-router-dom'
@@ -21,9 +21,9 @@ import { formatPrivacyStatus } from '../utils/labels'
 function SocialSearchLoadingState() {
   return (
     <div className="space-y-4">
-      <Skeleton className="h-28 rounded-[22px]" />
-      <Skeleton className="h-28 rounded-[22px]" />
-      <Skeleton className="h-28 rounded-[22px]" />
+      <Skeleton className="h-28 rounded-[var(--radius-panel)]" />
+      <Skeleton className="h-28 rounded-[var(--radius-panel)]" />
+      <Skeleton className="h-28 rounded-[var(--radius-panel)]" />
     </div>
   )
 }
@@ -74,14 +74,11 @@ export function SocialSearchPage() {
     <PageContainer className="relative isolate space-y-8 overflow-hidden pt-8 md:space-y-10 md:pt-12">
       <BrowsePageAtmosphere variant="hero" />
 
-      <section className="relative z-10 overflow-hidden rounded-[30px] border border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.98)_100%)] px-6 py-7 shadow-[0_30px_80px_rgba(0,0,0,0.34)] md:px-8 md:py-9">
-        <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(173,198,255,0.14)_0%,rgba(173,198,255,0)_72%)]" />
+      <section className="relative z-10 overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.98)_100%)] px-6 py-7 shadow-[0_30px_80px_rgba(0,0,0,0.34)] md:px-8 md:py-9">
+        <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(47,174,126,0.10)_0%,rgba(47,174,126,0)_72%)]" />
         <div className="relative space-y-7">
           <div className="space-y-4">
-            <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
-              Social
-            </p>
-            <h1 className="max-w-4xl font-display text-5xl tracking-[-0.055em] text-white md:text-6xl xl:text-[4.9rem]">
+            <h1 className="max-w-4xl font-display text-5xl tracking-[-0.03em] text-white md:text-6xl xl:text-[4.9rem]">
               Find people to follow.
             </h1>
             <p className="max-w-2xl text-base leading-7 text-[color:var(--color-text-secondary)]">
@@ -97,7 +94,7 @@ export function SocialSearchPage() {
                 className="pointer-events-none absolute left-5 top-1/2 size-5 -translate-y-1/2 text-[color:var(--color-text-tertiary)]"
               />
               <Input
-                className="h-16 rounded-[22px] border-white/10 bg-[rgba(255,255,255,0.04)] pl-14 pr-24 text-base shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] transition duration-300 focus:border-[rgba(173,198,255,0.32)] focus:shadow-[0_0_0_1px_rgba(173,198,255,0.18),0_18px_55px_rgba(0,0,0,0.28)] md:h-18"
+                className="h-16 rounded-[var(--radius-panel)] border-white/10 bg-[rgba(255,255,255,0.04)] pl-14 pr-24 text-base shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] transition duration-300 focus:border-[rgba(47,174,126,0.32)] focus:shadow-[0_0_0_1px_rgba(47,174,126,0.18),0_18px_55px_rgba(0,0,0,0.32)] md:h-18"
                 onChange={(event) => setDraftQuery(event.target.value)}
                 placeholder="Search usernames"
                 value={draftQuery}
@@ -170,10 +167,10 @@ export function SocialSearchPage() {
                 to={`/social/profile/${encodeURIComponent(result.username)}`}
               >
                 <Card
-                  className="motion-slide-up group flex min-h-[118px] flex-col gap-5 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.9)_0%,rgba(11,12,16,0.98)_100%)] p-5 transition duration-300 hover:border-[rgba(173,198,255,0.18)] hover:shadow-[0_28px_68px_rgba(0,0,0,0.38)] sm:flex-row sm:items-center sm:justify-between"
+                  className="motion-slide-up group flex min-h-[118px] flex-col gap-5 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(22,20,18,0.9)_0%,rgba(12,11,9,0.98)_100%)] p-5 transition duration-300 hover:border-[rgba(47,174,126,0.16)] hover:shadow-[0_28px_68px_rgba(0,0,0,0.44)] sm:flex-row sm:items-center sm:justify-between"
                   style={{ animationDelay: `${Math.min(index * 45, 220)}ms` }}
                 >
-                  <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(173,198,255,0.08)_0%,rgba(173,198,255,0)_72%)] opacity-0 transition duration-300 group-hover:opacity-100" />
+                  <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(47,174,126,0.06)_0%,rgba(47,174,126,0)_72%)] opacity-0 transition duration-300 group-hover:opacity-100" />
                   <div className="relative flex items-center gap-4">
                     <UserInitialBadge size="sm" username={result.username} />
                     <div className="space-y-2">

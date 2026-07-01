@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Layers3, Sparkles, Tv2 } from 'lucide-react'
+import { Layers3, Tv2 } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
@@ -24,8 +24,11 @@ import { MetadataPill } from '../components/media/MetadataPill'
 import { NextEpisodeCard } from '../components/media/NextEpisodeCard'
 import { RatingBadge } from '../components/media/RatingBadge'
 import { ReviewEditorCard } from '../components/media/ReviewEditorCard'
+import { CastRail } from '../components/media/CastRail'
 import { ReviewList } from '../components/media/ReviewList'
 import { SeasonCard } from '../components/media/SeasonCard'
+import { TrailerCard } from '../components/media/TrailerCard'
+import { WatchProvidersCard } from '../components/media/WatchProvidersCard'
 import { ShowProgressCard } from '../components/media/ShowProgressCard'
 import { WatchlistDialog } from '../components/media/WatchlistDialog'
 import {
@@ -56,7 +59,7 @@ function ShowDetailLoadingState() {
                 <Skeleton className="h-9 w-28 rounded-[14px]" />
                 <Skeleton className="h-9 w-24 rounded-[14px]" />
               </div>
-              <Skeleton className="h-20 w-full max-w-3xl rounded-[20px]" />
+              <Skeleton className="h-20 w-full max-w-3xl rounded-[var(--radius-panel)]" />
               <SkeletonText />
               <div className="flex flex-wrap gap-3">
                 <Skeleton className="h-10 w-28 rounded-[14px]" />
@@ -68,8 +71,8 @@ function ShowDetailLoadingState() {
         </div>
       </section>
       <PageContainer className="relative z-10 -mt-10 space-y-6 pt-0 md:-mt-14">
-        <Skeleton className="h-56 rounded-[24px]" />
-        <Skeleton className="h-72 rounded-[24px]" />
+        <Skeleton className="h-56 rounded-[var(--radius-panel)]" />
+        <Skeleton className="h-72 rounded-[var(--radius-panel)]" />
       </PageContainer>
     </div>
   )
@@ -140,6 +143,7 @@ export function ShowDetailPage() {
       queryClient.invalidateQueries({ queryKey: ['dashboard', 'continue-watching'] }),
       queryClient.invalidateQueries({ queryKey: ['dashboard', 'upcoming-episodes'] }),
       queryClient.invalidateQueries({ queryKey: ['dashboard', 'calendar'] }),
+      queryClient.invalidateQueries({ queryKey: ['dashboard', 'to-watch'] }),
       queryClient.invalidateQueries({ queryKey: ['watchlists'] }),
       queryClient.invalidateQueries({ queryKey: ['favourites'] }),
     ])
@@ -154,16 +158,19 @@ export function ShowDetailPage() {
 
     if (result.status === 202) {
       setPendingJobLabel(pendingMessage)
+      let jobFailed = false
       try {
         const job = await pollShowTrackingJob(result as ApiResult<ShowTrackingJobDTO>)
 
         if (job.status === 'FAILED') {
           pushToast(job.errorMessage || 'That update could not be completed.', 'error')
-          throw new Error(job.errorMessage || 'Show update failed')
+          await invalidateShowData()
+          jobFailed = true
         }
       } finally {
         setPendingJobLabel(null)
       }
+      if (jobFailed) return
     }
 
     pushToast(successMessage, 'success')
@@ -204,20 +211,6 @@ export function ShowDetailPage() {
         () => showApi.updateShowStatus(showData.tmdbId, status),
         'Updating your show status. This can take a moment for larger histories.',
         status === 'NONE' ? 'Removed show tracking status.' : 'Show status updated.',
-      )
-    },
-  })
-
-  const progressMutation = useMutation({
-    mutationFn: async (input: { watchPositionEpisode: number; watchPositionSeason: number }) => {
-      if (!showData) {
-        throw new Error('Show details are unavailable.')
-      }
-
-      return handleShowMutation(
-        () => showApi.updateShowProgress(showData.tmdbId, input),
-        'Updating your progress across the season. This can take a moment.',
-        'Show progress updated.',
       )
     },
   })
@@ -272,7 +265,6 @@ export function ShowDetailPage() {
   const actionPending =
     favouriteMutation.isPending
     || statusMutation.isPending
-    || progressMutation.isPending
     || pendingJobLabel !== null
 
   return (
@@ -316,31 +308,31 @@ export function ShowDetailPage() {
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_380px] 2xl:grid-cols-[minmax(0,1fr)_400px]">
           <div className="space-y-6">
             <Card className="space-y-6 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.9)_0%,rgba(11,12,16,0.98)_100%)] p-6 shadow-[0_26px_70px_rgba(0,0,0,0.32)]">
-              <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(173,198,255,0.28)_50%,rgba(255,255,255,0)_100%)]" />
+              <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(111,209,168,0.24)_50%,rgba(255,255,255,0)_100%)]" />
               <SectionHeader eyebrow="Overview" title="What this show is about" />
               <p className="max-w-4xl text-sm leading-7 text-[color:var(--color-text-secondary)]">
                 {show.overview || 'No overview is available for this show yet.'}
               </p>
               <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                <div className="rounded-[18px] border border-white/10 bg-white/[0.03] p-4">
+                <div className="rounded-[var(--radius-panel)] border border-white/10 bg-white/[0.03] p-4">
                   <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-text-tertiary)]">
                     First aired
                   </p>
                   <p className="mt-3 text-sm text-white">{formatDisplayDate(show.firstAirDate)}</p>
                 </div>
-                <div className="rounded-[18px] border border-white/10 bg-white/[0.03] p-4">
+                <div className="rounded-[var(--radius-panel)] border border-white/10 bg-white/[0.03] p-4">
                   <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-text-tertiary)]">
                     Last aired
                   </p>
                   <p className="mt-3 text-sm text-white">{formatDisplayDate(show.lastAirDate)}</p>
                 </div>
-                <div className="rounded-[18px] border border-white/10 bg-white/[0.03] p-4">
+                <div className="rounded-[var(--radius-panel)] border border-white/10 bg-white/[0.03] p-4">
                   <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-text-tertiary)]">
                     Seasons
                   </p>
                   <p className="mt-3 text-sm text-white">{show.numberOfSeasons ?? 'Unknown'}</p>
                 </div>
-                <div className="rounded-[18px] border border-white/10 bg-white/[0.03] p-4">
+                <div className="rounded-[var(--radius-panel)] border border-white/10 bg-white/[0.03] p-4">
                   <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-text-tertiary)]">
                     Episodes
                   </p>
@@ -366,6 +358,19 @@ export function ShowDetailPage() {
               )}
             </section>
 
+            <CastRail cast={show.cast} />
+
+            {isAuthenticated ? (
+              <ReviewEditorCard
+                detailQueryKey={detailQueryKey}
+                existingReview={ownReview}
+                key={`show-review-${show.tmdbId}-${ownReview?.reviewId ?? 'new'}`}
+                mediaType={show.type}
+                reviewQueryKey={reviewsQueryKey}
+                tmdbId={show.tmdbId}
+              />
+            ) : null}
+
             <ReviewList reviews={reviews} />
           </div>
 
@@ -386,27 +391,19 @@ export function ShowDetailPage() {
 
             <NextEpisodeCard nextEpisode={nextEpisodeDetails} />
 
+            {show.bestTrailer ? <TrailerCard trailer={show.bestTrailer} /> : null}
+            <WatchProvidersCard watchProviders={show.watchProviders} />
+
             {isAuthenticated ? (
               <ShowProgressCard
-                onSubmitProgress={(input) => progressMutation.mutateAsync(input)}
-                pending={actionPending}
                 pendingLabel={pendingJobLabel}
                 progress={showProgressQuery.data ?? null}
-                seasons={show.seasons}
-                tmdbId={show.tmdbId}
               />
-            ) : (
-              <Card className="space-y-4 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.88)_0%,rgba(11,12,16,0.98)_100%)] p-6">
-                <SectionHeader eyebrow="Viewer note" title="Progress stays on the show page." />
-                <p className="text-sm leading-7 text-[color:var(--color-text-secondary)]">
-                  Sign in to save where you are and keep episode progress in sync.
-                </p>
-              </Card>
-            )}
+            ) : null}
 
             {show.nextEpisodeSeasonNumber !== null && show.nextEpisodeEpisodeNumber !== null ? (
               <Card className="space-y-4 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.88)_0%,rgba(11,12,16,0.98)_100%)] p-6">
-                <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(255,222,164,0.08)_0%,rgba(255,222,164,0)_74%)]" />
+                <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(111,209,168,0.08)_0%,rgba(111,209,168,0)_74%)]" />
                 <div className="relative space-y-4">
                   <SectionHeader eyebrow="Up next" title="Jump to the current season" />
                   <Link
@@ -418,36 +415,6 @@ export function ShowDetailPage() {
                   </Link>
                 </div>
               </Card>
-            ) : null}
-
-            <Card className="space-y-4 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.88)_0%,rgba(11,12,16,0.98)_100%)] p-6">
-              <div className="space-y-2.5">
-                <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
-                  Tracking note
-                </p>
-                <h2 className="font-display text-3xl tracking-[-0.04em] text-white">
-                  Keep the season timeline tidy.
-                </h2>
-                <p className="text-sm leading-7 text-[color:var(--color-text-secondary)]">
-                  Status, favourites, watchlists, and progress all stay connected here so the rest
-                  of WatchMate can stay in sync.
-                </p>
-              </div>
-              <div className="inline-flex items-center gap-2 text-sm text-[color:var(--color-text-tertiary)]">
-                <Sparkles aria-hidden="true" className="size-4 text-[color:var(--color-accent)]" />
-                Pending progress updates are shown in plain language while the sync finishes.
-              </div>
-            </Card>
-
-            {isAuthenticated ? (
-              <ReviewEditorCard
-                detailQueryKey={detailQueryKey}
-                existingReview={ownReview}
-                key={`show-review-${ownReview?.reviewId ?? 'new'}`}
-                mediaType={show.type}
-                reviewQueryKey={reviewsQueryKey}
-                tmdbId={show.tmdbId}
-              />
             ) : null}
           </div>
         </div>

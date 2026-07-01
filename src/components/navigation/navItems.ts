@@ -21,8 +21,7 @@ export interface IconNavItem extends DesktopNavItem {
 }
 
 export const publicDesktopNavItems: DesktopNavItem[] = [
-  { label: 'Landing', to: '/' },
-  { label: 'Home', to: '/home' },
+  { label: 'Home', to: '/' },
   { label: 'Discover', to: '/discover' },
   { label: 'Search', to: '/search' },
 ]
@@ -59,8 +58,7 @@ export const privateDesktopSideRailSecondaryItems: IconNavItem[] = [
 ]
 
 export const publicMobileNavItems: IconNavItem[] = [
-  { icon: 'sparkles', label: 'Landing', to: '/' },
-  { icon: 'clapperboard', label: 'Home', to: '/home' },
+  { icon: 'clapperboard', label: 'Home', to: '/' },
   { icon: 'compass', label: 'Discover', to: '/discover' },
   { icon: 'search', label: 'Search', to: '/search' },
   { icon: 'log-in', label: 'Log in', to: '/login' },

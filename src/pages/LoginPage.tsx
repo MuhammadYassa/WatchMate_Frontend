@@ -1,10 +1,11 @@
-import { ArrowRight, LockKeyhole, User } from 'lucide-react'
+import { ArrowRight, Eye, EyeOff, LockKeyhole, User } from 'lucide-react'
 import { useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 import { authApi } from '../api/authApi'
 import { useAuthStore } from '../auth/authStore'
+import { Logo } from '../components/branding/Logo'
 import { useToast } from '../components/feedback/toastContext'
 import { PageContainer } from '../components/layout/PageContainer'
 import { PublicPageAtmosphere } from '../components/public/PublicPageAtmosphere'
@@ -50,40 +51,26 @@ export function LoginPage() {
 
       <div className="grid w-full gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
         <section className="hidden max-w-xl space-y-6 lg:block">
-          <p className="text-[11px] uppercase tracking-[0.3em] text-[color:var(--color-accent-strong)]">
-            Members screening room
-          </p>
-          <h1 className="font-display text-6xl tracking-[-0.05em] text-white xl:text-7xl">
+          <Logo size="lg" />
+          <h2 className="font-display text-6xl tracking-[-0.03em] text-white xl:text-7xl">
             Welcome back.
-          </h1>
+          </h2>
           <p className="text-base leading-8 text-[color:var(--color-text-secondary)] xl:text-lg">
             Return to your watch history, watchlists, reviews, favourites, and the people you
-            follow. Username and password sign-in stays exactly as it should.
+            follow.
           </p>
-          <div className="grid gap-3 sm:grid-cols-2">
-            <div className="rounded-[24px] border border-white/10 bg-[rgba(255,255,255,0.03)] px-5 py-4 text-sm text-[color:var(--color-text-secondary)]">
-              Discover what to watch next.
-            </div>
-            <div className="rounded-[24px] border border-white/10 bg-[rgba(255,255,255,0.03)] px-5 py-4 text-sm text-[color:var(--color-text-secondary)]">
-              Pick up your saved progress instantly.
-            </div>
-          </div>
         </section>
 
         <Card className="w-full max-w-xl justify-self-center p-6 md:p-8 lg:justify-self-end xl:p-10">
           <div className="space-y-7">
-            <div className="space-y-3 text-center">
-              <p className="text-[11px] uppercase tracking-[0.3em] text-[color:var(--color-accent-strong)]">
-                Log in
+            <div className="space-y-2">
+              <Logo className="mb-3 lg:hidden" size="md" />
+              <h1 className="font-display text-5xl tracking-[-0.03em] text-white md:text-6xl">
+                Welcome back.
+              </h1>
+              <p className="text-sm leading-7 text-[color:var(--color-text-secondary)]">
+                Pick up your watch history, favourites, and everything queued up next.
               </p>
-              <div className="space-y-2">
-                <h1 className="font-display text-5xl tracking-[-0.05em] text-white md:text-6xl">
-                  Welcome back.
-                </h1>
-                <p className="text-sm leading-7 text-[color:var(--color-text-secondary)]">
-                  Pick up your watch history, favourites, and everything queued up next.
-                </p>
-              </div>
             </div>
 
             <form
@@ -116,11 +103,14 @@ export function LoginPage() {
                 label="Password"
                 trailing={
                   <button
-                    className="text-xs text-[color:var(--color-text-tertiary)] transition hover:text-white"
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    className="flex items-center text-[color:var(--color-text-tertiary)] transition hover:text-white"
                     onClick={() => setShowPassword((current) => !current)}
                     type="button"
                   >
-                    {showPassword ? 'Hide' : 'Show'}
+                    {showPassword
+                      ? <EyeOff aria-hidden="true" className="size-4" />
+                      : <Eye aria-hidden="true" className="size-4" />}
                   </button>
                 }
               >
@@ -142,7 +132,7 @@ export function LoginPage() {
               </FormField>
 
               {error ? (
-                <div className="rounded-[22px] border border-[rgba(255,180,171,0.24)] bg-[rgba(147,0,10,0.16)] px-4 py-3 text-sm text-white">
+                <div className="rounded-[var(--radius-panel)] border border-[rgba(255,180,171,0.24)] bg-[rgba(147,0,10,0.16)] px-4 py-3 text-sm text-white">
                   {getFriendlyLoginError(error)}
                 </div>
               ) : null}

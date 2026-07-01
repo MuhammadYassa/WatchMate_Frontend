@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { CalendarDays, MessageSquareMore, Sparkles } from 'lucide-react'
+import { CalendarDays, MessageSquareMore } from 'lucide-react'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
@@ -20,7 +20,10 @@ import { MediaActionsPanel } from '../components/media/MediaActionsPanel'
 import { MetadataPill } from '../components/media/MetadataPill'
 import { RatingBadge } from '../components/media/RatingBadge'
 import { ReviewEditorCard } from '../components/media/ReviewEditorCard'
+import { CastRail } from '../components/media/CastRail'
 import { ReviewList } from '../components/media/ReviewList'
+import { TrailerCard } from '../components/media/TrailerCard'
+import { WatchProvidersCard } from '../components/media/WatchProvidersCard'
 import { WatchlistDialog } from '../components/media/WatchlistDialog'
 import { FavouriteStatusBadge, WatchStatusBadge } from '../components/media/StatusBadge'
 import { Button } from '../components/ui/Button'
@@ -45,7 +48,7 @@ function MovieDetailLoadingState() {
                 <Skeleton className="h-9 w-28 rounded-[14px]" />
                 <Skeleton className="h-9 w-24 rounded-[14px]" />
               </div>
-              <Skeleton className="h-20 w-full max-w-3xl rounded-[20px]" />
+              <Skeleton className="h-20 w-full max-w-3xl rounded-[var(--radius-panel)]" />
               <SkeletonText />
               <div className="flex flex-wrap gap-3">
                 <Skeleton className="h-10 w-28 rounded-[14px]" />
@@ -57,8 +60,8 @@ function MovieDetailLoadingState() {
         </div>
       </section>
       <PageContainer className="relative z-10 -mt-10 space-y-6 pt-0 md:-mt-14">
-        <Skeleton className="h-56 rounded-[24px]" />
-        <Skeleton className="h-72 rounded-[24px]" />
+        <Skeleton className="h-56 rounded-[var(--radius-panel)]" />
+        <Skeleton className="h-72 rounded-[var(--radius-panel)]" />
       </PageContainer>
     </div>
   )
@@ -134,6 +137,7 @@ export function MovieDetailPage() {
         queryClient.invalidateQueries({ queryKey: ['watchlists'] }),
         queryClient.invalidateQueries({ queryKey: ['favourites'] }),
         queryClient.invalidateQueries({ queryKey: ['dashboard', 'continue-watching'] }),
+        queryClient.invalidateQueries({ queryKey: ['dashboard', 'to-watch'] }),
       ])
     },
   })
@@ -211,13 +215,13 @@ export function MovieDetailPage() {
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px] 2xl:grid-cols-[minmax(0,1fr)_380px]">
           <div className="space-y-6">
             <Card className="space-y-6 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.9)_0%,rgba(11,12,16,0.98)_100%)] p-6 shadow-[0_26px_70px_rgba(0,0,0,0.32)]">
-              <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(173,198,255,0.28)_50%,rgba(255,255,255,0)_100%)]" />
+              <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(111,209,168,0.24)_50%,rgba(255,255,255,0)_100%)]" />
               <SectionHeader eyebrow="Overview" title="What to expect" />
               <p className="max-w-4xl text-sm leading-7 text-[color:var(--color-text-secondary)]">
                 {movie.overview || 'No overview is available for this movie yet.'}
               </p>
-              <div className="grid gap-4 md:grid-cols-3">
-                <div className="rounded-[18px] border border-white/10 bg-white/[0.03] p-4">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="rounded-[var(--radius-panel)] border border-white/10 bg-white/[0.03] p-4">
                   <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-text-tertiary)]">
                     Release date
                   </p>
@@ -226,17 +230,7 @@ export function MovieDetailPage() {
                     {formatDisplayDate(movie.releaseDate)}
                   </p>
                 </div>
-                <div className="rounded-[18px] border border-white/10 bg-white/[0.03] p-4">
-                  <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-text-tertiary)]">
-                    Viewer status
-                  </p>
-                  <p className="mt-3 text-sm text-white">
-                    {movie.watchStatus && movie.watchStatus !== 'NONE'
-                      ? 'Watch status available above'
-                      : 'No saved tracking yet.'}
-                  </p>
-                </div>
-                <div className="rounded-[18px] border border-white/10 bg-white/[0.03] p-4">
+                <div className="rounded-[var(--radius-panel)] border border-white/10 bg-white/[0.03] p-4">
                   <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-text-tertiary)]">
                     Reviews
                   </p>
@@ -247,6 +241,19 @@ export function MovieDetailPage() {
                 </div>
               </div>
             </Card>
+
+            <CastRail cast={movie.cast} />
+
+            {isAuthenticated ? (
+              <ReviewEditorCard
+                detailQueryKey={detailQueryKey}
+                existingReview={ownReview}
+                key={`movie-review-${movie.tmdbId}-${ownReview?.reviewId ?? 'new'}`}
+                mediaType={movie.type}
+                reviewQueryKey={reviewsQueryKey}
+                tmdbId={movie.tmdbId}
+              />
+            ) : null}
 
             <ReviewList reviews={reviews} />
           </div>
@@ -266,51 +273,8 @@ export function MovieDetailPage() {
               <ActionPrompt isAuthenticated={isAuthenticated} returnTo={`/movies/${movie.tmdbId}`} />
             )}
 
-            <Card className="space-y-4 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.88)_0%,rgba(11,12,16,0.98)_100%)] p-6">
-              <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(173,198,255,0.1)_0%,rgba(173,198,255,0)_74%)]" />
-              <div className="relative space-y-2.5">
-                <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
-                  Review note
-                </p>
-                <h2 className="font-display text-3xl tracking-[-0.04em] text-white">
-                  Leave a clean record of the watch.
-                </h2>
-                <p className="text-sm leading-7 text-[color:var(--color-text-secondary)]">
-                  Ratings and notes stay attached to this title only, so your watch history stays
-                  easy to revisit later.
-                </p>
-              </div>
-            </Card>
-
-            {isAuthenticated ? (
-              <ReviewEditorCard
-                detailQueryKey={detailQueryKey}
-                existingReview={ownReview}
-                key={`movie-review-${ownReview?.reviewId ?? 'new'}`}
-                mediaType={movie.type}
-                reviewQueryKey={reviewsQueryKey}
-                tmdbId={movie.tmdbId}
-              />
-            ) : (
-              <Card className="space-y-4 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.88)_0%,rgba(11,12,16,0.98)_100%)] p-6">
-                <div className="space-y-2.5">
-                  <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
-                    Viewer note
-                  </p>
-                  <h2 className="font-display text-3xl tracking-[-0.04em] text-white">
-                    Sign in to leave your take.
-                  </h2>
-                  <p className="text-sm leading-7 text-[color:var(--color-text-secondary)]">
-                    WatchMate keeps your reviews connected to your account so they can follow your
-                    watch history.
-                  </p>
-                </div>
-                <div className="inline-flex items-center gap-2 text-sm text-[color:var(--color-text-tertiary)]">
-                  <Sparkles aria-hidden="true" className="size-4 text-[color:var(--color-accent)]" />
-                  The sign-in link above keeps this title as your return destination.
-                </div>
-              </Card>
-            )}
+            {movie.bestTrailer ? <TrailerCard trailer={movie.bestTrailer} /> : null}
+            <WatchProvidersCard watchProviders={movie.watchProviders} />
           </div>
         </div>
 

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Check, Inbox, Send, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
@@ -26,9 +26,9 @@ function FollowRequestsLoadingState() {
   return (
     <PageContainer className="relative isolate space-y-8 overflow-hidden pt-8 md:pt-12">
       <BrowsePageAtmosphere variant="hero" />
-      <Skeleton className="relative z-10 h-60 rounded-[30px]" />
-      <Skeleton className="relative z-10 h-28 rounded-[22px]" />
-      <Skeleton className="relative z-10 h-28 rounded-[22px]" />
+      <Skeleton className="relative z-10 h-60 rounded-[var(--radius-panel)]" />
+      <Skeleton className="relative z-10 h-28 rounded-[var(--radius-panel)]" />
+      <Skeleton className="relative z-10 h-28 rounded-[var(--radius-panel)]" />
     </PageContainer>
   )
 }
@@ -171,13 +171,13 @@ export function FollowRequestsPage() {
     <PageContainer className="relative isolate space-y-8 overflow-hidden pt-8 md:space-y-10 md:pt-12">
       <BrowsePageAtmosphere variant="hero" />
 
-      <section className="relative z-10 overflow-hidden rounded-[30px] border border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.98)_100%)] px-6 py-7 shadow-[0_30px_80px_rgba(0,0,0,0.36)] md:px-8 md:py-9">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(173,198,255,0.15)_0%,rgba(173,198,255,0)_34%),linear-gradient(145deg,rgba(255,255,255,0.05)_0%,rgba(255,255,255,0)_42%)]" />
+      <section className="relative z-10 overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.98)_100%)] px-6 py-7 shadow-[0_30px_80px_rgba(0,0,0,0.36)] md:px-8 md:py-9">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(47,174,126,0.15)_0%,rgba(47,174,126,0)_34%),linear-gradient(145deg,rgba(255,255,255,0.05)_0%,rgba(255,255,255,0)_42%)]" />
         <div className="relative z-10 space-y-4">
           <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
             Social
           </p>
-          <h1 className="font-display text-5xl tracking-[-0.055em] text-white md:text-6xl xl:text-[4.75rem]">
+          <h1 className="font-display text-5xl tracking-[-0.03em] text-white md:text-6xl xl:text-[4.75rem]">
             Follow requests
           </h1>
           <p className="max-w-2xl text-base leading-7 text-[color:var(--color-text-secondary)]">
@@ -251,11 +251,11 @@ export function FollowRequestsPage() {
 
               return (
                 <Card
-                  className="motion-slide-up flex flex-col gap-5 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.9)_0%,rgba(11,12,16,0.98)_100%)] p-5 transition duration-300 hover:border-[rgba(173,198,255,0.18)] hover:shadow-[0_28px_68px_rgba(0,0,0,0.38)] md:flex-row md:items-center md:justify-between"
+                  className="motion-slide-up flex flex-col gap-5 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.9)_0%,rgba(11,12,16,0.98)_100%)] p-5 transition duration-300 hover:border-[rgba(47,174,126,0.18)] hover:shadow-[0_28px_68px_rgba(0,0,0,0.38)] md:flex-row md:items-center md:justify-between"
                   key={request.requestId}
                   style={{ animationDelay: `${Math.min(index * 45, 220)}ms` }}
                 >
-                  <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(173,198,255,0.08)_0%,rgba(173,198,255,0)_72%)] opacity-0 transition duration-300 hover:opacity-100" />
+                  <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(47,174,126,0.08)_0%,rgba(47,174,126,0)_72%)] opacity-0 transition duration-300 hover:opacity-100" />
                   <div className="relative flex items-center gap-4">
                     <UserInitialBadge
                       size="sm"

@@ -9,7 +9,7 @@ import { ReviewCard } from './ReviewCard'
 export function ReviewList({ reviews }: { reviews: ReviewResponseDTO[] }) {
   return (
     <section className="space-y-5">
-      <SectionHeader eyebrow="Reviews" title={formatReviewCount(reviews.length)} />
+      <SectionHeader title={formatReviewCount(reviews.length)} />
       {reviews.length > 0 ? (
         <div className="grid gap-4 2xl:grid-cols-2">
           {reviews.map((review) => (

@@ -1,9 +1,10 @@
-import { ArrowRight, LockKeyhole, Mail, ShieldCheck, User } from 'lucide-react'
+﻿import { ArrowRight, Eye, EyeOff, LockKeyhole, Mail, ShieldCheck, User } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 
 import { authApi } from '../api/authApi'
+import { Logo } from '../components/branding/Logo'
 import { PageContainer } from '../components/layout/PageContainer'
 import { PublicPageAtmosphere } from '../components/public/PublicPageAtmosphere'
 import { Button } from '../components/ui/Button'
@@ -41,6 +42,8 @@ export function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [username, setUsername] = useState('')
 
   const passwordIsValid = useMemo(() => validatePassword(password), [password])
@@ -57,14 +60,11 @@ export function RegisterPage() {
       <PageContainer className="relative isolate flex min-h-[calc(100dvh-8rem)] items-center justify-center py-8 md:py-10">
         <PublicPageAtmosphere variant="verify" />
         <Card className="w-full max-w-2xl space-y-6 p-7 text-center md:p-10">
-          <div className="mx-auto flex size-20 items-center justify-center rounded-[28px] border border-white/10 bg-[rgba(216,226,255,0.08)] text-[color:var(--color-accent)]">
+          <div className="mx-auto flex size-20 items-center justify-center rounded-[var(--radius-panel)] border border-white/10 bg-[rgba(47,174,126,0.07)] text-[color:var(--color-accent)]">
             <ShieldCheck aria-hidden="true" className="size-9" />
           </div>
           <div className="space-y-3">
-            <p className="text-[11px] uppercase tracking-[0.3em] text-[color:var(--color-accent-strong)]">
-              Check your email
-            </p>
-            <h1 className="font-display text-5xl tracking-[-0.05em] text-white md:text-6xl">
+            <h1 className="font-display text-5xl tracking-[-0.03em] text-white md:text-6xl">
               Your account is almost ready.
             </h1>
             <p className="mx-auto max-w-xl text-sm leading-7 text-[color:var(--color-text-secondary)]">
@@ -91,40 +91,27 @@ export function RegisterPage() {
 
       <div className="grid w-full gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
         <section className="hidden max-w-xl space-y-6 lg:block">
-          <p className="text-[11px] uppercase tracking-[0.3em] text-[color:var(--color-accent-strong)]">
-            New screening room
-          </p>
-          <h1 className="font-display text-6xl tracking-[-0.05em] text-white xl:text-7xl">
+          <Logo size="lg" />
+          <h2 className="font-display text-6xl tracking-[-0.03em] text-white xl:text-7xl">
             Start tracking for free.
-          </h1>
+          </h2>
           <p className="text-base leading-8 text-[color:var(--color-text-secondary)] xl:text-lg">
             Create your WatchMate account and keep discovery, progress, reviews, watchlists, and
             your social circle in one cinematic place.
           </p>
-          <div className="grid gap-3 sm:grid-cols-2">
-            <div className="rounded-[24px] border border-white/10 bg-[rgba(255,255,255,0.03)] px-5 py-4 text-sm text-[color:var(--color-text-secondary)]">
-              Username and email registration.
-            </div>
-            <div className="rounded-[24px] border border-white/10 bg-[rgba(255,255,255,0.03)] px-5 py-4 text-sm text-[color:var(--color-text-secondary)]">
-              Email verification before first login.
-            </div>
-          </div>
         </section>
 
         <Card className="w-full max-w-xl justify-self-center p-6 md:p-8 lg:justify-self-end xl:p-10">
           <div className="space-y-7">
-            <div className="space-y-3 text-center">
-              <p className="text-[11px] uppercase tracking-[0.3em] text-[color:var(--color-accent-strong)]">
-                Create account
+            <div className="space-y-2">
+              <Logo className="mb-3 lg:hidden" size="md" />
+              <h1 className="font-display text-5xl tracking-[-0.03em] text-white md:text-6xl">
+                Start tracking for free.
+              </h1>
+              <p className="text-sm leading-7 text-[color:var(--color-text-secondary)]">
+                Create your WatchMate account and keep your watch history, progress, and favourites
+                in one place.
               </p>
-              <div className="space-y-2">
-                <h1 className="font-display text-5xl tracking-[-0.05em] text-white md:text-6xl">
-                  Start tracking for free.
-                </h1>
-                <p className="text-sm leading-7 text-[color:var(--color-text-secondary)]">
-                  Create your WatchMate account and keep your watch history, progress, and favourites in one place.
-                </p>
-              </div>
             </div>
 
             <form
@@ -179,6 +166,18 @@ export function RegisterPage() {
                 error={password.length > 0 && !passwordIsValid ? 'Use at least 8 characters with a letter, number, and symbol.' : null}
                 hint="Use at least 8 characters, including a letter, number, and symbol."
                 label="Password"
+                trailing={
+                  <button
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    className="flex items-center text-[color:var(--color-text-tertiary)] transition hover:text-white"
+                    onClick={() => setShowPassword((c) => !c)}
+                    type="button"
+                  >
+                    {showPassword
+                      ? <EyeOff aria-hidden="true" className="size-4" />
+                      : <Eye aria-hidden="true" className="size-4" />}
+                  </button>
+                }
               >
                 <div className="relative">
                   <LockKeyhole
@@ -191,7 +190,7 @@ export function RegisterPage() {
                     onChange={(event) => setPassword(event.target.value)}
                     placeholder="Create a password"
                     required
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     value={password}
                   />
                 </div>
@@ -199,6 +198,18 @@ export function RegisterPage() {
               <FormField
                 error={confirmPassword.length > 0 && !passwordMatches ? 'Passwords need to match.' : null}
                 label="Confirm password"
+                trailing={
+                  <button
+                    aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+                    className="flex items-center text-[color:var(--color-text-tertiary)] transition hover:text-white"
+                    onClick={() => setShowConfirmPassword((c) => !c)}
+                    type="button"
+                  >
+                    {showConfirmPassword
+                      ? <EyeOff aria-hidden="true" className="size-4" />
+                      : <Eye aria-hidden="true" className="size-4" />}
+                  </button>
+                }
               >
                 <div className="relative">
                   <ShieldCheck
@@ -211,14 +222,14 @@ export function RegisterPage() {
                     onChange={(event) => setConfirmPassword(event.target.value)}
                     placeholder="Repeat your password"
                     required
-                    type="password"
+                    type={showConfirmPassword ? 'text' : 'password'}
                     value={confirmPassword}
                   />
                 </div>
               </FormField>
 
               {error ? (
-                <div className="rounded-[22px] border border-[rgba(255,180,171,0.24)] bg-[rgba(147,0,10,0.16)] px-4 py-3 text-sm text-white">
+                <div className="rounded-[var(--radius-panel)] border border-[rgba(255,180,171,0.24)] bg-[rgba(147,0,10,0.16)] px-4 py-3 text-sm text-white">
                   {getRegisterError(error)}
                 </div>
               ) : null}

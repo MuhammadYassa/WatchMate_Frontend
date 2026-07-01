@@ -115,7 +115,7 @@ describe('FollowRequestsPage', () => {
       expect(screen.getByText('No pending requests')).toBeInTheDocument()
     })
 
-    expect(screen.getByText('cinephile can now see your shared profile.')).toBeInTheDocument()
+    expect(screen.getAllByText('cinephile can now see your shared profile.').length).toBeGreaterThan(0)
   })
 
   it('rejects a request and refreshes the list', async () => {
@@ -147,7 +147,7 @@ describe('FollowRequestsPage', () => {
       expect(screen.getByText('No pending requests')).toBeInTheDocument()
     })
 
-    expect(screen.getByText('Request from cinephile declined.')).toBeInTheDocument()
+    expect(screen.getAllByText('Request from cinephile declined.').length).toBeGreaterThan(0)
   })
 
   it('shows a friendly message when a request was already handled', async () => {
@@ -183,7 +183,7 @@ describe('FollowRequestsPage', () => {
     await user.click(screen.getByRole('button', { name: /decline/i }))
 
     await waitFor(() => {
-      expect(screen.getByText('This request was already handled.')).toBeInTheDocument()
+      expect(screen.getAllByText('This request was already handled.').length).toBeGreaterThan(0)
     })
 
     await waitFor(() => {

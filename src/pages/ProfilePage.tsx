@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+﻿import { useMemo } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   Ban,
@@ -32,7 +32,6 @@ import { ReviewCard } from '../components/media/ReviewCard'
 import { UserInitialBadge } from '../components/social/UserInitialBadge'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
-import { Select } from '../components/ui/Select'
 import { getButtonClassName } from '../components/ui/buttonStyles'
 import type { SearchItemDTO, UserProfileDTO, WatchListDTO } from '../types/api'
 import type { FollowStatus, PrivacyStatus } from '../types/enums'
@@ -51,25 +50,25 @@ function ProfileLoadingState() {
       <Card className="relative z-10 overflow-hidden p-0">
         <Skeleton className="h-48 rounded-none" />
         <div className="grid gap-6 px-6 pb-6 pt-0 md:px-8 md:pb-8 lg:grid-cols-[auto_1fr_auto] lg:items-end">
-          <Skeleton className="-mt-10 size-28 rounded-[34px] md:size-36" />
+          <Skeleton className="-mt-10 size-28 rounded-[var(--radius-panel)] md:size-36" />
           <div className="space-y-3">
             <Skeleton className="h-5 w-32 rounded-[14px]" />
-            <Skeleton className="h-12 w-56 rounded-[18px]" />
+            <Skeleton className="h-12 w-56 rounded-[var(--radius-panel)]" />
             <Skeleton className="h-5 w-40 rounded-[14px]" />
           </div>
           <Skeleton className="h-12 w-48 rounded-[14px]" />
         </div>
       </Card>
       <div className="relative z-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <Skeleton className="h-28 rounded-[18px]" />
-        <Skeleton className="h-28 rounded-[18px]" />
-        <Skeleton className="h-28 rounded-[18px]" />
-        <Skeleton className="h-28 rounded-[18px]" />
+        <Skeleton className="h-28 rounded-[var(--radius-panel)]" />
+        <Skeleton className="h-28 rounded-[var(--radius-panel)]" />
+        <Skeleton className="h-28 rounded-[var(--radius-panel)]" />
+        <Skeleton className="h-28 rounded-[var(--radius-panel)]" />
       </div>
       <div className="relative z-10 grid gap-8 xl:grid-cols-[0.78fr_1.22fr]">
-        <Skeleton className="h-72 rounded-[18px]" />
+        <Skeleton className="h-72 rounded-[var(--radius-panel)]" />
         <div className="grid gap-6">
-          <Skeleton className="h-64 rounded-[18px]" />
+          <Skeleton className="h-64 rounded-[var(--radius-panel)]" />
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             <SkeletonPoster />
             <SkeletonPoster />
@@ -91,10 +90,10 @@ function ProfileStatCard({
   value: number | string
 }) {
   return (
-    <Card className="space-y-2 border-white/10 bg-[rgba(255,255,255,0.03)] p-4">
-      <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-accent-strong)]">{label}</p>
-      <p className="font-display text-[2.3rem] leading-none tracking-[-0.04em] text-white">{value}</p>
-    </Card>
+    <div className="rounded-[var(--radius-panel)] border border-white/[0.07] bg-[color:var(--color-surface-1)] p-4">
+      <p className="text-[12px] text-[color:var(--color-text-tertiary)]">{label}</p>
+      <p className="mt-1 font-display text-[2.3rem] leading-none tracking-[-0.04em] text-white">{value}</p>
+    </div>
   )
 }
 
@@ -113,13 +112,10 @@ function ProfileWatchlistPreview({ watchlist }: { watchlist: WatchListDTO }) {
           />
         ) : null}
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.02)_0%,rgba(10,11,14,0.96)_100%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(173,198,255,0.14),transparent_28%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(47,174,126,0.14),transparent_28%)]" />
 
         <div className="relative z-10 flex h-full min-h-[18rem] flex-col justify-end p-5">
           <div className="space-y-1.5">
-            <p className="text-[11px] uppercase tracking-[0.22em] text-[color:var(--color-accent-strong)]">
-              Watchlist
-            </p>
             <h3 className="font-display text-[2rem] tracking-[-0.04em] text-white">{watchlist.name}</h3>
             <p className="text-sm text-[color:var(--color-text-secondary)]">
               {watchlist.media.length} saved {watchlist.media.length === 1 ? 'title' : 'titles'}
@@ -167,7 +163,7 @@ function WatchedMediaSection({
 }) {
   return (
     <section className="space-y-5">
-      <SectionHeader eyebrow="Watched" title={heading} />
+      <SectionHeader title={heading} />
       {items.length > 0 ? (
         <MediaGrid>
           {items.map((item) => (
@@ -386,10 +382,9 @@ export function ProfilePage() {
       <BrowsePageAtmosphere variant="hero" />
 
       <Card className="relative z-10 overflow-hidden p-0 shadow-[0_34px_90px_rgba(0,0,0,0.38)]">
-        <div className="relative h-44 md:h-56">
-          <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(173,198,255,0.18)_0%,rgba(18,23,31,0.22)_42%,rgba(9,10,13,0.86)_100%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(173,198,255,0.2),transparent_28%),radial-gradient(circle_at_15%_80%,rgba(255,222,164,0.08),transparent_18%)]" />
-          <div className="absolute inset-y-0 right-[8%] hidden w-[26rem] rotate-[-6deg] rounded-[22px] border border-white/8 bg-[rgba(255,255,255,0.03)] lg:block" />
+        <div className="relative h-36 md:h-48">
+          <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(47,174,126,0.18)_0%,rgba(18,23,31,0.22)_42%,rgba(9,10,13,0.86)_100%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(47,174,126,0.2),transparent_28%),radial-gradient(circle_at_15%_80%,rgba(111,209,168,0.08),transparent_18%)]" />
         </div>
 
         <div className="relative z-10 grid gap-6 px-6 pb-6 pt-0 md:px-8 md:pb-8 lg:grid-cols-[auto_1fr_auto] lg:items-end">
@@ -399,10 +394,7 @@ export function ProfilePage() {
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
-                {isSelf ? 'Your profile' : 'Profile'}
-              </p>
-              <h1 className="font-display text-[3.1rem] leading-[0.94] tracking-[-0.055em] text-white md:text-[4.3rem]">
+              <h1 className="font-display text-[3.1rem] leading-[0.94] tracking-[-0.03em] text-white md:text-[4.3rem]">
                 {profile.username}
               </h1>
               <div className="flex flex-wrap gap-2">
@@ -475,44 +467,43 @@ export function ProfilePage() {
           </div>
 
           {isSelf ? (
-            <Card className="p-6">
+            <Card className="p-5">
               <div className="space-y-4">
-                <div className="space-y-2">
-                  <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
-                    Social tools
-                  </p>
-                  <h2 className="font-display text-[2.1rem] tracking-[-0.04em] text-white">
-                    Keep your circle close.
-                  </h2>
-                  <p className="text-sm leading-7 text-[color:var(--color-text-secondary)]">
-                    Find more people to follow or review any pending follow requests from one place.
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <label
-                    className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-text-tertiary)]"
-                    htmlFor="profile-visibility"
+                <button
+                  className="flex w-full items-center justify-between gap-4 text-left"
+                  disabled={privacyMutation.isPending}
+                  onClick={() => {
+                    privacyMutation.mutate(profile.privacyStatus === 'PRIVATE' ? 'PUBLIC' : 'PRIVATE')
+                  }}
+                  type="button"
+                >
+                  <div className="space-y-0.5">
+                    <p className="text-sm font-medium text-white">Private profile</p>
+                    <p className="text-xs text-[color:var(--color-text-tertiary)]">
+                      {profile.privacyStatus === 'PRIVATE'
+                        ? 'Only followers can see your activity.'
+                        : 'Anyone can view your profile and activity.'}
+                    </p>
+                  </div>
+                  <span
+                    aria-checked={profile.privacyStatus === 'PRIVATE'}
+                    className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full border transition duration-200 ${
+                      profile.privacyStatus === 'PRIVATE'
+                        ? 'border-[rgba(47,174,126,0.40)] bg-[rgba(47,174,126,0.20)]'
+                        : 'border-white/14 bg-white/[0.07]'
+                    }`}
+                    role="switch"
                   >
-                    Profile visibility
-                  </label>
-                  <Select
-                    className="max-w-xs"
-                    disabled={privacyMutation.isPending}
-                    id="profile-visibility"
-                    onChange={(event) => {
-                      const nextPrivacyStatus = event.target.value as PrivacyStatus
-
-                      if (nextPrivacyStatus !== profile.privacyStatus) {
-                        privacyMutation.mutate(nextPrivacyStatus)
-                      }
-                    }}
-                    value={profile.privacyStatus}
-                  >
-                    <option value="PUBLIC">Public</option>
-                    <option value="PRIVATE">Private</option>
-                  </Select>
-                </div>
-                <div className="flex flex-wrap gap-3">
+                    <span
+                      className={`inline-block size-4 rounded-full transition duration-200 ${
+                        profile.privacyStatus === 'PRIVATE'
+                          ? 'translate-x-[calc(100%+2px)] bg-[color:var(--color-accent)]'
+                          : 'translate-x-1 bg-white/40'
+                      }`}
+                    />
+                  </span>
+                </button>
+                <div className="flex flex-wrap gap-3 border-t border-white/8 pt-4">
                   <Link className={getButtonClassName('secondary')} to="/social/search">
                     <Search aria-hidden="true" className="mr-2 size-4" />
                     Find people
@@ -558,7 +549,7 @@ export function ProfilePage() {
         <div className="motion-stagger space-y-10">
           {!isBlockedProfile && !isPrivateInaccessible && hasWatchlistsSection ? (
             <section className="space-y-5">
-              <SectionHeader eyebrow="Shared now" title={isSelf ? 'Your watchlists' : 'Watchlists'} />
+              <SectionHeader title={isSelf ? 'Your watchlists' : 'Watchlists'} />
               {profile.watchlists!.content.length > 0 ? (
                 <div className="grid gap-4 lg:grid-cols-2">
                   {profile.watchlists!.content.map((watchlist) => (
@@ -577,7 +568,7 @@ export function ProfilePage() {
 
           {!isBlockedProfile && !isPrivateInaccessible && hasReviewsSection ? (
             <section className="space-y-5">
-              <SectionHeader eyebrow="Reviews" title={isSelf ? 'Your reviews' : 'Recent reviews'} />
+              <SectionHeader title={isSelf ? 'Your reviews' : 'Recent reviews'} />
               {profile.reviews!.content.length > 0 ? (
                 <div className="grid gap-4 xl:grid-cols-2">
                   {profile.reviews!.content.map((review) => (

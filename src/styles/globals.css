@@ -1,9 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap');
 @import 'tailwindcss';
 
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/Geist-Variable.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
-  --font-display: 'Playfair Display', Georgia, serif;
-  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
 :root {
@@ -13,34 +20,61 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  --color-bg: #121317;
-  --color-bg-elevated: #0d0e11;
-  --color-surface-1: #1a1b1f;
-  --color-surface-2: #1e1f23;
-  --color-surface-3: #292a2d;
-  --color-surface-glass: rgba(30, 31, 35, 0.68);
-  --color-surface-glass-strong: rgba(24, 26, 31, 0.84);
-  --color-accent: #d8e2ff;
-  --color-accent-strong: #adc6ff;
-  --color-accent-dim: #7c91bf;
-  --color-accent-glow: rgba(173, 198, 255, 0.2);
-  --color-text-primary: #e3e2e7;
-  --color-text-secondary: #c4c6d0;
-  --color-text-tertiary: #8e909a;
-  --color-border: rgba(255, 255, 255, 0.1);
-  --color-border-strong: rgba(255, 255, 255, 0.16);
-  --color-border-focus: #adc6ff;
-  --color-success: #a7f3d0;
-  --color-warning: #ffdea4;
+  /* Base surfaces — graphite (cool neutral) */
+  --color-bg: #0c0d0d;
+  --color-bg-elevated: #070808;
+  --color-surface-1: #16181a;
+  --color-surface-2: #1d1f21;
+  --color-surface-3: #26292b;
+  --color-surface-glass: rgba(22, 24, 26, 0.70);
+  --color-surface-glass-strong: rgba(17, 19, 20, 0.88);
+
+  /* Accent — jade/emerald */
+  --color-accent: #2fae7e;
+  --color-accent-strong: #1f8a63;
+  --color-accent-dim: #17513c;
+  --color-accent-glow: rgba(47, 174, 126, 0.22);
+
+  /* Action — bright jade for primary CTA fills (paired with --color-action-ink) */
+  --color-action: #45c793;
+  --color-action-ink: #06231a;
+  --color-action-glow: rgba(69, 199, 147, 0.30);
+
+  /* Highlight — lighter jade for ratings/emphasis */
+  --color-highlight: #6fd1a8;
+  --color-highlight-glow: rgba(111, 209, 168, 0.18);
+
+  /* Text */
+  --color-text-primary: #edefee;
+  --color-text-secondary: #b4b9b7;
+  --color-text-tertiary: #7f8583;
+
+  /* Borders */
+  --color-border: rgba(255, 252, 248, 0.09);
+  --color-border-strong: rgba(255, 252, 248, 0.15);
+  --color-border-focus: #2fae7e;
+
+  /* Semantic */
+  --color-success: #6fd1a8;
+  --color-warning: #e8a64a;
   --color-error: #ffb4ab;
-  --color-backdrop-tint: rgba(18, 19, 23, 0.18);
+  --color-backdrop-tint: rgba(12, 13, 13, 0.18);
+
+  /* Layout */
   --shell-side-rail-width: 17rem;
-  --radius-control: 0.75rem;
-  --radius-panel: 1rem;
-  --radius-media: 0.75rem;
-  --shadow-panel: 0 28px 72px rgba(0, 0, 0, 0.34);
-  --shadow-lift: 0 24px 56px rgba(0, 0, 0, 0.32);
+
+  /* Radius */
+  --radius-control: 10px;
+  --radius-panel: 14px;
+  --radius-media: 12px;
+
+  /* Shadows */
+  --shadow-panel: 0 28px 72px rgba(0, 0, 0, 0.44);
+  --shadow-lift: 0 24px 56px rgba(0, 0, 0, 0.40);
+
+  /* Easing */
   --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 * {
@@ -57,10 +91,10 @@ body {
   margin: 0;
   min-height: 100vh;
   background:
-    radial-gradient(circle at top center, rgba(173, 198, 255, 0.13), transparent 26%),
-    radial-gradient(circle at bottom right, rgba(255, 222, 164, 0.06), transparent 22%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.025) 0%, rgba(255, 255, 255, 0) 14%),
-    linear-gradient(180deg, #121317 0%, #0d0e11 100%);
+    radial-gradient(circle at top center, rgba(47, 174, 126, 0.07), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(111, 209, 168, 0.05), transparent 22%),
+    linear-gradient(180deg, rgba(255, 252, 248, 0.02) 0%, rgba(255, 252, 248, 0) 14%),
+    linear-gradient(180deg, #0c0d0d 0%, #070808 100%);
   color: var(--color-text-primary);
   overflow-x: hidden;
 }
@@ -71,24 +105,11 @@ body::before {
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(circle at 18% 18%, rgba(173, 198, 255, 0.06), transparent 18%),
-    radial-gradient(circle at 82% 0%, rgba(255, 222, 164, 0.04), transparent 20%);
+    radial-gradient(circle at 18% 18%, rgba(47, 174, 126, 0.04), transparent 20%),
+    radial-gradient(circle at 82% 0%, rgba(111, 209, 168, 0.03), transparent 22%);
   opacity: 0.9;
 }
 
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.012) 1px, transparent 1px);
-  background-position: center;
-  background-size: 140px 140px;
-  mask-image: radial-gradient(circle at center, black, transparent 80%);
-  opacity: 0.18;
-}
 
 a {
   color: inherit;
@@ -108,8 +129,8 @@ select {
 }
 
 ::selection {
-  background: rgba(173, 198, 255, 0.3);
-  color: #001a42;
+  background: rgba(47, 174, 126, 0.30);
+  color: #fff;
 }
 
 ::-webkit-scrollbar {
@@ -120,8 +141,19 @@ select {
 ::-webkit-scrollbar-thumb {
   border: 2px solid transparent;
   border-radius: 999px;
-  background: rgba(142, 144, 154, 0.5);
+  background: rgba(135, 128, 120, 0.48);
   background-clip: padding-box;
+}
+
+dialog.wm-dialog {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+dialog.wm-dialog::backdrop {
+  background: rgba(5, 6, 9, 0.78);
+  backdrop-filter: blur(6px);
 }
 
 @keyframes shimmer {
@@ -174,6 +206,12 @@ select {
   }
 }
 
+@keyframes brand-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .motion-fade-in {
   animation: fade-in 560ms var(--ease-premium) both;
 }
@@ -190,6 +228,10 @@ select {
   animation:
     fade-in 220ms ease-out both,
     scale-in-soft 260ms var(--ease-premium) both;
+}
+
+.motion-toast {
+  animation: scale-in-soft 240ms var(--ease-premium) both;
 }
 
 .motion-stagger > * {
@@ -241,6 +283,7 @@ select {
 
 .motion-poster:hover {
   transform: translateY(-6px);
+  box-shadow: 0 32px 72px rgba(0, 0, 0, 0.56), 0 0 0 1px rgba(47, 174, 126, 0.18);
 }
 
 .motion-poster img {
@@ -258,8 +301,33 @@ select {
     transform 280ms var(--ease-premium);
 }
 
+/* Primary button shine sweep */
+.motion-btn-primary {
+  position: relative;
+  overflow: hidden;
+}
+
+.motion-btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 56%);
+  opacity: 0;
+  transition: opacity 240ms ease;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.motion-btn-primary:hover::after {
+  opacity: 1;
+}
+
 .ambient-drift {
   animation: ambient-drift 14s ease-in-out infinite;
+}
+
+.motion-spin {
+  animation: brand-spin 900ms linear infinite;
 }
 
 .glass-hover-glow {
@@ -271,7 +339,7 @@ select {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: radial-gradient(circle at top, rgba(216, 226, 255, 0.12), transparent 58%);
+  background: radial-gradient(circle at top, rgba(47, 174, 126, 0.09), transparent 58%);
   opacity: 0;
   transition: opacity 280ms ease;
   pointer-events: none;
@@ -285,14 +353,23 @@ select {
   mask-image: linear-gradient(90deg, transparent 0, black 18px, black calc(100% - 18px), transparent 100%);
 }
 
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 .shimmer-nocturne {
   animation: shimmer 1.65s ease-in-out infinite;
   background:
     linear-gradient(
       90deg,
-      rgba(26, 27, 31, 0.88) 16%,
-      rgba(50, 55, 68, 0.96) 48%,
-      rgba(26, 27, 31, 0.88) 78%
+      rgba(22, 20, 18, 0.88) 16%,
+      rgba(44, 38, 34, 0.96) 48%,
+      rgba(22, 20, 18, 0.88) 78%
     );
   background-size: 200% 100%;
 }
@@ -311,8 +388,13 @@ select {
   .motion-slide-up,
   .motion-scale-in,
   .motion-modal,
+  .motion-toast,
   .motion-stagger > *,
   .ambient-drift {
+    animation: none !important;
+  }
+
+  .motion-spin {
     animation: none !important;
   }
 
@@ -323,5 +405,9 @@ select {
 
   .motion-poster:hover img {
     transform: none !important;
+  }
+
+  .motion-btn-primary::after {
+    opacity: 0 !important;
   }
 }

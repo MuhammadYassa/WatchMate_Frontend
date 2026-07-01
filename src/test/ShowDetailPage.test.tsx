@@ -162,12 +162,10 @@ describe('ShowDetailPage', () => {
     expect(screen.getByRole('link', { name: /season 1/i })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /specials/i })).toBeInTheDocument()
     expect(screen.getByText('The After Hours')).toBeInTheDocument()
-    expect(screen.getByText('Next episode')).toBeInTheDocument()
+    expect(screen.getByText('Season 3 Episode 1')).toBeInTheDocument()
   })
 
-  it('submits show progress and polls async jobs when the backend responds with 202', async () => {
-    const user = userEvent.setup()
-
+  it('does not render the manual show progress form on show detail', async () => {
     const show: ShowDetailsDTO = {
       backdropPath: '/backdrop.jpg',
       firstAirDate: '2022-02-18',
@@ -238,101 +236,10 @@ describe('ShowDetailPage', () => {
     )
     getNextEpisodeMock.mockResolvedValue(null)
     getShowProgressMock.mockResolvedValue(progress)
-    getSeasonEpisodesMock.mockResolvedValue({
-      airDate: '2022-02-18',
-      episodeCount: 3,
-      episodes: [
-        {
-          airDate: '2022-02-18',
-          episodeNumber: 1,
-          isAired: true,
-          name: 'Good News About Hell',
-          overview: 'Orientation begins.',
-          runtime: 57,
-          seasonNumber: 1,
-          stillPath: '/ep-1.jpg',
-          tmdbEpisodeId: 1,
-          watched: true,
-        },
-        {
-          airDate: '2022-02-25',
-          episodeNumber: 2,
-          isAired: true,
-          name: 'Half Loop',
-          overview: 'The work continues.',
-          runtime: 55,
-          seasonNumber: 1,
-          stillPath: '/ep-2.jpg',
-          tmdbEpisodeId: 2,
-          watched: true,
-        },
-        {
-          airDate: '2022-03-04',
-          episodeNumber: 3,
-          isAired: true,
-          name: 'In Perpetuity',
-          overview: 'Mark takes a tour.',
-          runtime: 56,
-          seasonNumber: 1,
-          stillPath: '/ep-3.jpg',
-          tmdbEpisodeId: 3,
-          watched: false,
-        },
-      ],
-      name: 'Season 1',
-      overview: 'Innies at work.',
-      posterPath: '/season-1.jpg',
-      seasonNumber: 1,
-      tmdbId: 95396,
-    })
-    updateShowProgressMock.mockResolvedValue({
-      data: {
-        completedAt: null,
-        completedSeasons: 0,
-        createdAt: '2026-06-20T10:00:00',
-        errorCode: null,
-        errorMessage: null,
-        finalStatus: null,
-        jobId: 42,
-        jobType: 'SET_SHOW_PROGRESS',
-        mediaId: 10,
-        message: 'Queued',
-        requestedStatus: null,
-        startedAt: '2026-06-20T10:00:01',
-        status: 'PENDING',
-        targetEpisodeNumber: 2,
-        targetSeasonNumber: 1,
-        tmdbId: 95396,
-        totalSeasons: 2,
-        updatedAt: '2026-06-20T10:00:01',
-      },
-      headers: new Headers(),
-      status: 202,
-    })
     updateShowStatusMock.mockResolvedValue({
       data: progress,
       headers: new Headers(),
       status: 200,
-    })
-    pollShowTrackingJobMock.mockResolvedValue({
-      completedAt: '2026-06-20T10:00:10',
-      completedSeasons: 0,
-      createdAt: '2026-06-20T10:00:00',
-      errorCode: null,
-      errorMessage: null,
-      finalStatus: null,
-      jobId: 42,
-      jobType: 'SET_SHOW_PROGRESS',
-      mediaId: 10,
-      message: 'Complete',
-      requestedStatus: null,
-      startedAt: '2026-06-20T10:00:01',
-      status: 'COMPLETED',
-      targetEpisodeNumber: 2,
-      targetSeasonNumber: 1,
-      tmdbId: 95396,
-      totalSeasons: 2,
-      updatedAt: '2026-06-20T10:00:10',
     })
 
     renderWithProviders(
@@ -344,22 +251,471 @@ describe('ShowDetailPage', () => {
     )
 
     await waitFor(() => {
-      expect(screen.getByRole('heading', { name: /set where you are now/i })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: 'Current watch position' })).toBeInTheDocument()
     })
 
-    expect(screen.getByRole('heading', { name: /update your take/i })).toBeInTheDocument()
+    expect(screen.getAllByText('Need this back immediately.').length).toBeGreaterThan(0)
+    expect(screen.queryByRole('heading', { name: /set where you are now/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /save progress/i })).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/^season$/i)).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/latest watched episode/i)).not.toBeInTheDocument()
+    expect(updateShowProgressMock).not.toHaveBeenCalled()
+  })
 
-    await user.click(screen.getByRole('button', { name: /save progress/i }))
+  it('renders cast, trailer, and watch providers when data exists', async () => {
+    const show: ShowDetailsDTO = {
+      backdropPath: '/backdrop.jpg',
+      firstAirDate: '2022-02-18',
+      genres: ['Drama'],
+      isFavourited: false,
+      lastAirDate: '2023-01-20',
+      lastEpisodeToAirEpisodeNumber: 9,
+      lastEpisodeToAirName: 'The We We Are',
+      lastEpisodeToAirSeasonNumber: 1,
+      nextEpisodeAirDate: '2025-01-17',
+      nextEpisodeEpisodeNumber: 1,
+      nextEpisodeName: 'Hello, Ms. Cobel',
+      nextEpisodeSeasonNumber: 3,
+      numberOfEpisodes: 9,
+      numberOfSeasons: 2,
+      overview: 'Workers split their memories between work and life.',
+      posterPath: '/poster.jpg',
+      rating: 8.7,
+      reviews: [],
+      seasons: [
+        {
+          airDate: '2022-02-18',
+          episodeCount: 9,
+          name: 'Season 1',
+          overview: 'Season overview',
+          posterPath: '/season-1.jpg',
+          seasonNumber: 1,
+          tmdbSeasonId: 1,
+        },
+        {
+          airDate: '2026-02-18',
+          episodeCount: 3,
+          name: 'Specials',
+          overview: 'Specials overview',
+          posterPath: '/specials.jpg',
+          seasonNumber: 0,
+          tmdbSeasonId: 2,
+        },
+      ],
+      title: 'Severance',
+      tmdbId: 95396,
+      tmdbShowStatus: 'Returning Series',
+      type: 'SHOW',
+      watchStatus: 'WATCHING',
+      cast: [
+        {
+          character: 'Mark S.',
+          knownForDepartment: 'Acting',
+          name: 'Adam Scott',
+          order: 0,
+          profilePath: '/adam.jpg',
+          tmdbPersonId: 10,
+        },
+        {
+          character: null,
+          knownForDepartment: 'Acting',
+          name: 'Patricia Arquette',
+          order: 1,
+          profilePath: null,
+          tmdbPersonId: 11,
+        },
+      ],
+      bestTrailer: {
+        key: 'xyz789',
+        name: 'Season 2 Trailer',
+        official: true,
+        publishedAt: '2025-01-01',
+        site: 'YouTube',
+        thumbnailUrl: 'https://img.youtube.com/vi/xyz789/hqdefault.jpg',
+        type: 'Trailer',
+        youtubeUrl: 'https://www.youtube.com/watch?v=xyz789',
+      },
+      watchProviders: {
+        ads: [],
+        buy: [],
+        flatrate: [
+          { displayPriority: 0, logoPath: '/atv.png', providerId: 350, providerName: 'Apple TV+' },
+        ],
+        free: [],
+        link: 'https://www.themoviedb.org/tv/95396/watch',
+        region: 'US',
+        rent: [],
+      },
+    }
+
+    getShowDetailsMock.mockResolvedValueOnce(show)
+    getShowReviewsMock.mockResolvedValueOnce(createReviewPage([]))
+    getNextEpisodeMock.mockResolvedValueOnce(null)
+    getShowProgressMock.mockResolvedValueOnce(null)
+    getSeasonEpisodesMock.mockResolvedValueOnce({
+      airDate: '2022-02-18',
+      episodeCount: 9,
+      episodes: [],
+      name: 'Season 1',
+      overview: 'Innies at work.',
+      posterPath: '/season-1.jpg',
+      seasonNumber: 1,
+      tmdbId: 95396,
+    })
+
+    renderWithProviders(
+      <MemoryRouter initialEntries={['/shows/95396']}>
+        <Routes>
+          <Route element={<ShowDetailPage />} path="/shows/:tmdbId" />
+        </Routes>
+      </MemoryRouter>,
+    )
 
     await waitFor(() => {
-      expect(updateShowProgressMock).toHaveBeenCalledWith(95396, {
-        watchPositionEpisode: 2,
-        watchPositionSeason: 1,
-      })
+      expect(screen.getByRole('heading', { name: 'Severance' })).toBeInTheDocument()
     })
 
-    await waitFor(() => {
-      expect(pollShowTrackingJobMock).toHaveBeenCalled()
+    expect(screen.getByRole('heading', { name: 'Cast' })).toBeInTheDocument()
+    expect(screen.getByAltText('Adam Scott')).toBeInTheDocument()
+    expect(screen.getByText('Adam Scott')).toBeInTheDocument()
+    expect(screen.getByText('Mark S.')).toBeInTheDocument()
+    expect(screen.getByText('Patricia Arquette')).toBeInTheDocument()
+
+    expect(screen.getByRole('link', { name: /watch season 2 trailer on youtube/i })).toBeInTheDocument()
+    expect(screen.getAllByText('Season 2 Trailer').length).toBeGreaterThan(0)
+
+    expect(screen.getByRole('heading', { name: 'Where to watch' })).toBeInTheDocument()
+    expect(screen.getByAltText('Apple TV+')).toBeInTheDocument()
+    expect(screen.getByText('Stream')).toBeInTheDocument()
+  })
+
+  it('shows loading state on the main show button and keeps it while a 202 job is pending', async () => {
+    const user = userEvent.setup()
+    const show: ShowDetailsDTO = {
+      backdropPath: '/backdrop.jpg',
+      firstAirDate: '2022-02-18',
+      genres: ['Drama'],
+      isFavourited: false,
+      lastAirDate: '2025-01-10',
+      lastEpisodeToAirEpisodeNumber: 10,
+      lastEpisodeToAirName: 'Cold Harbor',
+      lastEpisodeToAirSeasonNumber: 2,
+      nextEpisodeAirDate: null,
+      nextEpisodeEpisodeNumber: null,
+      nextEpisodeName: null,
+      nextEpisodeSeasonNumber: null,
+      numberOfEpisodes: 19,
+      numberOfSeasons: 2,
+      overview: 'Workers split their memories.',
+      posterPath: '/poster.jpg',
+      rating: 8.6,
+      reviews: [],
+      seasons: [],
+      title: 'Severance',
+      tmdbId: 95396,
+      tmdbShowStatus: 'Returning Series',
+      type: 'SHOW',
+      watchStatus: null,
+      cast: [],
+      bestTrailer: null,
+      watchProviders: { region: 'US', link: null, flatrate: [], rent: [], buy: [], ads: [], free: [] },
+    }
+
+    let resolveJob: (value: unknown) => void
+    const jobPromise = new Promise((resolve) => {
+      resolveJob = resolve
     })
+
+    getShowDetailsMock.mockResolvedValue(show)
+    getShowReviewsMock.mockResolvedValue(createReviewPage([]))
+    getNextEpisodeMock.mockResolvedValue(null)
+    getShowProgressMock.mockResolvedValue(null)
+    updateShowStatusMock.mockResolvedValue({
+      data: { jobId: 42, status: 'PENDING' },
+      headers: new Headers({ 'Retry-After': '2', Location: '/api/v1/show-tracking-jobs/42' }),
+      status: 202,
+    })
+    pollShowTrackingJobMock.mockReturnValue(jobPromise)
+
+    renderWithProviders(
+      <MemoryRouter initialEntries={['/shows/95396']}>
+        <Routes>
+          <Route element={<ShowDetailPage />} path="/shows/:tmdbId" />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: 'Severance' })).toBeInTheDocument()
+    })
+
+    const markWatchedButton = screen.getByRole('button', { name: /mark all watched/i })
+    await user.click(markWatchedButton)
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /marking watched/i })).toBeInTheDocument()
+    })
+
+    expect(screen.getByRole('button', { name: /marking watched/i })).toBeDisabled()
+
+    resolveJob!({ errorCode: null, errorMessage: null, status: 'COMPLETED' })
+
+    await waitFor(() => {
+      expect(screen.queryByRole('button', { name: /marking watched/i })).not.toBeInTheDocument()
+    })
+  })
+
+  it('shows error toast and clears loading state when a 202 job fails', async () => {
+    const user = userEvent.setup()
+    const show: ShowDetailsDTO = {
+      backdropPath: null,
+      firstAirDate: '2022-02-18',
+      genres: [],
+      isFavourited: false,
+      lastAirDate: null,
+      lastEpisodeToAirEpisodeNumber: null,
+      lastEpisodeToAirName: null,
+      lastEpisodeToAirSeasonNumber: null,
+      nextEpisodeAirDate: null,
+      nextEpisodeEpisodeNumber: null,
+      nextEpisodeName: null,
+      nextEpisodeSeasonNumber: null,
+      numberOfEpisodes: null,
+      numberOfSeasons: null,
+      overview: '',
+      posterPath: null,
+      rating: null,
+      reviews: [],
+      seasons: [],
+      title: 'Unknown Show',
+      tmdbId: 1111,
+      tmdbShowStatus: null,
+      type: 'SHOW',
+      watchStatus: null,
+      cast: [],
+      bestTrailer: null,
+      watchProviders: { region: 'US', link: null, flatrate: [], rent: [], buy: [], ads: [], free: [] },
+    }
+
+    getShowDetailsMock.mockResolvedValue(show)
+    getShowReviewsMock.mockResolvedValue(createReviewPage([]))
+    getNextEpisodeMock.mockResolvedValue(null)
+    getShowProgressMock.mockResolvedValue(null)
+    updateShowStatusMock.mockResolvedValue({
+      data: { jobId: 99, status: 'PENDING' },
+      headers: new Headers({ 'Retry-After': '2', Location: '/api/v1/show-tracking-jobs/99' }),
+      status: 202,
+    })
+    pollShowTrackingJobMock.mockResolvedValue({
+      errorCode: 'SOME_ERROR',
+      errorMessage: 'Backend failed to process.',
+      status: 'FAILED',
+    })
+
+    renderWithProviders(
+      <MemoryRouter initialEntries={['/shows/1111']}>
+        <Routes>
+          <Route element={<ShowDetailPage />} path="/shows/:tmdbId" />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: 'Unknown Show' })).toBeInTheDocument()
+    })
+
+    const markWatchedButton = screen.getByRole('button', { name: /mark all watched/i })
+    await user.click(markWatchedButton)
+
+    await waitFor(() => {
+      expect(screen.queryByRole('button', { name: /marking watched/i })).not.toBeInTheDocument()
+    })
+
+    expect(screen.getByRole('button', { name: /mark all watched/i })).toBeInTheDocument()
+  })
+
+  it('hides cast, trailer, and providers when extras are empty or null', async () => {
+    const show: ShowDetailsDTO = {
+      backdropPath: '/backdrop.jpg',
+      firstAirDate: '2022-02-18',
+      genres: ['Drama'],
+      isFavourited: false,
+      lastAirDate: '2023-01-20',
+      lastEpisodeToAirEpisodeNumber: 9,
+      lastEpisodeToAirName: 'The We We Are',
+      lastEpisodeToAirSeasonNumber: 1,
+      nextEpisodeAirDate: '2025-01-17',
+      nextEpisodeEpisodeNumber: 1,
+      nextEpisodeName: 'Hello, Ms. Cobel',
+      nextEpisodeSeasonNumber: 3,
+      numberOfEpisodes: 9,
+      numberOfSeasons: 2,
+      overview: 'Workers split their memories between work and life.',
+      posterPath: '/poster.jpg',
+      rating: 8.7,
+      reviews: [],
+      seasons: [
+        {
+          airDate: '2022-02-18',
+          episodeCount: 9,
+          name: 'Season 1',
+          overview: 'Season overview',
+          posterPath: '/season-1.jpg',
+          seasonNumber: 1,
+          tmdbSeasonId: 1,
+        },
+      ],
+      title: 'Severance',
+      tmdbId: 95396,
+      tmdbShowStatus: 'Returning Series',
+      type: 'SHOW',
+      watchStatus: 'WATCHING',
+      cast: [],
+      bestTrailer: null,
+      watchProviders: { ads: [], buy: [], flatrate: [], free: [], link: null, region: 'US', rent: [] },
+    }
+
+    getShowDetailsMock.mockResolvedValueOnce(show)
+    getShowReviewsMock.mockResolvedValueOnce(createReviewPage([]))
+    getNextEpisodeMock.mockResolvedValueOnce(null)
+    getShowProgressMock.mockResolvedValueOnce(null)
+    getSeasonEpisodesMock.mockResolvedValueOnce({
+      airDate: '2022-02-18',
+      episodeCount: 9,
+      episodes: [],
+      name: 'Season 1',
+      overview: 'Innies at work.',
+      posterPath: '/season-1.jpg',
+      seasonNumber: 1,
+      tmdbId: 95396,
+    })
+
+    renderWithProviders(
+      <MemoryRouter initialEntries={['/shows/95396']}>
+        <Routes>
+          <Route element={<ShowDetailPage />} path="/shows/:tmdbId" />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: 'Severance' })).toBeInTheDocument()
+    })
+
+    expect(screen.queryByRole('heading', { name: 'Cast' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Where to watch' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /on youtube/i })).not.toBeInTheDocument()
+  })
+
+  it('renders Plan to watch button for shows and sends TO_WATCH on click', async () => {
+    const user = userEvent.setup()
+    const show: ShowDetailsDTO = {
+      backdropPath: null,
+      bestTrailer: null,
+      cast: [],
+      firstAirDate: '2022-02-18',
+      genres: ['Drama'],
+      isFavourited: false,
+      lastAirDate: null,
+      lastEpisodeToAirEpisodeNumber: null,
+      lastEpisodeToAirName: null,
+      lastEpisodeToAirSeasonNumber: null,
+      nextEpisodeAirDate: null,
+      nextEpisodeEpisodeNumber: null,
+      nextEpisodeName: null,
+      nextEpisodeSeasonNumber: null,
+      numberOfEpisodes: 9,
+      numberOfSeasons: 1,
+      overview: 'Office drama.',
+      posterPath: null,
+      rating: 8.5,
+      reviews: [],
+      seasons: [],
+      title: 'Severance',
+      tmdbId: 95396,
+      tmdbShowStatus: 'Returning Series',
+      type: 'SHOW',
+      watchStatus: 'WATCHING',
+      watchProviders: { ads: [], buy: [], flatrate: [], free: [], link: null, region: 'US', rent: [] },
+    }
+
+    getShowDetailsMock.mockResolvedValue(show)
+    getShowReviewsMock.mockResolvedValue(createReviewPage([]))
+    getNextEpisodeMock.mockResolvedValue(null)
+    getShowProgressMock.mockResolvedValue(null)
+    updateShowStatusMock.mockResolvedValue({
+      data: { status: 'TO_WATCH', tmdbId: 95396 },
+      headers: new Headers(),
+      status: 200,
+    })
+
+    renderWithProviders(
+      <MemoryRouter initialEntries={['/shows/95396']}>
+        <Routes>
+          <Route element={<ShowDetailPage />} path="/shows/:tmdbId" />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /plan to watch/i })).toBeInTheDocument()
+    })
+
+    await user.click(screen.getByRole('button', { name: /plan to watch/i }))
+
+    await waitFor(() => {
+      expect(updateShowStatusMock).toHaveBeenCalledWith(95396, 'TO_WATCH')
+    })
+  })
+
+  it('renders Planned label with check when show watchStatus is TO_WATCH', async () => {
+    const show: ShowDetailsDTO = {
+      backdropPath: null,
+      bestTrailer: null,
+      cast: [],
+      firstAirDate: '2022-02-18',
+      genres: ['Drama'],
+      isFavourited: false,
+      lastAirDate: null,
+      lastEpisodeToAirEpisodeNumber: null,
+      lastEpisodeToAirName: null,
+      lastEpisodeToAirSeasonNumber: null,
+      nextEpisodeAirDate: null,
+      nextEpisodeEpisodeNumber: null,
+      nextEpisodeName: null,
+      nextEpisodeSeasonNumber: null,
+      numberOfEpisodes: 9,
+      numberOfSeasons: 1,
+      overview: 'Office drama.',
+      posterPath: null,
+      rating: 8.5,
+      reviews: [],
+      seasons: [],
+      title: 'Severance',
+      tmdbId: 95396,
+      tmdbShowStatus: 'Returning Series',
+      type: 'SHOW',
+      watchStatus: 'TO_WATCH',
+      watchProviders: { ads: [], buy: [], flatrate: [], free: [], link: null, region: 'US', rent: [] },
+    }
+
+    getShowDetailsMock.mockResolvedValue(show)
+    getShowReviewsMock.mockResolvedValue(createReviewPage([]))
+    getNextEpisodeMock.mockResolvedValue(null)
+    getShowProgressMock.mockResolvedValue(null)
+
+    renderWithProviders(
+      <MemoryRouter initialEntries={['/shows/95396']}>
+        <Routes>
+          <Route element={<ShowDetailPage />} path="/shows/:tmdbId" />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /planned/i })).toBeInTheDocument()
+    })
+
+    expect(screen.queryByRole('button', { name: /plan to watch/i })).not.toBeInTheDocument()
   })
 })

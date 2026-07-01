@@ -2,10 +2,11 @@ import { apiClient, type ApiResult } from './client'
 import { ApiClientError } from '../types/errors'
 import type {
   NextEpisodeAiringDTO,
+  PageResponse,
+  ShowEpisodeDetailsDTO,
   ShowTrackingDTO,
   ShowTrackingJobDTO,
   ShowDetailsDTO,
-  ShowSeasonsDetailsDTO,
 } from '../types/api'
 import type { WatchStatus } from '../types/enums'
 
@@ -14,9 +15,9 @@ export const showApi = {
     const result = await apiClient.get<NextEpisodeAiringDTO>(`/shows/${tmdbId}/next-episode`)
     return result.data
   },
-  getSeasonEpisodes: async (tmdbId: number, seasonNumber: number) => {
-    const result = await apiClient.get<ShowSeasonsDetailsDTO>(
-      `/shows/${tmdbId}/seasons/${seasonNumber}/episodes`,
+  getSeasonEpisodes: async (tmdbId: number, seasonNumber: number, page = 0, size = 20) => {
+    const result = await apiClient.get<PageResponse<ShowEpisodeDetailsDTO>>(
+      `/shows/${tmdbId}/seasons/${seasonNumber}/episodes?page=${page}&size=${size}`,
     )
     return result.data
   },

@@ -1,4 +1,4 @@
-import {
+﻿import {
   Bell,
   Bookmark,
   Clapperboard,
@@ -37,7 +37,7 @@ export function MobileNav() {
   const navItems = isAuthenticated && username ? privateMobileNavItems : publicMobileNavItems
 
   return (
-    <nav className="fixed inset-x-4 bottom-4 z-40 rounded-[18px] border border-white/10 bg-[rgba(17,18,23,0.92)] px-2 py-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] shadow-[0_18px_42px_rgba(0,0,0,0.42)] backdrop-blur-xl md:hidden">
+    <nav className="fixed inset-x-4 bottom-4 z-40 rounded-[var(--radius-panel)] border border-white/10 bg-[rgba(17,16,14,0.92)] px-2 py-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] shadow-[0_18px_42px_rgba(0,0,0,0.42)] backdrop-blur-xl md:hidden">
       <div className={cn('grid gap-1', navItems.length === 4 ? 'grid-cols-4' : 'grid-cols-5')}>
         {navItems.map((item) => {
           const Icon = iconMap[item.icon]
@@ -48,7 +48,7 @@ export function MobileNav() {
               className={({ isActive }) =>
                 cn(
                   'group relative flex min-h-[56px] flex-col items-center justify-center gap-1 rounded-[12px] px-2 py-2.5 text-[11px] text-[color:var(--color-text-tertiary)] transition duration-300',
-                  isActive ? 'bg-[rgba(216,226,255,0.09)] text-[color:var(--color-accent)]' : 'hover:text-white',
+                  isActive ? 'bg-[rgba(47,174,126,0.10)] text-[color:var(--color-accent)]' : 'hover:text-white',
                 )
               }
               to={item.to}

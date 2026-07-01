@@ -30,10 +30,10 @@ describe('VerifyEmailPage', () => {
     )
 
     await waitFor(() => {
-      expect(screen.getByText("You're verified.")).toBeInTheDocument()
+      expect(screen.getByText('Email verified successfully.')).toBeInTheDocument()
     })
 
-    expect(screen.getByText('Email verified successfully')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /go to login/i })).toBeInTheDocument()
     expect(verifyEmailMock).toHaveBeenCalledWith('abc123')
   })
 })

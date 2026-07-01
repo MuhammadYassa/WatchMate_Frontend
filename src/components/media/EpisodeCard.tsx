@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CalendarDays, Clock3, MonitorPlay } from 'lucide-react'
+import { CalendarDays, Check, Circle, Clock3, Loader2, MonitorPlay } from 'lucide-react'
 
 import type { ShowEpisodeDetailsDTO } from '../../types/api'
 import { formatDisplayDate } from '../../utils/dates'
@@ -10,18 +10,35 @@ import {
   formatWatchedState,
 } from '../../utils/labels'
 import { getStillUrl, hasImagePath } from '../../utils/tmdbImages'
+import { cn } from '../../utils/cn'
 import { Card } from '../ui/Card'
 import { CompletionStatusBadge, InformationalStatusBadge } from './StatusBadge'
 
-export function EpisodeCard({ episode }: { episode: ShowEpisodeDetailsDTO }) {
+interface EpisodeCardProps {
+  episode: ShowEpisodeDetailsDTO
+  onTick?: () => void
+  tickPending?: boolean
+}
+
+export function EpisodeCard({ episode, onTick, tickPending }: EpisodeCardProps) {
   const watchedLabel = formatWatchedState(episode.watched)
   const airedLabel = formatAiredState(episode.isAired)
   const [imageFailed, setImageFailed] = useState(false)
+  const isUnaired = episode.isAired === false
+  const isWatched = episode.watched === true
+  const episodePositionLabel = `Season ${episode.seasonNumber} Episode ${episode.episodeNumber}`
 
   return (
-    <Card className="group grid gap-5 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.9)_0%,rgba(11,12,16,0.98)_100%)] p-4 shadow-[0_22px_50px_rgba(0,0,0,0.3)] transition duration-300 hover:border-[rgba(173,198,255,0.14)] hover:shadow-[0_30px_72px_rgba(0,0,0,0.38)] md:p-5 lg:grid-cols-[280px_1fr]">
-      <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(173,198,255,0.08)_0%,rgba(173,198,255,0)_72%)] opacity-0 transition duration-300 group-hover:opacity-100" />
-      <div className="relative overflow-hidden rounded-[18px] border border-white/10 bg-[linear-gradient(180deg,#161922_0%,#0d0e11_100%)]">
+    <Card
+      className={cn(
+        'group grid gap-5 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(22,20,18,0.9)_0%,rgba(12,11,9,0.98)_100%)] p-4 shadow-[0_22px_50px_rgba(0,0,0,0.3)] transition duration-300 hover:border-[rgba(47,174,126,0.16)] hover:shadow-[0_30px_72px_rgba(0,0,0,0.44)] md:p-5 lg:grid-cols-[280px_1fr]',
+        isWatched
+          ? 'border-[rgba(111,209,168,0.28)] bg-[linear-gradient(160deg,rgba(20,32,27,0.82)_0%,rgba(12,11,9,0.98)_100%)]'
+          : null,
+      )}
+    >
+      <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(47,174,126,0.06)_0%,rgba(47,174,126,0)_72%)] opacity-0 transition duration-300 group-hover:opacity-100" />
+      <div className="relative overflow-hidden rounded-[var(--radius-media)] border border-white/10 bg-[linear-gradient(180deg,#161922_0%,#0d0e11_100%)]">
         {hasImagePath(episode.stillPath) && !imageFailed ? (
           <img
             alt={`${episode.name} still`}
@@ -41,15 +58,46 @@ export function EpisodeCard({ episode }: { episode: ShowEpisodeDetailsDTO }) {
         </div>
       </div>
       <div className="relative space-y-4 self-center">
-        <div className="space-y-2">
-          <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-accent-strong)]">
-            Episode detail
-          </p>
-          <h2 className="font-display text-[2rem] tracking-[-0.04em] text-white">{episode.name}</h2>
+        <div className="flex items-start justify-between gap-4">
+          <div className="space-y-2">
+            <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-accent-strong)]">
+              Episode detail
+            </p>
+            <h2 className="font-display text-[2rem] tracking-[-0.04em] text-white">{episode.name}</h2>
+          </div>
+
+          {onTick ? (
+            <button
+              aria-label={
+                isWatched
+                  ? `Watched: ${episodePositionLabel}`
+                  : `Mark watched through this episode: ${episodePositionLabel}`
+              }
+              aria-pressed={isWatched}
+              className={cn(
+                'mt-1 flex size-11 shrink-0 items-center justify-center rounded-full border transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-bg)]',
+                isWatched
+                  ? 'border-[rgba(111,209,168,0.55)] bg-[color:var(--color-accent)] text-black shadow-[0_0_0_4px_rgba(111,209,168,0.12)] hover:bg-[color:var(--color-accent-strong)]'
+                  : 'border-[rgba(255,255,255,0.24)] bg-transparent text-[color:var(--color-text-secondary)] hover:border-[rgba(111,209,168,0.48)] hover:bg-[rgba(111,209,168,0.08)] hover:text-[color:var(--color-accent)]',
+              )}
+              disabled={tickPending}
+              onClick={onTick}
+              title={tickPending ? 'Syncing progress…' : isWatched ? 'Watched' : 'Mark watched through this episode'}
+              type="button"
+            >
+              {tickPending ? (
+                <Loader2 aria-hidden="true" className="size-5 animate-spin" />
+              ) : isWatched ? (
+                <Check aria-hidden="true" className="size-5 stroke-[3]" />
+              ) : (
+                <Circle aria-hidden="true" className="size-5" />
+              )}
+            </button>
+          ) : null}
         </div>
 
         <div className="flex flex-wrap gap-2">
-          {episode.isAired === false ? (
+          {isUnaired ? (
             <InformationalStatusBadge label={airedLabel} tone="accent" />
           ) : (
             <InformationalStatusBadge label={airedLabel} />

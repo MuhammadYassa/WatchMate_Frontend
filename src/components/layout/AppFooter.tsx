@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 
 import { cn } from '../../utils/cn'
+import { Logo } from '../branding/Logo'
 import { useShellMode } from './useShellMode'
 
 const footerLinks = [
@@ -19,12 +20,14 @@ export function AppFooter() {
   return (
     <footer className="relative z-10 hidden border-t border-white/6 bg-[rgba(9,10,13,0.72)] backdrop-blur-xl md:block">
       <div className="mx-auto flex w-full max-w-[1320px] items-center justify-between gap-6 px-6 py-6 xl:px-12">
-        <div className="space-y-1">
-          <p className="font-display text-[1.55rem] tracking-[-0.04em] text-[color:var(--color-text-secondary)]">
-            WatchMate
-          </p>
-          <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-text-tertiary)]">
-            Nocturne cinema edition
+        <div className="space-y-2">
+          <Logo
+            className="opacity-80"
+            size="sm"
+            wordmarkClassName="text-[color:var(--color-text-secondary)]"
+          />
+          <p className="text-[11px] text-[color:var(--color-text-tertiary)]">
+            Track what matters to you.
           </p>
         </div>
         <nav className="flex items-center gap-5 text-sm text-[color:var(--color-text-tertiary)]">

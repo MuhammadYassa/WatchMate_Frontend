@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   ChevronDown,
@@ -9,7 +9,6 @@ import {
   Plus,
   Rows3,
   Trash2,
-  X,
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
@@ -26,8 +25,10 @@ import { PosterCard } from '../components/media/PosterCard'
 import { PosterPlaceholder } from '../components/media/PosterPlaceholder'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
+import { Dialog } from '../components/ui/Dialog'
 import { FormField } from '../components/ui/FormField'
 import { Input } from '../components/ui/Input'
+import { Pagination } from '../components/ui/Pagination'
 import { getButtonClassName } from '../components/ui/buttonStyles'
 import type { SpringPage, WatchListDTO } from '../types/api'
 import { ApiClientError } from '../types/errors'
@@ -53,7 +54,7 @@ function WatchlistsLoadingState() {
   return (
     <PageContainer className="relative isolate space-y-8 overflow-hidden pt-8 md:pt-12">
       <BrowsePageAtmosphere variant="hero" />
-      <Skeleton className="relative z-10 h-[260px] rounded-[28px]" />
+      <Skeleton className="relative z-10 h-[260px] rounded-[var(--radius-panel)]" />
       {[0, 1, 2].map((item) => (
         <Card
           className="relative z-10 space-y-6 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.98)_100%)] p-6"
@@ -61,10 +62,10 @@ function WatchlistsLoadingState() {
         >
           <Skeleton className="h-8 w-48 rounded-[14px]" />
           <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
-            <Skeleton className="h-[210px] rounded-[20px]" />
+            <Skeleton className="h-[210px] rounded-[var(--radius-panel)]" />
             <div className="space-y-4">
               <Skeleton className="h-12 w-64 rounded-[14px]" />
-              <Skeleton className="h-20 w-full rounded-[18px]" />
+              <Skeleton className="h-20 w-full rounded-[var(--radius-panel)]" />
               <div className="flex gap-4">
                 <SkeletonPoster />
                 <SkeletonPoster />
@@ -83,15 +84,15 @@ function WatchlistPosterPreview({ watchlist }: { watchlist: WatchListDTO }) {
 
   if (!previewItems.length) {
     return (
-      <div className="grid min-h-[220px] place-items-center rounded-[22px] border border-dashed border-white/10 bg-[rgba(255,255,255,0.03)] p-5">
+      <div className="grid min-h-[220px] place-items-center rounded-[var(--radius-panel)] border border-dashed border-white/10 bg-[rgba(255,255,255,0.03)] p-5">
         <PosterPlaceholder className="max-w-[150px]" title={watchlist.name} />
       </div>
     )
   }
 
   return (
-    <div className="relative flex min-h-[240px] items-center justify-center overflow-hidden rounded-[22px] border border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.94)_0%,rgba(11,12,16,0.98)_100%)] px-6 py-5">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(173,198,255,0.12)_0%,rgba(173,198,255,0)_58%)]" />
+    <div className="relative flex min-h-[240px] items-center justify-center overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.94)_0%,rgba(11,12,16,0.98)_100%)] px-6 py-5">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(47,174,126,0.12)_0%,rgba(47,174,126,0)_58%)]" />
       {previewItems.map((item, index) => {
         const rotation = index === 0 ? '-rotate-6 -translate-x-10' : index === 2 ? 'rotate-6 translate-x-10' : 'z-10 -translate-y-2'
 
@@ -135,46 +136,13 @@ function WatchlistEditorDialog({
 }) {
   const [value, setValue] = useState(initialValue)
 
-  if (!open) {
-    return null
-  }
-
   return (
-    <div className="fixed inset-0 z-[70] flex items-start justify-center overflow-y-auto bg-[rgba(5,6,8,0.82)] px-4 py-4 backdrop-blur-md sm:items-center sm:py-8">
-      <Card className="motion-modal w-full max-w-xl space-y-5 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(18,19,23,0.94)_0%,rgba(10,11,15,0.98)_100%)] p-5 shadow-[0_40px_100px_rgba(0,0,0,0.45)] sm:p-6">
-        <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(173,198,255,0.32)_50%,rgba(255,255,255,0)_100%)]" />
-        <div className="flex items-start justify-between gap-4">
-          <div className="space-y-2.5">
-            <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
-              Watchlists
-            </p>
-            <h2 className="font-display text-3xl tracking-[-0.04em] text-white">{title}</h2>
-            <p className="text-sm leading-7 text-[color:var(--color-text-secondary)]">
-              Keep it short and easy to scan across your library.
-            </p>
-          </div>
-          <Button aria-label="Close watchlist editor" onClick={onClose} variant="ghost">
-            <X aria-hidden="true" className="size-4" />
-          </Button>
-        </div>
-
-        <FormField
-          error={error}
-          hint="Names like Friday night, Comfort rewatches, or Summer shows work well."
-          label="Watchlist name"
-        >
-          <Input
-            autoFocus
-            className="bg-[rgba(10,12,16,0.82)]"
-            disabled={pending}
-            onChange={(event) => setValue(event.target.value)}
-            placeholder="Weekend picks"
-            value={value}
-          />
-        </FormField>
-
-        <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-          <Button className="w-full sm:w-auto" disabled={pending} onClick={onClose} variant="ghost">
+    <Dialog
+      description="Keep it short and easy to scan across your library."
+      eyebrow="Watchlists"
+      footer={
+        <>
+          <Button className="w-full sm:w-auto sm:ml-auto" disabled={pending} onClick={onClose} variant="ghost">
             Cancel
           </Button>
           <Button
@@ -184,9 +152,28 @@ function WatchlistEditorDialog({
           >
             {submitLabel}
           </Button>
-        </div>
-      </Card>
-    </div>
+        </>
+      }
+      onClose={onClose}
+      open={open}
+      size="sm"
+      title={title}
+    >
+      <FormField
+        error={error}
+        hint="Names like Friday night, Comfort rewatches, or Summer shows work well."
+        label="Watchlist name"
+      >
+        <Input
+          autoFocus
+          className="bg-[rgba(10,12,16,0.82)]"
+          disabled={pending}
+          onChange={(event) => setValue(event.target.value)}
+          placeholder="Weekend picks"
+          value={value}
+        />
+      </FormField>
+    </Dialog>
   )
 }
 
@@ -327,14 +314,14 @@ export function WatchlistsPage() {
     <PageContainer className="relative isolate space-y-8 overflow-hidden pt-8 md:space-y-10 md:pt-12">
       <BrowsePageAtmosphere variant="hero" />
 
-      <section className="relative z-10 overflow-hidden rounded-[30px] border border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.98)_100%)] px-6 py-7 shadow-[0_30px_80px_rgba(0,0,0,0.36)] md:px-8 md:py-9">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(173,198,255,0.15)_0%,rgba(173,198,255,0)_34%),linear-gradient(145deg,rgba(255,255,255,0.05)_0%,rgba(255,255,255,0)_42%)]" />
+      <section className="relative z-10 overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.98)_100%)] px-6 py-7 shadow-[0_30px_80px_rgba(0,0,0,0.36)] md:px-8 md:py-9">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(47,174,126,0.15)_0%,rgba(47,174,126,0)_34%),linear-gradient(145deg,rgba(255,255,255,0.05)_0%,rgba(255,255,255,0)_42%)]" />
         <div className="relative z-10 flex flex-col gap-7 md:flex-row md:items-end md:justify-between">
           <div className="max-w-3xl space-y-4">
             <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
               Library
             </p>
-            <h1 className="font-display text-5xl leading-[0.94] tracking-[-0.055em] text-white md:text-6xl xl:text-[4.75rem]">
+            <h1 className="font-display text-5xl leading-[0.94] tracking-[-0.03em] text-white md:text-6xl xl:text-[4.75rem]">
               Your watchlists, ready to browse.
             </h1>
             <p className="text-base leading-7 text-[color:var(--color-text-secondary)]">
@@ -397,7 +384,7 @@ export function WatchlistsPage() {
                           <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
                             Watchlist
                           </p>
-                          <h2 className="font-display text-4xl tracking-[-0.045em] text-white">
+                          <h2 className="font-display text-4xl tracking-[-0.04em] text-white">
                             {watchlist.name}
                           </h2>
                           <p className="text-sm text-[color:var(--color-text-tertiary)]">
@@ -459,7 +446,7 @@ export function WatchlistsPage() {
 
                   {expanded ? (
                     watchlist.media.length > 0 ? (
-                      <div className="space-y-5 rounded-[22px] border border-white/10 bg-[rgba(255,255,255,0.025)] p-5">
+                      <div className="space-y-5 rounded-[var(--radius-panel)] border border-white/10 bg-[rgba(255,255,255,0.025)] p-5">
                         <SectionHeader eyebrow="Saved titles" title="Inside this collection" />
                         <MediaGrid className="gap-x-4 gap-y-8 sm:gap-x-5 xl:grid-cols-5 2xl:grid-cols-6">
                           {watchlist.media.map((item) => (
@@ -506,29 +493,14 @@ export function WatchlistsPage() {
         </div>
       )}
 
-      {watchlistsPage.totalPages > 1 ? (
-        <Card className="relative z-10 flex flex-wrap items-center justify-between gap-3 overflow-hidden border-white/10 bg-[rgba(255,255,255,0.03)] px-5 py-4">
-          <p className="text-sm text-[color:var(--color-text-secondary)]">
-            Page {watchlistsPage.number + 1} of {watchlistsPage.totalPages}
-          </p>
-          <div className="flex gap-3">
-            <Button
-              disabled={watchlistsPage.first}
-              onClick={() => setPage((current) => Math.max(current - 1, 0))}
-              variant="ghost"
-            >
-              Previous
-            </Button>
-            <Button
-              disabled={watchlistsPage.last}
-              onClick={() => setPage((current) => current + 1)}
-              variant="secondary"
-            >
-              Next
-            </Button>
-          </div>
-        </Card>
-      ) : null}
+      <Card className="relative z-10 overflow-hidden border-white/10 bg-[rgba(255,255,255,0.03)] px-5 py-4">
+        <Pagination
+          layout="split"
+          onPageChange={setPage}
+          page={watchlistsPage.number}
+          totalPages={watchlistsPage.totalPages}
+        />
+      </Card>
 
       <WatchlistEditorDialog
         error={createError}

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { Layers3 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
@@ -21,8 +21,8 @@ export function SeasonCard({ season, showTmdbId }: SeasonCardProps) {
   return (
     <Link className="group block focus-visible:outline-none" to={`/shows/${showTmdbId}/seasons/${season.seasonNumber}/episodes`}>
       <Card className="grid gap-5 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.98)_100%)] p-4 transition duration-300 group-hover:-translate-y-1 group-hover:border-white/16 group-hover:shadow-[0_30px_70px_rgba(0,0,0,0.42)] sm:grid-cols-[138px_1fr] sm:p-5">
-        <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(173,198,255,0.08)_0%,rgba(173,198,255,0)_72%)] opacity-0 transition duration-300 group-hover:opacity-100" />
-        <div className="relative max-w-[138px] overflow-hidden rounded-[18px] border border-white/10 bg-[rgba(255,255,255,0.03)] shadow-[0_18px_35px_rgba(0,0,0,0.28)]">
+        <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(47,174,126,0.06)_0%,rgba(47,174,126,0)_72%)] opacity-0 transition duration-300 group-hover:opacity-100" />
+        <div className="relative max-w-[138px] overflow-hidden rounded-[var(--radius-media)] border border-white/10 bg-[rgba(255,255,255,0.03)] shadow-[0_18px_35px_rgba(0,0,0,0.28)]">
           {hasImagePath(season.posterPath) && !imageFailed ? (
             <img
               alt={`${season.name || label} poster`}
@@ -47,7 +47,7 @@ export function SeasonCard({ season, showTmdbId }: SeasonCardProps) {
           <div className="flex flex-wrap gap-3 text-sm text-[color:var(--color-text-secondary)]">
             <span className="inline-flex items-center gap-2 rounded-[12px] border border-white/10 bg-[rgba(255,255,255,0.04)] px-3 py-2">
               <Layers3 aria-hidden="true" className="size-3.5 text-[color:var(--color-accent)]" />
-              {season.episodeCount ?? '—'} episodes
+              {season.episodeCount ?? 'â€”'} episodes
             </span>
             {season.airDate ? (
               <span className="inline-flex items-center rounded-[12px] border border-white/10 bg-[rgba(255,255,255,0.04)] px-3 py-2">

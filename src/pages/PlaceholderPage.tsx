@@ -1,4 +1,4 @@
-import { ArrowRight, Film, Layers3, Sparkles } from 'lucide-react'
+﻿import { ArrowRight, Film, Layers3, Sparkles } from 'lucide-react'
 
 import { EmptyState } from '../components/feedback/EmptyState'
 import { SkeletonPoster, SkeletonText } from '../components/feedback/Skeleton'
@@ -24,7 +24,7 @@ export function PlaceholderPage({ eyebrow, heading, summary }: PlaceholderPagePr
     <PageContainer className="space-y-8 pt-8 md:pt-16">
       <section className="grid gap-6 lg:grid-cols-[1.3fr_0.9fr]">
         <Card className="relative overflow-hidden p-8 md:p-10">
-          <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(173,198,255,0.18),transparent_35%,rgba(255,255,255,0.04)_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(47,174,126,0.12),transparent_35%,rgba(255,255,255,0.04)_100%)]" />
           <div className="relative z-10 max-w-2xl space-y-5">
             <p className="text-[11px] uppercase tracking-[0.3em] text-[color:var(--color-accent-strong)]">
               {eyebrow}

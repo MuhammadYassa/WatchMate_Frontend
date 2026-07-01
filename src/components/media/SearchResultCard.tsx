@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { CalendarDays, Clapperboard, Star } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
@@ -13,10 +13,10 @@ export function SearchResultCard({ item }: { item: SearchItemDTO }) {
 
   return (
     <Link
-      className="motion-card group relative grid grid-cols-[92px_1fr] items-start gap-4 overflow-hidden rounded-[20px] border border-white/10 bg-[linear-gradient(160deg,rgba(19,20,24,0.88)_0%,rgba(9,10,14,0.96)_100%)] p-4 shadow-[0_24px_55px_rgba(0,0,0,0.28)] transition duration-300 hover:border-[rgba(173,198,255,0.18)] hover:shadow-[0_34px_82px_rgba(0,0,0,0.42)] sm:grid-cols-[116px_1fr] sm:gap-5 md:grid-cols-[138px_1fr] md:p-5"
+      className="motion-card group relative grid grid-cols-[92px_1fr] items-start gap-4 overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(160deg,rgba(22,20,18,0.88)_0%,rgba(11,10,8,0.96)_100%)] p-4 shadow-[0_24px_55px_rgba(0,0,0,0.28)] transition duration-300 hover:border-[rgba(47,174,126,0.18)] hover:shadow-[0_34px_82px_rgba(0,0,0,0.46)] sm:grid-cols-[116px_1fr] sm:gap-5 md:grid-cols-[138px_1fr] md:p-5"
       to={getSearchResultRoute(item.id, item.mediaType)}
     >
-      <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(173,198,255,0.08)_0%,rgba(173,198,255,0)_72%)] opacity-0 transition duration-300 group-hover:opacity-100" />
+      <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(47,174,126,0.07)_0%,rgba(47,174,126,0)_72%)] opacity-0 transition duration-300 group-hover:opacity-100" />
       <div className="relative overflow-hidden rounded-[var(--radius-media)] border border-white/10 bg-[rgba(255,255,255,0.03)] shadow-[0_18px_35px_rgba(0,0,0,0.28)]">
         {hasImagePath(item.posterPath) && !imageFailed ? (
           <img
@@ -32,13 +32,13 @@ export function SearchResultCard({ item }: { item: SearchItemDTO }) {
       </div>
       <div className="relative flex min-h-full flex-col justify-between gap-5 self-stretch">
         <div className="space-y-3">
-          <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-accent-strong)]">
-            {item.mediaType === 'movie' ? 'Movie' : 'Show'}
-          </p>
-          <h2 className="font-display text-[1.9rem] leading-none tracking-[-0.045em] text-white md:text-[2.6rem]">
+          <h2 className="font-display text-[1.9rem] leading-none tracking-[-0.04em] text-white md:text-[2.6rem]">
             {item.title}
           </h2>
           <div className="flex flex-wrap gap-2.5 text-sm text-[color:var(--color-text-secondary)]">
+            <span className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] font-medium text-[color:var(--color-text-tertiary)]">
+              {item.mediaType === 'movie' ? 'Movie' : 'Show'}
+            </span>
             {item.releaseDate ? (
               <span className="inline-flex items-center gap-2 rounded-full border border-white/8 bg-white/[0.03] px-3 py-1.5">
                 <CalendarDays
@@ -49,8 +49,8 @@ export function SearchResultCard({ item }: { item: SearchItemDTO }) {
               </span>
             ) : null}
             {typeof item.voteAverage === 'number' ? (
-              <span className="inline-flex items-center gap-2 rounded-full border border-[rgba(255,222,164,0.18)] bg-[rgba(255,222,164,0.08)] px-3 py-1.5">
-                <Star aria-hidden="true" className="size-4 fill-current text-[color:var(--color-warning)]" />
+              <span className="inline-flex items-center gap-2 rounded-full border border-[rgba(111,209,168,0.18)] bg-[rgba(111,209,168,0.08)] px-3 py-1.5">
+                <Star aria-hidden="true" className="size-4 fill-current text-[color:var(--color-highlight)]" />
                 {item.voteAverage.toFixed(1)}
               </span>
             ) : null}

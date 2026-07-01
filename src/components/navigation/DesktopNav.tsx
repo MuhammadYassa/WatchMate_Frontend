@@ -1,4 +1,4 @@
-import {
+﻿import {
   Bell,
   Bookmark,
   Clapperboard,
@@ -6,15 +6,17 @@ import {
   Heart,
   LayoutDashboard,
   LogIn,
+  LogOut,
   Search,
   Sparkles,
   UserRound,
   Users,
 } from 'lucide-react'
-import { NavLink, useLocation } from 'react-router-dom'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 
 import { useAuthStore } from '../../auth/authStore'
 import { cn } from '../../utils/cn'
+import { Logo } from '../branding/Logo'
 import { getButtonClassName } from '../ui/buttonStyles'
 import type { ShellMode } from '../layout/shellMode'
 import { getShellMode } from '../layout/shellMode'
@@ -42,35 +44,27 @@ const iconMap = {
 
 export function DesktopNav({ mode }: { mode?: ShellMode }) {
   const location = useLocation()
+  const navigate = useNavigate()
   const username = useAuthStore((state) => state.username)
   const isAuthenticated = useAuthStore((state) => Boolean(state.accessToken))
+  const clearAuth = useAuthStore((state) => state.clearAuth)
   const shellMode = mode ?? getShellMode(location.pathname)
   const browseNavItems = isAuthenticated && username ? privateDesktopBrowseNavItems : publicDesktopNavItems
 
+  function handleLogout() {
+    clearAuth()
+    navigate('/')
+  }
+
   if (shellMode === 'side-rail' && isAuthenticated && username) {
     return (
-      <aside className="motion-slide-up fixed inset-y-0 left-0 z-40 hidden w-[var(--shell-side-rail-width)] border-r border-white/8 bg-[linear-gradient(180deg,rgba(18,19,23,0.92)_0%,rgba(12,13,16,0.98)_100%)] px-5 py-5 shadow-[0_30px_90px_rgba(0,0,0,0.38)] backdrop-blur-xl md:flex md:flex-col">
-        <div className="rounded-[18px] border border-white/8 bg-[rgba(255,255,255,0.03)] px-4 py-4">
-          <NavLink className="flex items-center gap-3" to="/dashboard">
-            <span className="flex size-11 items-center justify-center rounded-[12px] border border-white/10 bg-[rgba(216,226,255,0.1)] font-display text-lg text-[color:var(--color-accent)]">
-              W
-            </span>
-            <div className="min-w-0">
-              <div className="font-display text-[1.9rem] leading-none tracking-[-0.05em] text-white">
-                WatchMate
-              </div>
-              <p className="mt-1 text-[10px] uppercase tracking-[0.28em] text-[color:var(--color-text-tertiary)]">
-                Nocturne library
-              </p>
-            </div>
-          </NavLink>
+      <aside className="motion-slide-up fixed inset-y-0 left-0 z-40 hidden w-[var(--shell-side-rail-width)] border-r border-white/8 bg-[linear-gradient(180deg,rgba(15,14,12,0.94)_0%,rgba(9,8,7,0.99)_100%)] px-5 py-5 shadow-[0_30px_90px_rgba(0,0,0,0.44)] backdrop-blur-xl md:flex md:flex-col">
+        <div className="px-1">
+          <Logo size="lg" to="/dashboard" />
         </div>
 
         <div className="mt-7 space-y-6 overflow-y-auto pr-1">
-          <div className="space-y-2">
-            <p className="px-3 text-[10px] uppercase tracking-[0.3em] text-[color:var(--color-text-tertiary)]">
-              Library
-            </p>
+          <div className="space-y-1.5">
             <nav className="space-y-1.5">
               {privateDesktopSideRailPrimaryItems.map((item) => {
                 const Icon = iconMap[item.icon]
@@ -82,7 +76,7 @@ export function DesktopNav({ mode }: { mode?: ShellMode }) {
                       cn(
                         'group relative flex items-center gap-3 rounded-[14px] border px-3.5 py-3 text-sm transition duration-300',
                         isActive
-                          ? 'border-[rgba(173,198,255,0.18)] bg-[linear-gradient(135deg,rgba(216,226,255,0.16)_0%,rgba(173,198,255,0.06)_100%)] text-white shadow-[0_12px_28px_rgba(173,198,255,0.1)]'
+                          ? 'border-[rgba(47,174,126,0.20)] bg-[linear-gradient(135deg,rgba(47,174,126,0.12)_0%,rgba(47,174,126,0.04)_100%)] text-white shadow-[0_12px_28px_rgba(47,174,126,0.10)]'
                           : 'border-transparent text-[color:var(--color-text-secondary)] hover:border-white/8 hover:bg-white/[0.04] hover:text-white',
                       )
                     }
@@ -112,10 +106,7 @@ export function DesktopNav({ mode }: { mode?: ShellMode }) {
             </nav>
           </div>
 
-          <div className="space-y-2">
-            <p className="px-3 text-[10px] uppercase tracking-[0.3em] text-[color:var(--color-text-tertiary)]">
-              Browse
-            </p>
+          <div className="space-y-1.5">
             <nav className="space-y-1.5">
               {privateDesktopSideRailSecondaryItems.map((item) => {
                 const Icon = iconMap[item.icon]
@@ -145,40 +136,28 @@ export function DesktopNav({ mode }: { mode?: ShellMode }) {
           </div>
         </div>
 
-        <div className="mt-auto space-y-3 pt-6">
-          <div className="rounded-[18px] border border-white/8 bg-[rgba(255,255,255,0.03)] p-4">
-            <p className="text-[10px] uppercase tracking-[0.3em] text-[color:var(--color-accent-strong)]">
-              Signed in
-            </p>
-            <p className="mt-2 text-sm text-[color:var(--color-text-secondary)]">
-              Move between your shelves, queue, and social pages without leaving the cinematic shell.
-            </p>
-          </div>
+        <div className="mt-auto space-y-2 pt-6">
           <NavLink className={getButtonClassName('secondary', 'w-full justify-start gap-2 px-4')} to="/profile">
             <UserRound aria-hidden="true" className="size-4" />
             {username}
           </NavLink>
+          <button
+            className={getButtonClassName('ghost', 'w-full justify-start gap-2 px-4')}
+            onClick={handleLogout}
+            type="button"
+          >
+            <LogOut aria-hidden="true" className="size-4" />
+            Log out
+          </button>
         </div>
       </aside>
     )
   }
 
   return (
-    <header className="sticky top-0 z-40 hidden border-b border-white/8 bg-[rgba(12,13,17,0.78)] backdrop-blur-xl md:block">
+    <header className="sticky top-0 z-40 hidden border-b border-white/8 bg-[rgba(12,11,10,0.80)] backdrop-blur-xl md:block">
       <div className="mx-auto flex w-full max-w-[1320px] items-center justify-between gap-6 px-6 py-4 xl:px-12">
-        <NavLink className="flex items-center gap-3" to={isAuthenticated ? '/home' : '/'}>
-          <span className="flex size-10 items-center justify-center rounded-[12px] border border-white/10 bg-[rgba(216,226,255,0.08)] font-display text-lg text-[color:var(--color-accent)]">
-            W
-          </span>
-          <div className="space-y-1">
-            <div className="font-display text-[1.9rem] leading-none tracking-[-0.05em] text-white">
-              WatchMate
-            </div>
-            <p className="text-[10px] uppercase tracking-[0.28em] text-[color:var(--color-text-tertiary)]">
-              Nocturne cinema
-            </p>
-          </div>
-        </NavLink>
+        <Logo size="lg" to={isAuthenticated ? '/home' : '/'} />
         <nav className="flex items-center gap-1.5">
           {browseNavItems.map((item) => (
             <NavLink
@@ -187,7 +166,7 @@ export function DesktopNav({ mode }: { mode?: ShellMode }) {
                 cn(
                   'rounded-[12px] border border-transparent px-3.5 py-2.5 text-sm text-[color:var(--color-text-secondary)] transition duration-300 hover:bg-white/[0.04] hover:text-white',
                   isActive
-                    ? 'border-white/8 bg-[rgba(216,226,255,0.08)] text-white shadow-[0_0_0_1px_rgba(173,198,255,0.08)_inset]'
+                    ? 'border-white/8 bg-[rgba(47,174,126,0.08)] text-white shadow-[0_0_0_1px_rgba(47,174,126,0.08)_inset]'
                     : '',
                 )
               }
@@ -219,6 +198,14 @@ export function DesktopNav({ mode }: { mode?: ShellMode }) {
               <NavLink className={getButtonClassName('secondary', 'min-h-10 px-4 py-2')} to="/profile">
                 {username}
               </NavLink>
+              <button
+                aria-label="Log out"
+                className={getButtonClassName('ghost', 'min-h-10 px-3 py-2')}
+                onClick={handleLogout}
+                type="button"
+              >
+                <LogOut aria-hidden="true" className="size-4" />
+              </button>
             </>
           ) : (
             <>

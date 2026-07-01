@@ -246,7 +246,7 @@ export interface ShowDetailsDTO {
 }
 
 export interface ShowEpisodeDetailsDTO {
-  tmdbEpisodeId: number | null
+  tmdbEpisodeId: number
   seasonNumber: number
   episodeNumber: number
   name: string
@@ -256,17 +256,6 @@ export interface ShowEpisodeDetailsDTO {
   stillPath: string | null
   isAired: boolean | null
   watched: boolean | null
-}
-
-export interface ShowSeasonsDetailsDTO {
-  tmdbId: number
-  seasonNumber: number
-  name: string
-  overview: string
-  posterPath: string | null
-  airDate: string | null
-  episodeCount: number
-  episodes: ShowEpisodeDetailsDTO[]
 }
 
 export interface NextEpisodeAiringDTO {
@@ -413,6 +402,19 @@ export interface CalendarItemDTO {
 
 export interface CalendarResponseDTO {
   items: CalendarItemDTO[]
+}
+
+export interface ToWatchItemDTO {
+  tmdbId: number
+  type: MediaType
+  title: string
+  posterPath: string | null
+  backdropPath: string | null
+  rating: number | null
+  watchStatus: 'TO_WATCH'
+  releaseDate: string | null
+  firstAirDate: string | null
+  updatedAt: string
 }
 
 export interface FollowStatusDTO {
