@@ -1,6 +1,7 @@
 import { CheckCircle2 } from 'lucide-react'
 
 import type { ShowTrackingDTO } from '../../types/api'
+import { Spinner } from '../feedback/Spinner'
 import { Card } from '../ui/Card'
 
 interface ShowProgressCardProps {
@@ -47,8 +48,12 @@ export function ShowProgressCard({ pendingLabel, progress }: ShowProgressCardPro
       </div>
 
       {pendingLabel ? (
-        <p className="rounded-[var(--radius-panel)] border border-[rgba(47,174,126,0.20)] bg-[rgba(47,174,126,0.08)] px-4 py-3 text-sm text-[color:var(--color-accent)]">
-          {pendingLabel}
+        <p
+          className="motion-fade-in flex items-start gap-3 rounded-[var(--radius-panel)] border border-[rgba(47,174,126,0.20)] bg-[rgba(47,174,126,0.08)] px-4 py-3 text-sm text-[color:var(--color-accent)]"
+          role="status"
+        >
+          <Spinner className="mt-1 shrink-0" size="sm" />
+          <span>{pendingLabel}</span>
         </p>
       ) : null}
     </Card>

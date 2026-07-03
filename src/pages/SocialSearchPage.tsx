@@ -15,15 +15,28 @@ import { UserInitialBadge } from '../components/social/UserInitialBadge'
 import { Card } from '../components/ui/Card'
 import { FormField } from '../components/ui/FormField'
 import { Input } from '../components/ui/Input'
+import { getButtonClassName } from '../components/ui/buttonStyles'
 import type { SearchListUserDetailsDTO } from '../types/api'
 import { formatPrivacyStatus } from '../utils/labels'
 
 function SocialSearchLoadingState() {
   return (
-    <div className="space-y-4">
-      <Skeleton className="h-28 rounded-[var(--radius-panel)]" />
-      <Skeleton className="h-28 rounded-[var(--radius-panel)]" />
-      <Skeleton className="h-28 rounded-[var(--radius-panel)]" />
+    <div className="grid gap-4 lg:grid-cols-2">
+      {[0, 1, 2, 3].map((row) => (
+        <div
+          className="flex min-h-[118px] items-center gap-4 rounded-[var(--radius-panel)] border border-white/[0.07] bg-[color:var(--color-surface-1)] p-5"
+          key={row}
+        >
+          <Skeleton className="size-12 shrink-0 rounded-full" />
+          <div className="w-full space-y-2.5">
+            <Skeleton className="h-5 w-32" />
+            <div className="flex gap-2">
+              <Skeleton className="h-6 w-20 rounded-full" />
+              <Skeleton className="h-6 w-24 rounded-full" />
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   )
 }
@@ -94,9 +107,19 @@ export function SocialSearchPage() {
                 className="pointer-events-none absolute left-5 top-1/2 size-5 -translate-y-1/2 text-[color:var(--color-text-tertiary)]"
               />
               <Input
-                className="h-16 rounded-[var(--radius-panel)] border-white/10 bg-[rgba(255,255,255,0.04)] pl-14 pr-24 text-base shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] transition duration-300 focus:border-[rgba(47,174,126,0.32)] focus:shadow-[0_0_0_1px_rgba(47,174,126,0.18),0_18px_55px_rgba(0,0,0,0.32)] md:h-18"
+                autoComplete="off"
+                className="h-16 rounded-[var(--radius-panel)] border-white/10 bg-[rgba(255,255,255,0.04)] pl-14 pr-24 text-base shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] transition duration-300 focus:border-[rgba(47,174,126,0.32)] focus:shadow-[0_0_0_1px_rgba(47,174,126,0.18),0_18px_55px_rgba(0,0,0,0.32)] md:h-18 [&::-webkit-search-cancel-button]:hidden"
+                enterKeyHint="search"
                 onChange={(event) => setDraftQuery(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Escape' && draftQuery) {
+                    event.preventDefault()
+                    setDraftQuery('')
+                  }
+                }}
                 placeholder="Search usernames"
+                spellCheck={false}
+                type="search"
                 value={draftQuery}
               />
               {draftQuery ? (
@@ -133,10 +156,7 @@ export function SocialSearchPage() {
         <div className="relative z-10">
           <ErrorState
             action={
-              <Link
-                className="inline-flex min-h-11 items-center rounded-xl border border-white/10 px-5 text-sm font-semibold text-[color:var(--color-text-primary)] transition hover:border-white/18 hover:bg-[rgba(255,255,255,0.08)] hover:text-white"
-                to="/profile"
-              >
+              <Link className={getButtonClassName('secondary')} to="/profile">
                 Back to profile
               </Link>
             }
@@ -162,12 +182,12 @@ export function SocialSearchPage() {
           <div className="grid gap-4 lg:grid-cols-2">
             {results.map((result, index) => (
               <Link
-                className="block focus-visible:outline-none"
+                className="block"
                 key={result.userId}
                 to={`/social/profile/${encodeURIComponent(result.username)}`}
               >
                 <Card
-                  className="motion-slide-up group flex min-h-[118px] flex-col gap-5 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(22,20,18,0.9)_0%,rgba(12,11,9,0.98)_100%)] p-5 transition duration-300 hover:border-[rgba(47,174,126,0.16)] hover:shadow-[0_28px_68px_rgba(0,0,0,0.44)] sm:flex-row sm:items-center sm:justify-between"
+                  className="motion-slide-up group flex min-h-[118px] flex-col gap-5 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(22,24,26,0.9)_0%,rgba(13,14,15,0.98)_100%)] p-5 transition duration-300 hover:border-[rgba(47,174,126,0.16)] hover:shadow-[0_28px_68px_rgba(0,0,0,0.44)] sm:flex-row sm:items-center sm:justify-between"
                   style={{ animationDelay: `${Math.min(index * 45, 220)}ms` }}
                 >
                   <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(47,174,126,0.06)_0%,rgba(47,174,126,0)_72%)] opacity-0 transition duration-300 group-hover:opacity-100" />

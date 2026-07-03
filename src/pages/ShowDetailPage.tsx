@@ -344,7 +344,7 @@ export function ShowDetailPage() {
             <section className="space-y-5">
               <SectionHeader eyebrow="Seasons" title="Browse every season" />
               {show.seasons.length > 0 ? (
-                <div className="grid gap-4">
+                <div className="motion-stagger grid gap-4">
                   {show.seasons.map((season) => (
                     <SeasonCard key={season.seasonNumber} season={season} showTmdbId={show.tmdbId} />
                   ))}

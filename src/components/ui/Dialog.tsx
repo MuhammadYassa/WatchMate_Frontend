@@ -1,6 +1,7 @@
-import { useEffect, useRef, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 
 import { cn } from '../../utils/cn'
+import { prefersReducedMotion } from '../../utils/motion'
 
 type DialogSize = 'sm' | 'md' | 'lg'
 
@@ -36,6 +37,7 @@ export function Dialog({
   className,
 }: DialogProps) {
   const dialogRef = useRef<HTMLDialogElement>(null)
+  const [closing, setClosing] = useState(false)
 
   useEffect(() => {
     const dialogEl = dialogRef.current
@@ -44,9 +46,30 @@ export function Dialog({
     }
 
     if (open && !dialogEl.open) {
+      setClosing(false)
       dialogEl.showModal()
-    } else if (!open && dialogEl.open) {
-      dialogEl.close()
+      return
+    }
+
+    if (!open && dialogEl.open) {
+      if (prefersReducedMotion()) {
+        dialogEl.close()
+        return
+      }
+
+      // Let the panel and backdrop animate out before the native close.
+      // The closing flag must flip in this effect: it reacts to the `open`
+      // prop while the native dialog is still showing.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setClosing(true)
+      const timer = window.setTimeout(() => {
+        dialogEl.close()
+        setClosing(false)
+      }, 150)
+      return () => {
+        window.clearTimeout(timer)
+        setClosing(false)
+      }
     }
   }, [open])
 
@@ -60,8 +83,18 @@ export function Dialog({
       onClose()
     }
 
+    // Route Esc through onClose so the exit animation plays
+    function handleCancel(event: Event) {
+      event.preventDefault()
+      onClose()
+    }
+
     dialogEl.addEventListener('close', handleNativeClose)
-    return () => dialogEl.removeEventListener('close', handleNativeClose)
+    dialogEl.addEventListener('cancel', handleCancel)
+    return () => {
+      dialogEl.removeEventListener('close', handleNativeClose)
+      dialogEl.removeEventListener('cancel', handleCancel)
+    }
   }, [onClose])
 
   const hasHeader = Boolean(eyebrow || title || description || headerActions)
@@ -69,6 +102,7 @@ export function Dialog({
   return (
     <dialog
       className="wm-dialog motion-modal m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] overflow-y-auto rounded-[var(--radius-panel)] border border-white/10 bg-[color:var(--color-surface-glass-strong)] text-[color:var(--color-text-primary)] shadow-[0_32px_90px_rgba(0,0,0,0.52)] backdrop-blur-xl"
+      data-closing={closing ? 'true' : undefined}
       onClick={(event) => {
         if (event.target === dialogRef.current) {
           onClose()
@@ -76,7 +110,7 @@ export function Dialog({
       }}
       ref={dialogRef}
     >
-      {open ? (
+      {open || closing ? (
         <div className={cn('mx-auto p-6 sm:p-7', SIZE_CLASSES[size], className)}>
           {hasHeader ? (
             <div className="flex items-start justify-between gap-4">

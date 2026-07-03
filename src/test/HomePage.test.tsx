@@ -103,7 +103,7 @@ describe('HomePage', () => {
     })
 
     expect(screen.getByText('Continue watching')).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /view dune: part two/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /view details/i })).toBeInTheDocument()
     expect(screen.getByText('The Bear')).toBeInTheDocument()
     expect(screen.getByText('Severance')).toBeInTheDocument()
     expect(screen.getByText('Browse movie genres')).toBeInTheDocument()

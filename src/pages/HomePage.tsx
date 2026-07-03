@@ -158,12 +158,12 @@ export function HomePage() {
           {hero.backdropPath ? (
             <img
               alt=""
-              className="absolute inset-0 h-full w-full object-cover opacity-72"
+              className="motion-hero-img absolute inset-0 h-full w-full object-cover [--hero-img-opacity:0.72]"
               src={getBackdropUrl(hero.backdropPath, 'w1280') ?? undefined}
             />
           ) : null}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_18%,rgba(47,174,126,0.12),transparent_22%),linear-gradient(180deg,rgba(8,7,6,0.14)_0%,rgba(8,7,6,0.34)_24%,rgba(8,7,6,0.96)_100%)]" />
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(10,10,13,0.96)_8%,rgba(10,10,13,0.78)_38%,rgba(10,10,13,0.3)_100%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_18%,rgba(47,174,126,0.12),transparent_22%),linear-gradient(180deg,rgba(7,8,8,0.14)_0%,rgba(7,8,8,0.34)_24%,rgba(7,8,8,0.96)_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(10,11,11,0.96)_8%,rgba(10,11,11,0.78)_38%,rgba(10,11,11,0.3)_100%)]" />
 
           <div className="relative mx-auto flex min-h-[84vh] max-w-[1440px] items-end px-4 pb-18 pt-28 sm:px-6 lg:px-8 xl:px-12">
             <div className="motion-stagger max-w-3xl space-y-6">
@@ -171,7 +171,7 @@ export function HomePage() {
                 <h1 className="font-display text-[3.6rem] leading-[0.92] tracking-[-0.03em] text-white sm:text-[4.7rem] md:text-[5.8rem]">
                   {hero.title}
                 </h1>
-                <p className="max-w-2xl text-base leading-8 text-[color:var(--color-text-secondary)] md:text-lg">
+                <p className="line-clamp-3 max-w-2xl text-base leading-8 text-[color:var(--color-text-secondary)] md:text-lg">
                   {hero.overview || "A standout title from today's WatchMate feed."}
                 </p>
               </div>
@@ -181,7 +181,8 @@ export function HomePage() {
                   className={getButtonClassName('primary', 'min-w-[12rem]')}
                   to={getMediaRoute(hero.tmdbId, hero.type)}
                 >
-                  View {hero.title}
+                  <PlayCircle aria-hidden="true" className="size-4" />
+                  View details
                 </Link>
                 <Link className={getButtonClassName('secondary', 'min-w-[12rem]')} to="/discover">
                   Explore titles
@@ -273,7 +274,7 @@ export function HomePage() {
       {!isAuthenticated ? (
         <section className="relative z-10 mt-16">
           <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8 xl:px-12">
-            <div className="overflow-hidden rounded-[var(--radius-panel)] border border-[rgba(47,174,126,0.14)] bg-[linear-gradient(145deg,rgba(22,20,18,0.92)_0%,rgba(12,10,9,0.98)_100%)] px-5 py-6 shadow-[0_26px_60px_rgba(0,0,0,0.32)]">
+            <div className="overflow-hidden rounded-[var(--radius-panel)] border border-[rgba(47,174,126,0.14)] bg-[linear-gradient(145deg,rgba(22,24,26,0.92)_0%,rgba(13,14,15,0.98)_100%)] px-5 py-6 shadow-[0_26px_60px_rgba(0,0,0,0.32)]">
               <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(47,174,126,0.10)_0%,rgba(47,174,126,0)_72%)]" />
               <div className="relative flex flex-wrap items-center justify-between gap-4">
                 <div>

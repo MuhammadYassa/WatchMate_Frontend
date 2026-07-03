@@ -91,10 +91,15 @@ function WatchlistPosterPreview({ watchlist }: { watchlist: WatchListDTO }) {
   }
 
   return (
-    <div className="relative flex min-h-[240px] items-center justify-center overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.94)_0%,rgba(11,12,16,0.98)_100%)] px-6 py-5">
+    <div className="group relative flex min-h-[240px] items-center justify-center overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.94)_0%,rgba(11,12,16,0.98)_100%)] px-6 py-5">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(47,174,126,0.12)_0%,rgba(47,174,126,0)_58%)]" />
       {previewItems.map((item, index) => {
-        const rotation = index === 0 ? '-rotate-6 -translate-x-10' : index === 2 ? 'rotate-6 translate-x-10' : 'z-10 -translate-y-2'
+        const rotation =
+          index === 0
+            ? '-rotate-6 -translate-x-10 group-hover:-rotate-8 group-hover:-translate-x-12'
+            : index === 2
+              ? 'rotate-6 translate-x-10 group-hover:rotate-8 group-hover:translate-x-12'
+              : 'z-10 -translate-y-2 group-hover:-translate-y-3.5'
 
         return hasImagePath(item.posterPath) ? (
           <img
@@ -148,6 +153,7 @@ function WatchlistEditorDialog({
           <Button
             className="w-full sm:w-auto"
             disabled={pending || value.trim().length < 2}
+            loading={pending}
             onClick={() => onSubmit(value.trim())}
           >
             {submitLabel}
@@ -169,6 +175,12 @@ function WatchlistEditorDialog({
           className="bg-[rgba(10,12,16,0.82)]"
           disabled={pending}
           onChange={(event) => setValue(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' && !pending && value.trim().length >= 2) {
+              event.preventDefault()
+              onSubmit(value.trim())
+            }
+          }}
           placeholder="Weekend picks"
           value={value}
         />
@@ -403,11 +415,12 @@ export function WatchlistsPage() {
                                 Cancel
                               </Button>
                               <Button
-                                disabled={deleting}
+                                className="border-[rgba(255,180,171,0.32)] bg-[rgba(147,0,10,0.30)] text-white hover:border-[rgba(255,180,171,0.5)] hover:bg-[rgba(147,0,10,0.46)]"
+                                loading={deleting}
                                 onClick={() => deleteMutation.mutate(watchlist.id)}
                                 variant="secondary"
                               >
-                                <Trash2 aria-hidden="true" className="mr-2 size-4" />
+                                {deleting ? null : <Trash2 aria-hidden="true" className="mr-2 size-4" />}
                                 Confirm delete
                               </Button>
                             </>
@@ -446,36 +459,45 @@ export function WatchlistsPage() {
 
                   {expanded ? (
                     watchlist.media.length > 0 ? (
-                      <div className="space-y-5 rounded-[var(--radius-panel)] border border-white/10 bg-[rgba(255,255,255,0.025)] p-5">
+                      <div className="motion-fade-in space-y-5 rounded-[var(--radius-panel)] border border-white/10 bg-[rgba(255,255,255,0.025)] p-5">
                         <SectionHeader eyebrow="Saved titles" title="Inside this collection" />
                         <MediaGrid className="gap-x-4 gap-y-8 sm:gap-x-5 xl:grid-cols-5 2xl:grid-cols-6">
-                          {watchlist.media.map((item) => (
-                            <div className="space-y-3" key={`${watchlist.id}-${item.type}-${item.tmdbId}`}>
-                              <PosterCard
-                                href={getMediaRoute(item.tmdbId, item.type)}
-                                imagePath={item.posterPath}
-                                mediaTypeLabel={formatMediaType(item.type)}
-                                rating={item.rating}
-                                releaseDate={item.releaseDate}
-                                title={item.title}
-                                variant="grid"
-                              />
-                              <Button
-                                className="w-full"
-                                disabled={removeItemMutation.isPending}
-                                onClick={() =>
-                                  removeItemMutation.mutate({
-                                    tmdbId: item.tmdbId,
-                                    type: item.type,
-                                    watchlistId: watchlist.id,
-                                  })
-                                }
-                                variant="ghost"
-                              >
-                                Remove from list
-                              </Button>
-                            </div>
-                          ))}
+                          {watchlist.media.map((item) => {
+                            const isRemovingThis =
+                              removeItemMutation.isPending
+                              && removeItemMutation.variables?.watchlistId === watchlist.id
+                              && removeItemMutation.variables?.tmdbId === item.tmdbId
+                              && removeItemMutation.variables?.type === item.type
+
+                            return (
+                              <div className="space-y-3" key={`${watchlist.id}-${item.type}-${item.tmdbId}`}>
+                                <PosterCard
+                                  href={getMediaRoute(item.tmdbId, item.type)}
+                                  imagePath={item.posterPath}
+                                  mediaTypeLabel={formatMediaType(item.type)}
+                                  rating={item.rating}
+                                  releaseDate={item.releaseDate}
+                                  title={item.title}
+                                  variant="grid"
+                                />
+                                <Button
+                                  className="w-full"
+                                  disabled={removeItemMutation.isPending}
+                                  loading={isRemovingThis}
+                                  onClick={() =>
+                                    removeItemMutation.mutate({
+                                      tmdbId: item.tmdbId,
+                                      type: item.type,
+                                      watchlistId: watchlist.id,
+                                    })
+                                  }
+                                  variant="ghost"
+                                >
+                                  Remove from list
+                                </Button>
+                              </div>
+                            )
+                          })}
                         </MediaGrid>
                       </div>
                     ) : (
@@ -493,14 +515,16 @@ export function WatchlistsPage() {
         </div>
       )}
 
-      <Card className="relative z-10 overflow-hidden border-white/10 bg-[rgba(255,255,255,0.03)] px-5 py-4">
-        <Pagination
-          layout="split"
-          onPageChange={setPage}
-          page={watchlistsPage.number}
-          totalPages={watchlistsPage.totalPages}
-        />
-      </Card>
+      {watchlistsPage.totalPages > 1 ? (
+        <Card className="relative z-10 overflow-hidden border-white/10 bg-[rgba(255,255,255,0.03)] px-5 py-4">
+          <Pagination
+            layout="split"
+            onPageChange={setPage}
+            page={watchlistsPage.number}
+            totalPages={watchlistsPage.totalPages}
+          />
+        </Card>
+      ) : null}
 
       <WatchlistEditorDialog
         error={createError}

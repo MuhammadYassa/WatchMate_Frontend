@@ -31,9 +31,9 @@ export function EpisodeCard({ episode, onTick, tickPending }: EpisodeCardProps) 
   return (
     <Card
       className={cn(
-        'group grid gap-5 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(22,20,18,0.9)_0%,rgba(12,11,9,0.98)_100%)] p-4 shadow-[0_22px_50px_rgba(0,0,0,0.3)] transition duration-300 hover:border-[rgba(47,174,126,0.16)] hover:shadow-[0_30px_72px_rgba(0,0,0,0.44)] md:p-5 lg:grid-cols-[280px_1fr]',
+        'group grid gap-5 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(22,24,26,0.9)_0%,rgba(13,14,15,0.98)_100%)] p-4 shadow-[0_22px_50px_rgba(0,0,0,0.3)] transition duration-300 hover:border-[rgba(47,174,126,0.16)] hover:shadow-[0_30px_72px_rgba(0,0,0,0.44)] md:p-5 lg:grid-cols-[280px_1fr]',
         isWatched
-          ? 'border-[rgba(111,209,168,0.28)] bg-[linear-gradient(160deg,rgba(20,32,27,0.82)_0%,rgba(12,11,9,0.98)_100%)]'
+          ? 'border-[rgba(111,209,168,0.28)] bg-[linear-gradient(160deg,rgba(20,32,27,0.82)_0%,rgba(13,14,15,0.98)_100%)]'
           : null,
       )}
     >

@@ -4,6 +4,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { Link, useSearchParams } from 'react-router-dom'
 
 import { authApi } from '../api/authApi'
+import { Spinner } from '../components/feedback/Spinner'
 import { PageContainer } from '../components/layout/PageContainer'
 import { PublicPageAtmosphere } from '../components/public/PublicPageAtmosphere'
 import { Button } from '../components/ui/Button'
@@ -48,17 +49,23 @@ function ResendForm({
         />
       </FormField>
       {isSuccess ? (
-        <div className="rounded-[var(--radius-panel)] border border-[rgba(167,243,208,0.22)] bg-[rgba(6,78,59,0.24)] px-4 py-3 text-sm text-white">
+        <div
+          className="motion-fade-in rounded-[var(--radius-panel)] border border-[rgba(167,243,208,0.22)] bg-[rgba(6,78,59,0.24)] px-4 py-3 text-sm leading-6 text-white"
+          role="status"
+        >
           {successMessage || 'Verification email sent.'}
         </div>
       ) : null}
       {error ? (
-        <div className="rounded-[var(--radius-panel)] border border-[rgba(255,180,171,0.24)] bg-[rgba(147,0,10,0.16)] px-4 py-3 text-sm text-white">
+        <div
+          className="motion-fade-in rounded-[var(--radius-panel)] border border-[rgba(255,180,171,0.24)] bg-[rgba(147,0,10,0.16)] px-4 py-3 text-sm leading-6 text-white"
+          role="alert"
+        >
           {error}
         </div>
       ) : null}
-      <Button className="w-full" disabled={isPending} type="submit">
-        {isPending ? 'Sending...' : 'Send verification email'}
+      <Button className="w-full" loading={isPending} type="submit">
+        Send verification email
       </Button>
     </form>
   )
@@ -91,11 +98,11 @@ export function VerifyEmailPage() {
       <PageContainer className="relative isolate flex min-h-[calc(100dvh-8rem)] items-center justify-center py-8 md:py-10">
         <PublicPageAtmosphere variant="verify" />
 
-        <Card className="w-full max-w-xl space-y-6 p-7 text-center md:p-10">
+        <Card className="motion-scale-in w-full max-w-xl space-y-6 p-7 text-center md:p-10">
           {verifyQuery.isLoading ? (
             <>
               <div className="mx-auto flex size-20 items-center justify-center rounded-[var(--radius-panel)] border border-white/10 bg-white/[0.04] text-[color:var(--color-text-tertiary)]">
-                <MailPlus aria-hidden="true" className="size-9" />
+                <Spinner size="lg" />
               </div>
               <div className="space-y-3">
                 <h1 className="font-display text-4xl tracking-[-0.03em] text-white md:text-5xl">
@@ -156,7 +163,7 @@ export function VerifyEmailPage() {
     <PageContainer className="relative isolate flex min-h-[calc(100dvh-8rem)] items-center justify-center py-8 md:py-10">
       <PublicPageAtmosphere variant="verify" />
 
-      <Card className="w-full max-w-xl space-y-6 p-7 md:p-10">
+      <Card className="motion-scale-in w-full max-w-xl space-y-6 p-7 md:p-10">
         <div className="space-y-4">
           <div className="flex size-16 items-center justify-center rounded-[var(--radius-panel)] border border-white/10 bg-white/[0.04] text-[color:var(--color-accent)]">
             <MailPlus aria-hidden="true" className="size-7" />

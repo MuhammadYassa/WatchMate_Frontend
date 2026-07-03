@@ -175,33 +175,40 @@ export function FavouritesPage() {
             />
           </div>
           <MediaGrid className="gap-x-4 gap-y-8 sm:gap-x-5 xl:grid-cols-6">
-            {favourites.map((item, index) => (
-              <div
-                className="group relative space-y-3"
-                key={`${item.type}-${item.tmdbId}`}
-                style={{ animationDelay: `${Math.min(index * 35, 220)}ms` }}
-              >
-                <Button
-                  className="absolute right-3 top-3 z-20 min-h-0 rounded-full border border-white/10 bg-[rgba(8,9,12,0.72)] px-2.5 py-2 text-white opacity-0 shadow-[0_10px_30px_rgba(0,0,0,0.28)] backdrop-blur-xl transition duration-300 group-hover:opacity-100"
-                  disabled={removeFavouriteMutation.isPending}
-                  onClick={() => removeFavouriteMutation.mutate(item)}
-                  variant="ghost"
+            {favourites.map((item, index) => {
+              const isRemovingThis =
+                removeFavouriteMutation.isPending
+                && removeFavouriteMutation.variables?.tmdbId === item.tmdbId
+                && removeFavouriteMutation.variables?.type === item.type
+
+              return (
+                <div
+                  className="motion-slide-up group relative space-y-3"
+                  key={`${item.type}-${item.tmdbId}`}
+                  style={{ animationDelay: `${Math.min(index * 35, 220)}ms` }}
                 >
-                  <Trash2 aria-hidden="true" className="size-4" />
-                  <span className="sr-only">Remove favourite</span>
-                </Button>
-                <PosterCard
-                  className="motion-slide-up"
-                  href={getMediaRoute(item.tmdbId, item.type)}
-                  imagePath={item.posterPath}
-                  mediaTypeLabel={formatMediaType(item.type)}
-                  rating={item.rating}
-                  releaseDate={item.releaseDate}
-                  title={item.title}
-                  variant="grid"
-                />
-              </div>
-            ))}
+                  <Button
+                    className="absolute right-3 top-3 z-20 min-h-0 rounded-full border border-white/10 bg-[rgba(13,14,15,0.72)] px-2.5 py-2 text-white opacity-0 shadow-[0_10px_30px_rgba(0,0,0,0.28)] backdrop-blur-xl transition duration-300 focus-visible:opacity-100 group-hover:opacity-100 [@media(hover:none)]:opacity-100"
+                    disabled={removeFavouriteMutation.isPending}
+                    loading={isRemovingThis}
+                    onClick={() => removeFavouriteMutation.mutate(item)}
+                    variant="ghost"
+                  >
+                    {isRemovingThis ? null : <Trash2 aria-hidden="true" className="size-4" />}
+                    <span className="sr-only">Remove {item.title} from favourites</span>
+                  </Button>
+                  <PosterCard
+                    href={getMediaRoute(item.tmdbId, item.type)}
+                    imagePath={item.posterPath}
+                    mediaTypeLabel={formatMediaType(item.type)}
+                    rating={item.rating}
+                    releaseDate={item.releaseDate}
+                    title={item.title}
+                    variant="grid"
+                  />
+                </div>
+              )
+            })}
           </MediaGrid>
         </section>
       )}

@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { watchlistApi } from '../../api/watchlistApi'
 import type { MediaType } from '../../types/enums'
 import { ApiClientError } from '../../types/errors'
+import { Skeleton } from '../feedback/Skeleton'
 import { useToast } from '../feedback/toastContext'
 import { Button } from '../ui/Button'
 import { Card } from '../ui/Card'
@@ -74,6 +75,12 @@ export function WatchlistDialog({
   const createError = createWatchlistMutation.error instanceof ApiClientError
     ? createWatchlistMutation.error.message
     : null
+  const canCreate = !createWatchlistMutation.isPending && newWatchlistName.trim().length >= 2
+  const pendingWatchlistId = addMutation.isPending
+    ? addMutation.variables
+    : removeMutation.isPending
+      ? removeMutation.variables
+      : null
 
   return (
     <Dialog
@@ -100,17 +107,24 @@ export function WatchlistDialog({
               <Input
                 className="bg-[rgba(10,12,16,0.82)]"
                 onChange={(event) => setNewWatchlistName(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' && canCreate) {
+                    event.preventDefault()
+                    createWatchlistMutation.mutate({ name: newWatchlistName.trim() })
+                  }
+                }}
                 placeholder="Weekend movies"
                 value={newWatchlistName}
               />
               <Button
-                disabled={createWatchlistMutation.isPending || newWatchlistName.trim().length < 2}
+                disabled={!canCreate}
+                loading={createWatchlistMutation.isPending}
                 onClick={() => {
                   createWatchlistMutation.mutate({ name: newWatchlistName.trim() })
                 }}
                 variant="secondary"
               >
-                <Plus aria-hidden="true" className="mr-2 size-4" />
+                <Plus aria-hidden="true" className="size-4" />
                 Create
               </Button>
             </div>
@@ -119,7 +133,20 @@ export function WatchlistDialog({
 
         <div className="max-h-[calc(100dvh-20rem)] space-y-3 overflow-y-auto pr-1">
           {watchlistsQuery.isLoading ? (
-            <p className="text-sm text-[color:var(--color-text-tertiary)]">Loading your watchlists...</p>
+            <div className="space-y-3">
+              {[0, 1, 2].map((row) => (
+                <div
+                  className="flex items-center justify-between gap-4 rounded-[var(--radius-panel)] border border-white/[0.07] bg-[rgba(255,255,255,0.03)] p-4"
+                  key={row}
+                >
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-36" />
+                    <Skeleton className="h-3 w-20" />
+                  </div>
+                  <Skeleton className="h-11 w-28" />
+                </div>
+              ))}
+            </div>
           ) : watchlists.length > 0 ? (
             watchlists.map((watchlist) => {
               const alreadyAdded = includesMedia(watchlist.media, tmdbId, mediaType)
@@ -137,6 +164,7 @@ export function WatchlistDialog({
                   </div>
                   <Button
                     disabled={addMutation.isPending || removeMutation.isPending}
+                    loading={pendingWatchlistId === watchlist.id}
                     onClick={() => {
                       if (alreadyAdded) {
                         removeMutation.mutate(watchlist.id)
@@ -147,17 +175,12 @@ export function WatchlistDialog({
                     }}
                     variant={alreadyAdded ? 'primary' : 'secondary'}
                   >
-                    {alreadyAdded ? (
-                      <>
-                        <Check aria-hidden="true" className="mr-2 size-4" />
-                        In watchlist
-                      </>
+                    {pendingWatchlistId === watchlist.id ? null : alreadyAdded ? (
+                      <Check aria-hidden="true" className="size-4" />
                     ) : (
-                      <>
-                        <ListPlus aria-hidden="true" className="mr-2 size-4" />
-                        Add title
-                      </>
+                      <ListPlus aria-hidden="true" className="size-4" />
                     )}
+                    {alreadyAdded ? 'In watchlist' : 'Add title'}
                   </Button>
                 </Card>
               )

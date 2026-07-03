@@ -24,13 +24,14 @@ export function DetailHero({
 }: DetailHeroProps) {
   const [backdropFailed, setBackdropFailed] = useState(false)
   const [posterFailed, setPosterFailed] = useState(false)
+  const [posterLoaded, setPosterLoaded] = useState(false)
 
   return (
     <section className="relative overflow-hidden border-b border-white/10 bg-[color:var(--color-bg)]">
       {hasImagePath(backdropPath) && !backdropFailed ? (
         <img
           alt=""
-          className="absolute inset-0 h-full w-full object-cover opacity-45"
+          className="motion-hero-img absolute inset-0 h-full w-full object-cover [--hero-img-opacity:0.45]"
           onError={() => setBackdropFailed(true)}
           src={getBackdropUrl(backdropPath, 'w1280') ?? undefined}
         />
@@ -46,8 +47,15 @@ export function DetailHero({
               {hasImagePath(posterPath) && !posterFailed ? (
                 <img
                   alt={`${title} poster`}
-                  className="aspect-[2/3] w-full object-cover"
+                  className="img-reveal aspect-[2/3] w-full object-cover"
+                  data-loaded={posterLoaded ? 'true' : 'false'}
                   onError={() => setPosterFailed(true)}
+                  onLoad={() => setPosterLoaded(true)}
+                  ref={(node) => {
+                    if (node?.complete && node.naturalWidth > 0) {
+                      setPosterLoaded(true)
+                    }
+                  }}
                   src={getPosterUrl(posterPath, 'w500') ?? undefined}
                 />
               ) : (
@@ -57,10 +65,10 @@ export function DetailHero({
             </div>
           </div>
 
-          <div className="max-w-5xl space-y-6 pb-1 lg:pb-6">
-            {meta ? <div className="motion-fade-in flex flex-wrap gap-2.5">{meta}</div> : null}
+          <div className="motion-stagger max-w-5xl space-y-6 pb-1 lg:pb-6">
+            {meta ? <div className="flex flex-wrap gap-2.5">{meta}</div> : null}
             <div className="space-y-5">
-              <h1 className="motion-slide-up font-display text-5xl leading-[0.9] tracking-[-0.03em] text-white drop-shadow-[0_12px_30px_rgba(0,0,0,0.45)] md:text-6xl xl:text-[5.4rem]">
+              <h1 className="font-display text-5xl leading-[0.9] tracking-[-0.03em] text-white drop-shadow-[0_12px_30px_rgba(0,0,0,0.45)] md:text-6xl xl:text-[5.4rem]">
                 {title}
               </h1>
               <p className="max-w-3xl text-sm leading-7 text-[color:var(--color-text-secondary)] md:text-base">

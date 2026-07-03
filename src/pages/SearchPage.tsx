@@ -23,9 +23,23 @@ import {
 function SearchLoadingState() {
   return (
     <div className="space-y-4">
-      <Skeleton className="h-32 rounded-[var(--radius-panel)]" />
-      <Skeleton className="h-32 rounded-[var(--radius-panel)]" />
-      <Skeleton className="h-32 rounded-[var(--radius-panel)]" />
+      {[0, 1, 2].map((row) => (
+        <div
+          className="grid grid-cols-[92px_1fr] items-start gap-4 rounded-[var(--radius-panel)] border border-white/[0.07] bg-[color:var(--color-surface-1)] p-4 sm:grid-cols-[116px_1fr] sm:gap-5 md:grid-cols-[138px_1fr] md:p-5"
+          key={row}
+        >
+          <Skeleton className="aspect-[2/3] w-full rounded-[var(--radius-media)]" />
+          <div className="space-y-3 pt-1">
+            <Skeleton className="h-8 w-2/3 max-w-sm" />
+            <div className="flex gap-2">
+              <Skeleton className="h-7 w-16 rounded-full" />
+              <Skeleton className="h-7 w-24 rounded-full" />
+            </div>
+            <Skeleton className="h-4 w-full max-w-xl" />
+            <Skeleton className="h-4 w-5/6 max-w-lg" />
+          </div>
+        </div>
+      ))}
     </div>
   )
 }
@@ -105,14 +119,25 @@ export function SearchPage() {
                 className="pointer-events-none absolute left-5 top-1/2 size-5 -translate-y-1/2 text-[color:var(--color-text-tertiary)]"
               />
               <Input
-                className="h-16 rounded-[var(--radius-panel)] border-white/10 bg-[rgba(255,255,255,0.04)] pl-14 pr-24 text-base shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] transition duration-300 focus:border-[rgba(47,174,126,0.32)] focus:shadow-[0_0_0_1px_rgba(47,174,126,0.18),0_18px_55px_rgba(0,0,0,0.32)] md:h-20 md:text-lg"
+                autoComplete="off"
+                autoFocus
+                className="h-16 rounded-[var(--radius-panel)] border-white/10 bg-[rgba(255,255,255,0.04)] pl-14 pr-24 text-base shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] transition duration-300 focus:border-[rgba(47,174,126,0.32)] focus:shadow-[0_0_0_1px_rgba(47,174,126,0.18),0_18px_55px_rgba(0,0,0,0.32)] md:h-20 md:text-lg [&::-webkit-search-cancel-button]:hidden"
+                enterKeyHint="search"
                 onChange={(event) => setDraftQuery(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Escape' && draftQuery) {
+                    event.preventDefault()
+                    setDraftQuery('')
+                  }
+                }}
                 placeholder="Search for a title"
+                spellCheck={false}
+                type="search"
                 value={draftQuery}
               />
               {draftQuery ? (
                 <button
-                  className="absolute right-5 top-1/2 -translate-y-1/2 text-sm font-medium text-[color:var(--color-text-tertiary)] transition hover:text-white"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-[8px] px-2.5 py-2 text-sm font-medium text-[color:var(--color-text-tertiary)] transition hover:text-white"
                   onClick={() => setDraftQuery('')}
                   type="button"
                 >
@@ -200,15 +225,10 @@ export function SearchPage() {
 
       {results.length > 0 ? (
         <section className="relative z-10 space-y-5">
-          <div className="space-y-1.5">
-            <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
-              Results
-            </p>
-            <h2 className="font-display text-3xl tracking-[-0.04em] text-white md:text-5xl">
-              Results for "{debouncedQuery}"
-            </h2>
-          </div>
-          <div className="space-y-4">
+          <h2 className="font-display text-3xl tracking-[-0.04em] text-white md:text-5xl">
+            Results for "{debouncedQuery}"
+          </h2>
+          <div className="motion-stagger space-y-4" key={debouncedQuery}>
             {results.map((item) => (
               <SearchResultCard item={item} key={`${item.mediaType}-${item.id}`} />
             ))}
@@ -216,11 +236,11 @@ export function SearchPage() {
           {searchQuery.hasNextPage ? (
             <Button
               className="w-full"
-              disabled={searchQuery.isFetchingNextPage}
+              loading={searchQuery.isFetchingNextPage}
               onClick={() => void searchQuery.fetchNextPage()}
               variant="secondary"
             >
-              {searchQuery.isFetchingNextPage ? 'Loading more...' : 'Load more'}
+              {searchQuery.isFetchingNextPage ? 'Loading more…' : 'Load more'}
             </Button>
           ) : null}
         </section>

@@ -159,7 +159,7 @@ describe('ProfilePage', () => {
     expect(screen.getByText('The Matrix')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /find people/i })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /follow requests/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /private profile/i })).toBeInTheDocument()
+    expect(screen.getByRole('switch', { name: /private profile/i })).toBeInTheDocument()
     expect(screen.getByText(/anyone can view your profile/i)).toBeInTheDocument()
   }, 10000)
 
@@ -421,7 +421,7 @@ describe('ProfilePage', () => {
       expect(screen.getByText(/anyone can view your profile/i)).toBeInTheDocument()
     })
 
-    await user.click(screen.getByRole('button', { name: /private profile/i }))
+    await user.click(screen.getByRole('switch', { name: /private profile/i }))
 
     await waitFor(() => {
       expect(updateMyPrivacyStatusMock).toHaveBeenCalledWith('PRIVATE')

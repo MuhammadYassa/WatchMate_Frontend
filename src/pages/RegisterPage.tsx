@@ -59,7 +59,7 @@ export function RegisterPage() {
     return (
       <PageContainer className="relative isolate flex min-h-[calc(100dvh-8rem)] items-center justify-center py-8 md:py-10">
         <PublicPageAtmosphere variant="verify" />
-        <Card className="w-full max-w-2xl space-y-6 p-7 text-center md:p-10">
+        <Card className="motion-scale-in w-full max-w-2xl space-y-6 p-7 text-center md:p-10">
           <div className="mx-auto flex size-20 items-center justify-center rounded-[var(--radius-panel)] border border-white/10 bg-[rgba(47,174,126,0.07)] text-[color:var(--color-accent)]">
             <ShieldCheck aria-hidden="true" className="size-9" />
           </div>
@@ -101,7 +101,7 @@ export function RegisterPage() {
           </p>
         </section>
 
-        <Card className="w-full max-w-xl justify-self-center p-6 md:p-8 lg:justify-self-end xl:p-10">
+        <Card className="motion-scale-in w-full max-w-xl justify-self-center p-6 md:p-8 lg:justify-self-end xl:p-10">
           <div className="space-y-7">
             <div className="space-y-2">
               <Logo className="mb-3 lg:hidden" size="md" />
@@ -169,7 +169,8 @@ export function RegisterPage() {
                 trailing={
                   <button
                     aria-label={showPassword ? 'Hide password' : 'Show password'}
-                    className="flex items-center text-[color:var(--color-text-tertiary)] transition hover:text-white"
+                    aria-pressed={showPassword}
+                    className="-m-2 flex items-center rounded-[8px] p-2 text-[color:var(--color-text-tertiary)] transition hover:text-white"
                     onClick={() => setShowPassword((c) => !c)}
                     type="button"
                   >
@@ -201,7 +202,8 @@ export function RegisterPage() {
                 trailing={
                   <button
                     aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
-                    className="flex items-center text-[color:var(--color-text-tertiary)] transition hover:text-white"
+                    aria-pressed={showConfirmPassword}
+                    className="-m-2 flex items-center rounded-[8px] p-2 text-[color:var(--color-text-tertiary)] transition hover:text-white"
                     onClick={() => setShowConfirmPassword((c) => !c)}
                     type="button"
                   >
@@ -229,24 +231,22 @@ export function RegisterPage() {
               </FormField>
 
               {error ? (
-                <div className="rounded-[var(--radius-panel)] border border-[rgba(255,180,171,0.24)] bg-[rgba(147,0,10,0.16)] px-4 py-3 text-sm text-white">
+                <div
+                  className="motion-fade-in rounded-[var(--radius-panel)] border border-[rgba(255,180,171,0.24)] bg-[rgba(147,0,10,0.16)] px-4 py-3 text-sm leading-6 text-white"
+                  role="alert"
+                >
                   {getRegisterError(error)}
                 </div>
               ) : null}
 
               <Button
-                className="w-full gap-2"
-                disabled={registerMutation.isPending || !passwordIsValid || !passwordMatches}
+                className="w-full"
+                disabled={!passwordIsValid || !passwordMatches}
+                loading={registerMutation.isPending}
                 type="submit"
               >
-                {registerMutation.isPending ? (
-                  'Creating account...'
-                ) : (
-                  <>
-                    Sign up
-                    <ArrowRight aria-hidden="true" className="size-4" />
-                  </>
-                )}
+                Sign up
+                {registerMutation.isPending ? null : <ArrowRight aria-hidden="true" className="size-4" />}
               </Button>
             </form>
 

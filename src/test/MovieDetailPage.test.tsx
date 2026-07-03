@@ -343,7 +343,7 @@ describe('MovieDetailPage', () => {
     const commentField = screen.getByLabelText(/comment/i)
     await user.clear(commentField)
     await user.type(commentField, updatedReview.comment)
-    await user.selectOptions(screen.getByLabelText(/rating/i), '4')
+    await user.click(screen.getByRole('radio', { name: /4 out of 5 stars/i }))
     await user.click(screen.getByRole('button', { name: /save changes/i }))
 
     await waitFor(() => {

@@ -36,6 +36,7 @@ import {
   formatDisplayDate,
   getIsoDate,
 } from '../utils/dates'
+import { prefersReducedMotion } from '../utils/motion'
 import { formatMediaType, formatTmdbShowStatus, formatWatchStatus } from '../utils/labels'
 import { getMediaRoute } from '../utils/mediaRoutes'
 import { getBackdropUrl, getPosterUrl, getTitleInitials, hasImagePath } from '../utils/tmdbImages'
@@ -97,8 +98,8 @@ function groupCalendarItems(items: CalendarItemDTO[]) {
 
 function UpcomingStackCard({ item }: { item: UpcomingEpisodeItemDTO }) {
   return (
-    <Link className="block focus-visible:outline-none" to={getMediaRoute(item.tmdbId, item.type)}>
-      <Card className="h-full border-white/10 bg-[linear-gradient(145deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.96)_100%)] p-5">
+    <Link className="block" to={getMediaRoute(item.tmdbId, item.type)}>
+      <Card className="motion-card h-full border-white/10 bg-[linear-gradient(145deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.96)_100%)] p-5 hover:border-[rgba(47,174,126,0.2)]">
         <div className="space-y-3">
           <div className="flex items-start justify-between gap-3">
             <div className="space-y-1">
@@ -157,7 +158,7 @@ function ToWatchLoadingRow() {
 
 function ToWatchItemRow({ item }: { item: ToWatchItemDTO }) {
   return (
-    <Link className="block focus-visible:outline-none" to={getMediaRoute(item.tmdbId, item.type)}>
+    <Link className="block" to={getMediaRoute(item.tmdbId, item.type)}>
       <Card className="group flex items-center gap-4 border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.9)_0%,rgba(12,13,17,0.98)_100%)] p-4 transition duration-200 hover:border-[rgba(47,174,126,0.2)]">
         <div className="relative h-14 w-10 shrink-0 overflow-hidden rounded-[var(--radius-media)] border border-white/10">
           {hasImagePath(item.posterPath) ? (
@@ -179,7 +180,7 @@ function ToWatchItemRow({ item }: { item: ToWatchItemDTO }) {
           </p>
         </div>
         {item.rating !== null ? (
-          <span className="shrink-0 text-xs text-[color:var(--color-text-secondary)]">
+          <span className="shrink-0 text-xs tabular-nums text-[color:var(--color-text-secondary)]">
             {item.rating.toFixed(1)}
           </span>
         ) : null}
@@ -240,12 +241,12 @@ export function DashboardPage() {
           {hero && 'backdropPath' in hero && hero.backdropPath ? (
             <img
               alt=""
-              className="absolute inset-0 h-full w-full object-cover opacity-55"
+              className="motion-hero-img absolute inset-0 h-full w-full object-cover [--hero-img-opacity:0.55]"
               src={getBackdropUrl(hero.backdropPath, 'w1280') ?? undefined}
             />
           ) : null}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(47,174,126,0.14),transparent_26%),linear-gradient(180deg,rgba(7,6,5,0.12)_0%,rgba(7,6,5,0.3)_18%,rgba(7,6,5,0.96)_100%)]" />
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(10,10,13,0.96)_8%,rgba(10,10,13,0.74)_46%,rgba(10,10,13,0.28)_100%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(47,174,126,0.14),transparent_26%),linear-gradient(180deg,rgba(7,8,8,0.12)_0%,rgba(7,8,8,0.3)_18%,rgba(7,8,8,0.96)_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(10,11,11,0.96)_8%,rgba(10,11,11,0.74)_46%,rgba(10,11,11,0.28)_100%)]" />
 
           <div className="relative z-10 flex h-full min-h-[34rem] flex-col justify-end px-6 py-7 md:px-8 md:py-8 lg:px-10 lg:py-10">
             <div className="motion-stagger max-w-3xl space-y-5">
@@ -273,8 +274,17 @@ export function DashboardPage() {
                     {'resumeSeasonNumber' in hero ? 'Jump back in' : 'Open title'}
                   </Link>
                 ) : null}
-                <Button onClick={() => setRangeDays(14)} variant="secondary">
-                  14 day view
+                <Button
+                  onClick={() => {
+                    document.getElementById('release-calendar')?.scrollIntoView?.({
+                      behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+                      block: 'start',
+                    })
+                  }}
+                  variant="secondary"
+                >
+                  <CalendarDays aria-hidden="true" className="size-4" />
+                  View release calendar
                 </Button>
               </div>
             </div>
@@ -352,10 +362,7 @@ export function DashboardPage() {
         ) : (
           <EmptyState
             action={
-              <Link
-                className="inline-flex min-h-11 items-center rounded-[var(--radius-control)] bg-[linear-gradient(160deg,#c44040_0%,#9e2828_100%)] px-5 text-sm font-semibold text-white shadow-[0_8px_26px_rgba(180,48,48,0.26)] transition hover:brightness-[1.08]"
-                to="/discover"
-              >
+              <Link className={getButtonClassName('primary')} to="/discover">
                 Find something new
               </Link>
             }
@@ -421,7 +428,7 @@ export function DashboardPage() {
         )}
       </section>
 
-      <section className="relative z-10 space-y-6">
+      <section className="relative z-10 scroll-mt-24 space-y-6" id="release-calendar">
         <SectionHeader
           action={
             <div className="flex gap-2">
@@ -467,11 +474,11 @@ export function DashboardPage() {
                 <MediaGrid className="gap-4 sm:grid-cols-2 xl:grid-cols-3">
                   {group.items.map((item) => (
                     <Link
-                      className="block focus-visible:outline-none"
+                      className="block"
                       key={`${group.date}-${item.tmdbId}-${item.episodeNumber ?? 'x'}`}
                       to={getMediaRoute(item.tmdbId, item.type)}
                     >
-                      <Card className="h-full border-white/10 bg-[rgba(255,255,255,0.03)] p-4">
+                      <Card className="h-full border-white/10 bg-[rgba(255,255,255,0.03)] p-4 transition duration-200 hover:border-[rgba(47,174,126,0.2)] hover:bg-[rgba(255,255,255,0.05)]">
                         <p className="text-sm font-semibold text-white">{item.title}</p>
                         <div className="mt-3 space-y-2 text-sm text-[color:var(--color-text-secondary)]">
                           {item.episodeTitle ? <p>{item.episodeTitle}</p> : null}

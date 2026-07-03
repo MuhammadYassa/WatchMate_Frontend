@@ -10,8 +10,60 @@ import { useToast } from '../feedback/toastContext'
 import { Button } from '../ui/Button'
 import { Card } from '../ui/Card'
 import { FormField } from '../ui/FormField'
-import { Select } from '../ui/Select'
 import { Textarea } from '../ui/Textarea'
+
+function StarRatingPicker({
+  disabled,
+  onChange,
+  value,
+}: {
+  disabled?: boolean
+  onChange: (value: number) => void
+  value: number
+}) {
+  const [hovered, setHovered] = useState<number | null>(null)
+  const preview = hovered ?? value
+
+  return (
+    <div className="space-y-2.5">
+      <span className="block text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--color-text-secondary)]">
+        Rating
+      </span>
+      <div
+        aria-label="Star rating"
+        className="flex items-center gap-1"
+        onMouseLeave={() => setHovered(null)}
+        role="radiogroup"
+      >
+        {[1, 2, 3, 4, 5].map((star) => (
+          <button
+            aria-checked={value === star}
+            aria-label={`${star} out of 5 stars`}
+            className="group/star flex size-10 items-center justify-center rounded-[10px] transition duration-150 hover:bg-white/[0.05] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-border-focus)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-bg)] active:scale-90 disabled:cursor-not-allowed disabled:opacity-50"
+            disabled={disabled}
+            key={star}
+            onClick={() => onChange(star)}
+            onMouseEnter={() => setHovered(star)}
+            role="radio"
+            type="button"
+          >
+            <Star
+              aria-hidden="true"
+              className={`size-6 transition duration-150 ${
+                star <= preview
+                  ? 'fill-[color:var(--color-accent)] text-[color:var(--color-accent)]'
+                  : 'text-white/25 group-hover/star:text-white/45'
+              } ${hovered !== null && star <= hovered ? 'scale-110' : ''}`}
+            />
+          </button>
+        ))}
+        <span className="ml-2 text-sm tabular-nums text-[color:var(--color-text-tertiary)]">
+          {preview} / 5
+        </span>
+      </div>
+    </div>
+  )
+}
 
 interface ReviewEditorCardProps {
   detailQueryKey: readonly unknown[]
@@ -152,20 +204,7 @@ export function ReviewEditorCard({
       </div>
 
       <div className="grid gap-4">
-        <FormField label="Rating">
-          <Select
-            className="bg-[rgba(10,12,16,0.8)]"
-            disabled={pending}
-            onChange={(event) => setStarRating(Number(event.target.value))}
-            value={starRating}
-          >
-            {[1, 2, 3, 4, 5].map((value) => (
-              <option key={value} value={value}>
-                {value} / 5
-              </option>
-            ))}
-          </Select>
-        </FormField>
+        <StarRatingPicker disabled={pending} onChange={setStarRating} value={starRating} />
 
         <FormField
           error={error instanceof ApiClientError ? error.message : null}
@@ -185,6 +224,7 @@ export function ReviewEditorCard({
       <div className="flex flex-wrap gap-3">
         <Button
           disabled={pending || comment.trim().length < 4}
+          loading={createMutation.isPending || updateMutation.isPending}
           onClick={() => {
             if (activeReview) {
               updateMutation.mutate({

@@ -239,7 +239,7 @@ export function FollowRequestsPage() {
             eyebrow={activeTab === 'received' ? 'Awaiting your reply' : 'Awaiting their reply'}
             title={activeTab === 'received' ? 'Incoming requests' : 'Sent requests'}
           />
-          <div className="space-y-4">
+          <div className="space-y-4" key={activeTab}>
             {requests.map((request, index) => {
               const acceptPending =
                 acceptMutation.isPending && acceptMutation.variables?.requestId === request.requestId
@@ -280,28 +280,30 @@ export function FollowRequestsPage() {
                       <>
                         <Button
                           disabled={actionPending}
+                          loading={acceptPending}
                           onClick={() => acceptMutation.mutate(request)}
-                          variant="secondary"
                         >
-                          <Check aria-hidden="true" className="mr-2 size-4" />
+                          {acceptPending ? null : <Check aria-hidden="true" className="mr-2 size-4" />}
                           Accept
                         </Button>
                         <Button
                           disabled={actionPending}
+                          loading={rejectPending}
                           onClick={() => rejectMutation.mutate(request)}
                           variant="ghost"
                         >
-                          <X aria-hidden="true" className="mr-2 size-4" />
+                          {rejectPending ? null : <X aria-hidden="true" className="mr-2 size-4" />}
                           Decline
                         </Button>
                       </>
                     ) : (
                       <Button
                         disabled={actionPending}
+                        loading={cancelPending}
                         onClick={() => cancelMutation.mutate(request)}
                         variant="ghost"
                       >
-                        <X aria-hidden="true" className="mr-2 size-4" />
+                        {cancelPending ? null : <X aria-hidden="true" className="mr-2 size-4" />}
                         Cancel request
                       </Button>
                     )}

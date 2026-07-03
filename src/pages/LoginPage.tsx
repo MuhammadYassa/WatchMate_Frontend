@@ -61,7 +61,7 @@ export function LoginPage() {
           </p>
         </section>
 
-        <Card className="w-full max-w-xl justify-self-center p-6 md:p-8 lg:justify-self-end xl:p-10">
+        <Card className="motion-scale-in w-full max-w-xl justify-self-center p-6 md:p-8 lg:justify-self-end xl:p-10">
           <div className="space-y-7">
             <div className="space-y-2">
               <Logo className="mb-3 lg:hidden" size="md" />
@@ -104,7 +104,8 @@ export function LoginPage() {
                 trailing={
                   <button
                     aria-label={showPassword ? 'Hide password' : 'Show password'}
-                    className="flex items-center text-[color:var(--color-text-tertiary)] transition hover:text-white"
+                    aria-pressed={showPassword}
+                    className="-m-2 flex items-center rounded-[8px] p-2 text-[color:var(--color-text-tertiary)] transition hover:text-white"
                     onClick={() => setShowPassword((current) => !current)}
                     type="button"
                   >
@@ -132,20 +133,17 @@ export function LoginPage() {
               </FormField>
 
               {error ? (
-                <div className="rounded-[var(--radius-panel)] border border-[rgba(255,180,171,0.24)] bg-[rgba(147,0,10,0.16)] px-4 py-3 text-sm text-white">
+                <div
+                  className="motion-fade-in rounded-[var(--radius-panel)] border border-[rgba(255,180,171,0.24)] bg-[rgba(147,0,10,0.16)] px-4 py-3 text-sm leading-6 text-white"
+                  role="alert"
+                >
                   {getFriendlyLoginError(error)}
                 </div>
               ) : null}
 
-              <Button className="w-full gap-2" disabled={loginMutation.isPending} type="submit">
-                {loginMutation.isPending ? (
-                  'Logging in...'
-                ) : (
-                  <>
-                    Log in
-                    <ArrowRight aria-hidden="true" className="size-4" />
-                  </>
-                )}
+              <Button className="w-full" loading={loginMutation.isPending} type="submit">
+                Log in
+                {loginMutation.isPending ? null : <ArrowRight aria-hidden="true" className="size-4" />}
               </Button>
             </form>
 

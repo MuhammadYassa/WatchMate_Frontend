@@ -13,7 +13,7 @@ export function SearchResultCard({ item }: { item: SearchItemDTO }) {
 
   return (
     <Link
-      className="motion-card group relative grid grid-cols-[92px_1fr] items-start gap-4 overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(160deg,rgba(22,20,18,0.88)_0%,rgba(11,10,8,0.96)_100%)] p-4 shadow-[0_24px_55px_rgba(0,0,0,0.28)] transition duration-300 hover:border-[rgba(47,174,126,0.18)] hover:shadow-[0_34px_82px_rgba(0,0,0,0.46)] sm:grid-cols-[116px_1fr] sm:gap-5 md:grid-cols-[138px_1fr] md:p-5"
+      className="motion-card group relative grid grid-cols-[92px_1fr] items-start gap-4 overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(160deg,rgba(22,24,26,0.88)_0%,rgba(13,14,15,0.96)_100%)] p-4 shadow-[0_24px_55px_rgba(0,0,0,0.28)] transition duration-300 hover:border-[rgba(47,174,126,0.18)] hover:shadow-[0_34px_82px_rgba(0,0,0,0.46)] sm:grid-cols-[116px_1fr] sm:gap-5 md:grid-cols-[138px_1fr] md:p-5"
       to={getSearchResultRoute(item.id, item.mediaType)}
     >
       <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(47,174,126,0.07)_0%,rgba(47,174,126,0)_72%)] opacity-0 transition duration-300 group-hover:opacity-100" />

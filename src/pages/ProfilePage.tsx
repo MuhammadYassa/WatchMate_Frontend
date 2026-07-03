@@ -92,7 +92,7 @@ function ProfileStatCard({
   return (
     <div className="rounded-[var(--radius-panel)] border border-white/[0.07] bg-[color:var(--color-surface-1)] p-4">
       <p className="text-[12px] text-[color:var(--color-text-tertiary)]">{label}</p>
-      <p className="mt-1 font-display text-[2.3rem] leading-none tracking-[-0.04em] text-white">{value}</p>
+      <p className="mt-1 font-display text-[2.3rem] leading-none tracking-[-0.04em] tabular-nums text-white">{value}</p>
     </div>
   )
 }
@@ -383,7 +383,7 @@ export function ProfilePage() {
 
       <Card className="relative z-10 overflow-hidden p-0 shadow-[0_34px_90px_rgba(0,0,0,0.38)]">
         <div className="relative h-36 md:h-48">
-          <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(47,174,126,0.18)_0%,rgba(18,23,31,0.22)_42%,rgba(9,10,13,0.86)_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(47,174,126,0.18)_0%,rgba(17,21,20,0.22)_42%,rgba(9,10,10,0.86)_100%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(47,174,126,0.2),transparent_28%),radial-gradient(circle_at_15%_80%,rgba(111,209,168,0.08),transparent_18%)]" />
         </div>
 
@@ -421,8 +421,16 @@ export function ProfilePage() {
           {!isSelf ? (
             <div className="flex flex-wrap gap-3 lg:justify-end">
               {effectiveFollowStatus === 'FOLLOWING' ? (
-                <Button disabled={actionPending} onClick={() => unfollowMutation.mutate()} variant="secondary">
-                  <UserMinus aria-hidden="true" className="mr-2 size-4" />
+                <Button
+                  disabled={actionPending}
+                  loading={unfollowMutation.isPending}
+                  onClick={() => unfollowMutation.mutate()}
+                  title="Unfollow this profile"
+                  variant="secondary"
+                >
+                  {unfollowMutation.isPending ? null : (
+                    <UserMinus aria-hidden="true" className="mr-2 size-4" />
+                  )}
                   Following
                 </Button>
               ) : hasPendingFollowRequest ? (
@@ -431,20 +439,34 @@ export function ProfilePage() {
                   Requested
                 </Button>
               ) : effectiveFollowStatus === 'NOT_FOLLOWING' ? (
-                <Button disabled={actionPending} onClick={() => followMutation.mutate()}>
-                  <UserPlus aria-hidden="true" className="mr-2 size-4" />
+                <Button
+                  disabled={actionPending}
+                  loading={followMutation.isPending}
+                  onClick={() => followMutation.mutate()}
+                >
+                  {followMutation.isPending ? null : <UserPlus aria-hidden="true" className="mr-2 size-4" />}
                   Follow
                 </Button>
               ) : null}
 
               {!isBlockedProfile ? (
-                <Button disabled={actionPending} onClick={() => blockMutation.mutate()} variant="ghost">
-                  <Ban aria-hidden="true" className="mr-2 size-4" />
+                <Button
+                  disabled={actionPending}
+                  loading={blockMutation.isPending}
+                  onClick={() => blockMutation.mutate()}
+                  variant="ghost"
+                >
+                  {blockMutation.isPending ? null : <Ban aria-hidden="true" className="mr-2 size-4" />}
                   Block profile
                 </Button>
               ) : (
-                <Button disabled={actionPending} onClick={() => unblockMutation.mutate()} variant="ghost">
-                  <Ban aria-hidden="true" className="mr-2 size-4" />
+                <Button
+                  disabled={actionPending}
+                  loading={unblockMutation.isPending}
+                  onClick={() => unblockMutation.mutate()}
+                  variant="ghost"
+                >
+                  {unblockMutation.isPending ? null : <Ban aria-hidden="true" className="mr-2 size-4" />}
                   Unblock profile
                 </Button>
               )}
@@ -470,11 +492,13 @@ export function ProfilePage() {
             <Card className="p-5">
               <div className="space-y-4">
                 <button
-                  className="flex w-full items-center justify-between gap-4 text-left"
+                  aria-checked={profile.privacyStatus === 'PRIVATE'}
+                  className="flex w-full items-center justify-between gap-4 rounded-[10px] text-left transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-border-focus)] focus-visible:ring-offset-4 focus-visible:ring-offset-[color:var(--color-surface-1)] disabled:cursor-wait disabled:opacity-70"
                   disabled={privacyMutation.isPending}
                   onClick={() => {
                     privacyMutation.mutate(profile.privacyStatus === 'PRIVATE' ? 'PUBLIC' : 'PRIVATE')
                   }}
+                  role="switch"
                   type="button"
                 >
                   <div className="space-y-0.5">
@@ -486,13 +510,12 @@ export function ProfilePage() {
                     </p>
                   </div>
                   <span
-                    aria-checked={profile.privacyStatus === 'PRIVATE'}
+                    aria-hidden="true"
                     className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full border transition duration-200 ${
                       profile.privacyStatus === 'PRIVATE'
                         ? 'border-[rgba(47,174,126,0.40)] bg-[rgba(47,174,126,0.20)]'
                         : 'border-white/14 bg-white/[0.07]'
                     }`}
-                    role="switch"
                   >
                     <span
                       className={`inline-block size-4 rounded-full transition duration-200 ${

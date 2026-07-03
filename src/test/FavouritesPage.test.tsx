@@ -74,7 +74,7 @@ describe('FavouritesPage', () => {
       expect(screen.getByText('Arrival')).toBeInTheDocument()
     })
 
-    await user.click(screen.getByRole('button', { name: /remove favourite/i }))
+    await user.click(screen.getByRole('button', { name: /remove arrival from favourites/i }))
 
     await waitFor(() => {
       expect(screen.getByText('No favourites yet')).toBeInTheDocument()

@@ -18,9 +18,11 @@ import { EpisodeCard } from '../components/media/EpisodeCard'
 import { GenrePill } from '../components/media/GenrePill'
 import { PosterPlaceholder } from '../components/media/PosterPlaceholder'
 import { Button } from '../components/ui/Button'
+import { Pagination } from '../components/ui/Pagination'
 import type { ShowTrackingJobDTO } from '../types/api'
 import { formatDisplayDate } from '../utils/dates'
 import { formatSeasonLabel } from '../utils/labels'
+import { prefersReducedMotion } from '../utils/motion'
 import { getPosterUrl, hasImagePath } from '../utils/tmdbImages'
 
 function SeasonEpisodesLoadingState() {
@@ -165,7 +167,7 @@ export function SeasonEpisodesPage() {
         {hasImagePath(posterPath) ? (
           <img
             alt=""
-            className="absolute inset-0 h-full w-full object-cover opacity-24"
+            className="motion-hero-img absolute inset-0 h-full w-full object-cover [--hero-img-opacity:0.24]"
             src={getPosterUrl(posterPath, 'w500') ?? undefined}
           />
         ) : null}
@@ -249,7 +251,7 @@ export function SeasonEpisodesPage() {
       </section>
 
       <PageContainer className="relative z-10 -mt-10 space-y-8 pt-0 md:-mt-14">
-        <section className="space-y-5">
+        <section className="scroll-mt-24 space-y-5" id="season-lineup">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <SectionHeader eyebrow="Episodes" title="Season lineup" />
             <div className="flex flex-wrap gap-4 text-[11px] uppercase tracking-[0.2em] text-[color:var(--color-text-tertiary)]">
@@ -309,27 +311,19 @@ export function SeasonEpisodesPage() {
                   </div>
                 ))}
               </div>
-              {(episodesQuery.data?.totalPages ?? 1) > 1 ? (
-                <div className="flex items-center justify-between border-t border-white/8 pt-6">
-                  <Button
-                    disabled={episodePage === 0}
-                    onClick={() => setEpisodePage((p) => Math.max(0, p - 1))}
-                    variant="ghost"
-                  >
-                    Previous
-                  </Button>
-                  <span className="text-sm text-[color:var(--color-text-secondary)]">
-                    Page {episodePage + 1} of {episodesQuery.data?.totalPages ?? 1}
-                  </span>
-                  <Button
-                    disabled={episodePage + 1 >= (episodesQuery.data?.totalPages ?? 1)}
-                    onClick={() => setEpisodePage((p) => p + 1)}
-                    variant="ghost"
-                  >
-                    Next
-                  </Button>
-                </div>
-              ) : null}
+              <Pagination
+                className="border-t border-white/8 pt-6"
+                onPageChange={(nextPage) => {
+                  setEpisodePage(nextPage)
+                  const target = document.getElementById('season-lineup')
+                  target?.scrollIntoView?.({
+                    behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+                    block: 'start',
+                  })
+                }}
+                page={episodePage}
+                totalPages={episodesQuery.data?.totalPages ?? 1}
+              />
             </>
           ) : (
             <EmptyState

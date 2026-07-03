@@ -29,6 +29,7 @@ export function PosterCard({
   variant = 'rail',
 }: PosterCardProps) {
   const [imageFailed, setImageFailed] = useState(false)
+  const [imageLoaded, setImageLoaded] = useState(false)
 
   return (
     <Link
@@ -41,13 +42,20 @@ export function PosterCard({
       ].join(' ')}
       to={href}
     >
-      <div className="motion-poster relative overflow-hidden rounded-[var(--radius-media)] border border-white/10 bg-[rgba(255,255,255,0.03)] shadow-[0_18px_40px_rgba(0,0,0,0.32)] group-hover:border-[rgba(47,174,126,0.26)] group-hover:shadow-[0_28px_64px_rgba(0,0,0,0.50)]">
+      <div className="motion-poster relative overflow-hidden rounded-[var(--radius-media)] border border-white/10 bg-[color:var(--color-surface-1)] shadow-[0_18px_40px_rgba(0,0,0,0.32)] group-hover:border-[rgba(47,174,126,0.26)] group-hover:shadow-[0_28px_64px_rgba(0,0,0,0.50)] group-focus-visible:border-[rgba(47,174,126,0.55)] group-focus-visible:shadow-[0_0_0_3px_var(--color-accent-glow),0_18px_40px_rgba(0,0,0,0.32)]">
         {hasImagePath(imagePath) && !imageFailed ? (
           <img
             alt={`${title} poster`}
-            className="aspect-[2/3] w-full object-cover"
+            className="img-reveal aspect-[2/3] w-full object-cover"
+            data-loaded={imageLoaded ? 'true' : 'false'}
             loading="lazy"
             onError={() => setImageFailed(true)}
+            onLoad={() => setImageLoaded(true)}
+            ref={(node) => {
+              if (node?.complete && node.naturalWidth > 0) {
+                setImageLoaded(true)
+              }
+            }}
             src={getPosterUrl(imagePath, 'w342') ?? undefined}
           />
         ) : (
@@ -67,7 +75,7 @@ export function PosterCard({
           <p className="text-[12px] text-[color:var(--color-text-tertiary)]">
             {[mediaTypeLabel, releaseDate ? formatDisplayDate(releaseDate) : null]
               .filter(Boolean)
-              .join(' Â· ')}
+              .join(' · ')}
           </p>
         ) : null}
       </div>

@@ -11,14 +11,14 @@ export function PublicPageAtmosphere({
 }: PublicPageAtmosphereProps) {
   return (
     <div className={cn('pointer-events-none absolute inset-0 -z-10 overflow-hidden', className)}>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(47,174,126,0.08),_transparent_26%),linear-gradient(180deg,rgba(15,14,12,0.36)_0%,rgba(9,8,7,0.94)_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(47,174,126,0.08),_transparent_26%),linear-gradient(180deg,rgba(16,18,20,0.36)_0%,rgba(7,8,8,0.94)_100%)]" />
       <div className="ambient-drift absolute left-[-8%] top-14 h-72 w-72 rounded-full bg-[rgba(47,174,126,0.07)] blur-[100px]" />
       <div className="ambient-drift absolute bottom-[-12%] right-[-6%] h-80 w-80 rounded-full bg-[rgba(111,209,168,0.05)] blur-[120px] [animation-delay:-6s]" />
 
       {variant === 'landing' ? (
         <>
           <div className="absolute left-[10%] top-10 h-[30rem] w-[80%] rounded-[var(--radius-panel)] border border-white/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.02)_0%,rgba(255,255,255,0)_100%)]" />
-          <div className="absolute right-[8%] top-28 h-[24rem] w-[34rem] rounded-[var(--radius-panel)] border border-white/8 bg-[radial-gradient(circle_at_top,_rgba(47,174,126,0.10),_transparent_42%),linear-gradient(180deg,rgba(24,22,20,0.92)_0%,rgba(9,8,7,0.35)_100%)] shadow-[0_30px_80px_rgba(0,0,0,0.32)]" />
+          <div className="absolute right-[8%] top-28 h-[24rem] w-[34rem] rounded-[var(--radius-panel)] border border-white/8 bg-[radial-gradient(circle_at_top,_rgba(47,174,126,0.10),_transparent_42%),linear-gradient(180deg,rgba(22,24,26,0.92)_0%,rgba(7,8,8,0.35)_100%)] shadow-[0_30px_80px_rgba(0,0,0,0.32)]" />
           <div className="absolute bottom-[14%] left-[8%] h-28 w-64 rounded-full bg-[rgba(47,174,126,0.05)] blur-[72px]" />
         </>
       ) : null}

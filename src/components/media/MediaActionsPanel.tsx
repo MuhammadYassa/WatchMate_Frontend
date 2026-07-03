@@ -105,7 +105,12 @@ export function MediaActionsPanel({
           }}
           variant={isFavourited ? 'secondary' : 'ghost'}
         >
-          <Heart aria-hidden="true" className="mr-2 size-4" />
+          <Heart
+            aria-hidden="true"
+            className={`mr-2 size-4 transition duration-200 ${
+              isFavourited ? 'fill-current text-[color:var(--color-highlight)]' : ''
+            }`}
+          />
           {isFavourited ? 'Remove from favourites' : 'Add to favourites'}
         </Button>
 

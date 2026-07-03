@@ -141,7 +141,12 @@ select {
 ::-webkit-scrollbar-thumb {
   border: 2px solid transparent;
   border-radius: 999px;
-  background: rgba(135, 128, 120, 0.48);
+  background: rgba(127, 133, 131, 0.42);
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(127, 133, 131, 0.62);
   background-clip: padding-box;
 }
 
@@ -212,6 +217,23 @@ dialog.wm-dialog::backdrop {
   }
 }
 
+/* Cinematic hero backdrop entrance: settle from a slight zoom */
+@keyframes hero-settle {
+  from {
+    opacity: 0;
+    transform: scale(1.045);
+  }
+  to {
+    opacity: var(--hero-img-opacity, 1);
+    transform: scale(1);
+  }
+}
+
+.motion-hero-img {
+  animation: hero-settle 1100ms var(--ease-premium) both;
+  will-change: transform, opacity;
+}
+
 .motion-fade-in {
   animation: fade-in 560ms var(--ease-premium) both;
 }
@@ -230,8 +252,47 @@ dialog.wm-dialog::backdrop {
     scale-in-soft 260ms var(--ease-premium) both;
 }
 
+dialog.wm-dialog[data-closing='true'] {
+  animation: dialog-out 150ms ease-in both;
+}
+
+dialog.wm-dialog::backdrop {
+  animation: fade-in 220ms ease-out both;
+}
+
+dialog.wm-dialog[data-closing='true']::backdrop {
+  animation: fade-in 150ms ease-in both reverse;
+}
+
+@keyframes dialog-out {
+  to {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
 .motion-toast {
-  animation: scale-in-soft 240ms var(--ease-premium) both;
+  animation: toast-in 260ms var(--ease-premium) both;
+}
+
+.motion-toast[data-leaving='true'] {
+  opacity: 0;
+  transform: translate3d(0, 8px, 0) scale(0.97);
+  transition:
+    opacity 160ms ease-in,
+    transform 160ms ease-in;
+  animation: none;
 }
 
 .motion-stagger > * {
@@ -270,10 +331,6 @@ dialog.wm-dialog::backdrop {
     box-shadow 260ms ease;
 }
 
-.motion-card:hover {
-  transform: translateY(-4px);
-}
-
 .motion-poster {
   transition:
     transform 320ms var(--ease-premium),
@@ -281,17 +338,39 @@ dialog.wm-dialog::backdrop {
     box-shadow 320ms ease;
 }
 
-.motion-poster:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 32px 72px rgba(0, 0, 0, 0.56), 0 0 0 1px rgba(47, 174, 126, 0.18);
-}
-
 .motion-poster img {
   transition: transform 560ms var(--ease-premium), opacity 280ms ease;
 }
 
-.motion-poster:hover img {
-  transform: scale(1.06);
+@media (hover: hover) and (pointer: fine) {
+  .motion-card:hover {
+    transform: translateY(-4px);
+  }
+
+  .motion-poster:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 32px 72px rgba(0, 0, 0, 0.56), 0 0 0 1px rgba(47, 174, 126, 0.18);
+  }
+
+  .motion-poster:hover img {
+    transform: scale(1.06);
+  }
+}
+
+a:active .motion-poster,
+.motion-poster:active {
+  transform: translateY(-2px) scale(0.99);
+  transition-duration: 120ms;
+}
+
+/* Fade posters in as they decode instead of popping */
+.img-reveal {
+  opacity: 0;
+  transition: opacity 420ms ease;
+}
+
+.img-reveal[data-loaded='true'] {
+  opacity: 1;
 }
 
 .motion-nav-indicator {
@@ -367,9 +446,9 @@ dialog.wm-dialog::backdrop {
   background:
     linear-gradient(
       90deg,
-      rgba(22, 20, 18, 0.88) 16%,
-      rgba(44, 38, 34, 0.96) 48%,
-      rgba(22, 20, 18, 0.88) 78%
+      rgba(22, 24, 26, 0.9) 16%,
+      rgba(38, 41, 43, 0.96) 48%,
+      rgba(22, 24, 26, 0.9) 78%
     );
   background-size: 200% 100%;
 }
@@ -399,12 +478,19 @@ dialog.wm-dialog::backdrop {
   }
 
   .motion-card:hover,
-  .motion-poster:hover {
+  .motion-poster:hover,
+  .motion-poster:active,
+  a:active .motion-poster {
     transform: none !important;
   }
 
   .motion-poster:hover img {
     transform: none !important;
+  }
+
+  .img-reveal {
+    opacity: 1 !important;
+    transition: none !important;
   }
 
   .motion-btn-primary::after {

@@ -1,3 +1,5 @@
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+
 import { cn } from '../../utils/cn'
 import { Button } from './Button'
 
@@ -28,6 +30,7 @@ export function Pagination({
       onClick={() => onPageChange(Math.max(0, page - 1))}
       variant="ghost"
     >
+      <ChevronLeft aria-hidden="true" className="-ml-1 size-4" />
       Previous
     </Button>
   )
@@ -39,11 +42,12 @@ export function Pagination({
       variant="ghost"
     >
       Next
+      <ChevronRight aria-hidden="true" className="-mr-1 size-4" />
     </Button>
   )
 
   const label = (
-    <p className="text-sm text-[color:var(--color-text-secondary)]">
+    <p className="text-sm tabular-nums text-[color:var(--color-text-secondary)]">
       Page {page + 1} of {totalPages}
     </p>
   )

@@ -1,6 +1,7 @@
 ﻿import type { ReactNode } from 'react'
 import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { Clapperboard, Compass } from 'lucide-react'
 import { Link, useSearchParams } from 'react-router-dom'
 
 import { discoverApi } from '../api/discoverApi'
@@ -117,7 +118,7 @@ function DiscoverFeatureCard({ item }: { item: DiscoveryMediaItemDTO | null }) {
             </p>
           </div>
           <p className="text-[12px] text-[color:var(--color-text-tertiary)]">
-            {[formatMediaType(item.type), item.releaseDate?.slice(0, 4), typeof item.rating === 'number' ? `${item.rating.toFixed(1)} rating` : null].filter(Boolean).join(' Â· ')}
+            {[formatMediaType(item.type), item.releaseDate?.slice(0, 4), typeof item.rating === 'number' ? `${item.rating.toFixed(1)} rating` : null].filter(Boolean).join(' · ')}
           </p>
         </div>
         <Link className={getButtonClassName('secondary', 'shrink-0')} to={getMediaRoute(item.tmdbId, item.type)}>
@@ -221,7 +222,7 @@ export function DiscoverPage() {
             }
           />
         ) : categoryQuery.data && categoryQuery.data.length > 0 ? (
-          <MediaGrid className="gap-x-4 gap-y-8 sm:gap-x-5 xl:grid-cols-6">
+          <MediaGrid className="motion-fade-in gap-x-4 gap-y-8 sm:gap-x-5 xl:grid-cols-6" key={selectedCategory}>
             {categoryQuery.data.map((item) => (
               <PosterCard
                 key={`${selectedCategory}-${item.tmdbId}`}
@@ -239,7 +240,7 @@ export function DiscoverPage() {
           <EmptyState
             body="There isn't anything in this category right now."
             heading="Nothing to show yet"
-            icon={<span className="text-lg">+</span>}
+            icon={<Compass aria-hidden="true" className="size-5" />}
           />
         )}
       </section>
@@ -314,7 +315,10 @@ export function DiscoverPage() {
               }
             />
           ) : genreResults.length > 0 ? (
-            <MediaGrid className="gap-x-4 gap-y-8 sm:gap-x-5 xl:grid-cols-6">
+            <MediaGrid
+              className="motion-fade-in gap-x-4 gap-y-8 sm:gap-x-5 xl:grid-cols-6"
+              key={`${selectedGenreType}-${selectedGenre}`}
+            >
               {genreResults.map((item) => (
                 <PosterCard
                   key={`${selectedGenreType}-${selectedGenre}-${item.tmdbId}`}
@@ -332,7 +336,7 @@ export function DiscoverPage() {
             <EmptyState
               body="Nothing matches that genre right now. Try another one."
               heading="No titles in this genre"
-              icon={<span className="text-lg">+</span>}
+              icon={<Clapperboard aria-hidden="true" className="size-5" />}
             />
           )}
         </section>
