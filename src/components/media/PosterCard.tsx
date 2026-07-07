@@ -63,7 +63,7 @@ export function PosterCard({
         )}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-[linear-gradient(180deg,rgba(8,9,12,0)_0%,rgba(8,9,12,0.9)_100%)]" />
         {typeof rating === 'number' ? (
-          <div className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-[10px] border border-white/14 bg-[rgba(8,9,12,0.78)] px-2.5 py-1 text-[11px] font-medium text-[color:var(--color-highlight)] backdrop-blur-xl">
+          <div className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-[10px] border border-white/14 bg-[rgba(8,9,12,0.78)] px-2.5 py-1 text-[11px] font-medium tabular-nums text-[color:var(--color-highlight)] backdrop-blur-xl">
             <Star aria-hidden="true" className="size-3 fill-current" />
             {rating.toFixed(1)}
           </div>

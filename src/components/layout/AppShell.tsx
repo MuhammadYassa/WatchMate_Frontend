@@ -1,7 +1,9 @@
+import { Suspense } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 
 import { cn } from '../../utils/cn'
 import { SessionExpiredModal } from '../feedback/SessionExpiredModal'
+import { Spinner } from '../feedback/Spinner'
 import { AppFooter } from './AppFooter'
 import { ShellModeProvider } from './ShellModeContext'
 import { getShellMode } from './shellMode'
@@ -16,7 +18,7 @@ export function AppShell() {
   return (
     <ShellModeProvider value={shellMode}>
       <div
-        className="relative min-h-screen overflow-hidden bg-[color:var(--color-bg)] text-[color:var(--color-text-primary)]"
+        className="relative min-h-dvh overflow-hidden bg-[color:var(--color-bg)] text-[color:var(--color-text-primary)]"
         data-shell-mode={shellMode}
       >
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(47,174,126,0.08),_transparent_26%),radial-gradient(circle_at_82%_18%,_rgba(111,209,168,0.05),_transparent_20%),linear-gradient(180deg,rgba(255,252,248,0.015)_0%,rgba(255,252,248,0)_18%)]" />
@@ -26,11 +28,19 @@ export function AppShell() {
         <MobileTopBar />
         <main
           className={cn(
-            'relative z-10 min-h-screen',
+            'relative z-10 min-h-dvh',
             shellMode === 'side-rail' ? 'md:pl-[calc(var(--shell-side-rail-width)+1.25rem)]' : '',
           )}
         >
-          <Outlet />
+          <Suspense
+            fallback={
+              <div className="flex min-h-dvh items-center justify-center">
+                <Spinner size="lg" />
+              </div>
+            }
+          >
+            <Outlet />
+          </Suspense>
         </main>
         <AppFooter />
         <MobileNav />

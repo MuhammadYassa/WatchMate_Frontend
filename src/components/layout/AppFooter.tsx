@@ -26,8 +26,8 @@ export function AppFooter() {
             size="sm"
             wordmarkClassName="text-[color:var(--color-text-secondary)]"
           />
-          <p className="text-[11px] text-[color:var(--color-text-tertiary)]">
-            Track what matters to you.
+          <p className="text-[11px] uppercase tracking-[0.22em] text-[color:var(--color-text-tertiary)]">
+            Movies &amp; shows, tracked
           </p>
         </div>
         <nav className="flex items-center gap-5 text-sm text-[color:var(--color-text-tertiary)]">

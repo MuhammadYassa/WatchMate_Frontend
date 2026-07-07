@@ -91,7 +91,7 @@ export function SocialSearchPage() {
         <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(47,174,126,0.10)_0%,rgba(47,174,126,0)_72%)]" />
         <div className="relative space-y-7">
           <div className="space-y-4">
-            <h1 className="max-w-4xl font-display text-5xl tracking-[-0.03em] text-white md:text-6xl xl:text-[4.9rem]">
+            <h1 className="max-w-4xl font-display text-[length:clamp(2.3rem,10.5vw,3rem)] tracking-[-0.03em] text-white md:text-6xl xl:text-[4.9rem]">
               Find people to follow.
             </h1>
             <p className="max-w-2xl text-base leading-7 text-[color:var(--color-text-secondary)]">
@@ -191,17 +191,17 @@ export function SocialSearchPage() {
                   style={{ animationDelay: `${Math.min(index * 45, 220)}ms` }}
                 >
                   <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(47,174,126,0.06)_0%,rgba(47,174,126,0)_72%)] opacity-0 transition duration-300 group-hover:opacity-100" />
-                  <div className="relative flex items-center gap-4">
+                  <div className="relative flex min-w-0 items-center gap-4">
                     <UserInitialBadge size="sm" username={result.username} />
-                    <div className="space-y-2">
-                      <p className="text-lg font-semibold text-white">{result.username}</p>
+                    <div className="min-w-0 space-y-2">
+                      <p className="text-lg font-semibold text-white [overflow-wrap:anywhere]">{result.username}</p>
                       <div className="flex flex-wrap gap-2">
                         <MetadataPill>{formatPrivacyStatus(result.privacyStatus)}</MetadataPill>
                         <MetadataPill>{getRelationshipLabel(result)}</MetadataPill>
                       </div>
                     </div>
                   </div>
-                  <span className="relative inline-flex items-center gap-2 text-sm font-medium text-[color:var(--color-accent)]">
+                  <span className="relative inline-flex shrink-0 items-center gap-2 text-sm font-medium text-[color:var(--color-accent)]">
                     Open profile
                     <ArrowUpRight aria-hidden="true" className="size-4" />
                   </span>

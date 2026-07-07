@@ -25,7 +25,7 @@ function HomeLoadingState() {
   return (
     <PageContainer className="relative isolate space-y-12 overflow-hidden pt-6 md:pt-8">
       <BrowsePageAtmosphere variant="hero" />
-      <Skeleton className="-mx-4 h-[72vh] min-h-[34rem] rounded-none sm:-mx-6 lg:-mx-8 xl:-mx-12" />
+      <Skeleton className="-mx-4 h-[72dvh] min-h-[34rem] rounded-none sm:-mx-6 lg:-mx-8 xl:-mx-12" />
       <div className="space-y-4">
         <Skeleton className="h-14 w-full max-w-3xl rounded-[16px]" />
         <div className="flex gap-4 overflow-hidden">
@@ -154,7 +154,7 @@ export function HomePage() {
       <BrowsePageAtmosphere variant="hero" />
 
       {hero ? (
-        <section className="relative min-h-[84vh] overflow-hidden border-b border-white/6">
+        <section className="relative min-h-[84dvh] overflow-hidden border-b border-white/6">
           {hero.backdropPath ? (
             <img
               alt=""
@@ -165,10 +165,10 @@ export function HomePage() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_18%,rgba(47,174,126,0.12),transparent_22%),linear-gradient(180deg,rgba(7,8,8,0.14)_0%,rgba(7,8,8,0.34)_24%,rgba(7,8,8,0.96)_100%)]" />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(10,11,11,0.96)_8%,rgba(10,11,11,0.78)_38%,rgba(10,11,11,0.3)_100%)]" />
 
-          <div className="relative mx-auto flex min-h-[84vh] max-w-[1440px] items-end px-4 pb-18 pt-28 sm:px-6 lg:px-8 xl:px-12">
-            <div className="motion-stagger max-w-3xl space-y-6">
+          <div className="relative mx-auto flex min-h-[84dvh] max-w-[1440px] items-end px-4 pb-18 pt-28 sm:px-6 lg:px-8 xl:px-12">
+            <div className="motion-stagger min-w-0 max-w-3xl space-y-6">
               <div className="space-y-4">
-                <h1 className="font-display text-[3.6rem] leading-[0.92] tracking-[-0.03em] text-white sm:text-[4.7rem] md:text-[5.8rem]">
+                <h1 className="break-words font-display text-[length:clamp(2.5rem,12vw,3.6rem)] leading-[0.92] tracking-[-0.03em] text-white sm:text-[4.7rem] md:text-[5.8rem]">
                   {hero.title}
                 </h1>
                 <p className="line-clamp-3 max-w-2xl text-base leading-8 text-[color:var(--color-text-secondary)] md:text-lg">

@@ -1,4 +1,24 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-  <rect x="14" y="4" width="13" height="19" rx="3" transform="rotate(-7 20.5 13.5)" fill="none" stroke="#2fae7e" stroke-width="2.2" opacity="0.45" />
-  <rect x="5" y="9" width="15" height="21" rx="3.5" transform="rotate(2 12.5 19.5)" fill="#2fae7e" />
+  <rect x="0.5" y="0.5" width="31" height="31" rx="7.5" fill="#0c0d0d" stroke="rgba(255,255,255,0.10)"/>
+  <rect x="14.9" y="4.4" width="2.2" height="3.4" rx="1" fill="#45c793" transform="rotate(0 16 16)"/>
+  <rect x="14.9" y="4.4" width="2.2" height="3.4" rx="1" fill="#45c793" transform="rotate(18 16 16)"/>
+  <rect x="14.9" y="4.4" width="2.2" height="3.4" rx="1" fill="#45c793" transform="rotate(36 16 16)"/>
+  <rect x="14.9" y="4.4" width="2.2" height="3.4" rx="1" fill="#45c793" transform="rotate(54 16 16)"/>
+  <rect x="14.9" y="4.4" width="2.2" height="3.4" rx="1" fill="#45c793" transform="rotate(72 16 16)"/>
+  <rect x="14.9" y="4.4" width="2.2" height="3.4" rx="1" fill="#45c793" transform="rotate(90 16 16)"/>
+  <rect x="14.9" y="4.4" width="2.2" height="3.4" rx="1" fill="#45c793" transform="rotate(108 16 16)"/>
+  <rect x="14.9" y="4.4" width="2.2" height="3.4" rx="1" fill="#45c793" transform="rotate(126 16 16)"/>
+  <rect x="14.9" y="4.4" width="2.2" height="3.4" rx="1" fill="#45c793" transform="rotate(144 16 16)"/>
+  <rect x="14.9" y="4.4" width="2.2" height="3.4" rx="1" fill="#45c793" transform="rotate(162 16 16)"/>
+  <rect x="14.9" y="4.4" width="2.2" height="3.4" rx="1" fill="#45c793" transform="rotate(180 16 16)"/>
+  <rect x="14.9" y="4.4" width="2.2" height="3.4" rx="1" fill="#45c793" transform="rotate(198 16 16)"/>
+  <rect x="14.9" y="4.4" width="2.2" height="3.4" rx="1" fill="#45c793" transform="rotate(216 16 16)"/>
+  <rect x="14.9" y="4.4" width="2.2" height="3.4" rx="1" fill="#45c793" transform="rotate(234 16 16)"/>
+  <rect x="14.9" y="4.4" width="2.2" height="3.4" rx="1" fill="#31383a" transform="rotate(252 16 16)"/>
+  <rect x="14.9" y="4.4" width="2.2" height="3.4" rx="1" fill="#31383a" transform="rotate(270 16 16)"/>
+  <rect x="14.9" y="4.4" width="2.2" height="3.4" rx="1" fill="#31383a" transform="rotate(288 16 16)"/>
+  <rect x="14.9" y="4.4" width="2.2" height="3.4" rx="1" fill="#31383a" transform="rotate(306 16 16)"/>
+  <rect x="14.9" y="4.4" width="2.2" height="3.4" rx="1" fill="#31383a" transform="rotate(324 16 16)"/>
+  <rect x="14.9" y="4.4" width="2.2" height="3.4" rx="1" fill="#31383a" transform="rotate(342 16 16)"/>
+  <path d="M13 11.4 21.4 16 13 20.6Z" fill="#45c793"/>
 </svg>

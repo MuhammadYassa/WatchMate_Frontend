@@ -26,23 +26,25 @@ export function Pagination({
 
   const previousButton = (
     <Button
+      aria-label="Previous page"
       disabled={disabled || page <= 0}
       onClick={() => onPageChange(Math.max(0, page - 1))}
       variant="ghost"
     >
-      <ChevronLeft aria-hidden="true" className="-ml-1 size-4" />
-      Previous
+      <ChevronLeft aria-hidden="true" className="size-4 sm:-ml-1" />
+      <span className="hidden sm:inline">Previous</span>
     </Button>
   )
 
   const nextButton = (
     <Button
+      aria-label="Next page"
       disabled={disabled || page >= totalPages - 1}
       onClick={() => onPageChange(Math.min(totalPages - 1, page + 1))}
       variant="ghost"
     >
-      Next
-      <ChevronRight aria-hidden="true" className="-mr-1 size-4" />
+      <span className="hidden sm:inline">Next</span>
+      <ChevronRight aria-hidden="true" className="size-4 sm:-mr-1" />
     </Button>
   )
 
@@ -54,21 +56,21 @@ export function Pagination({
 
   if (layout === 'split') {
     return (
-      <div className={cn('flex flex-wrap items-center justify-between gap-3', className)}>
+      <nav aria-label="Pagination" className={cn('flex flex-wrap items-center justify-between gap-3', className)}>
         {label}
         <div className="flex gap-3">
           {previousButton}
           {nextButton}
         </div>
-      </div>
+      </nav>
     )
   }
 
   return (
-    <div className={cn('flex items-center justify-between gap-3', className)}>
+    <nav aria-label="Pagination" className={cn('flex items-center justify-between gap-3', className)}>
       {previousButton}
       {label}
       {nextButton}
-    </div>
+    </nav>
   )
 }

@@ -61,7 +61,7 @@ export function MobileNav() {
                       isActive ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0',
                     )}
                   />
-                  <Icon aria-hidden="true" className="size-4 transition duration-300 group-hover:scale-105" />
+                  <Icon aria-hidden="true" className="size-5 transition duration-300 group-hover:scale-105" />
                   <span>{item.label}</span>
                 </>
               )}

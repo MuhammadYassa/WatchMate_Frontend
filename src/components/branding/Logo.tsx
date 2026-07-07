@@ -2,12 +2,22 @@ import { Link } from 'react-router-dom'
 
 import { cn } from '../../utils/cn'
 
+/**
+ * WatchMate mark: a 20-tick progress ring (14 lit, 6 remaining) around a play
+ * wedge. The ring is the brand story — "movies & shows, tracked" — so the lit
+ * arc always starts at 12 o'clock and the open segment sits on the upper left.
+ */
+const TICK_COUNT = 20
+const LIT_TICKS = 14
+
 interface LogoMarkProps {
   size?: number
   className?: string
+  /** 'ring' renders only the tick ring (used by the Spinner). */
+  variant?: 'mark' | 'ring'
 }
 
-export function LogoMark({ size = 28, className }: LogoMarkProps) {
+export function LogoMark({ size = 28, className, variant = 'mark' }: LogoMarkProps) {
   return (
     <svg
       aria-hidden="true"
@@ -18,26 +28,22 @@ export function LogoMark({ size = 28, className }: LogoMarkProps) {
       width={size}
       xmlns="http://www.w3.org/2000/svg"
     >
-      <rect
-        height="19"
-        opacity="0.4"
-        rx="3"
-        stroke="currentColor"
-        strokeWidth="1.9"
-        transform="rotate(-7 20.5 13.5)"
-        width="13"
-        x="14"
-        y="4"
-      />
-      <rect
-        fill="currentColor"
-        height="21"
-        rx="3.5"
-        transform="rotate(2 12.5 19.5)"
-        width="15"
-        x="5"
-        y="9"
-      />
+      {Array.from({ length: TICK_COUNT }, (_, index) => (
+        <rect
+          key={index}
+          fill="currentColor"
+          height="3.8"
+          opacity={index < LIT_TICKS ? 1 : 0.24}
+          rx="1.1"
+          transform={`rotate(${index * (360 / TICK_COUNT)} 16 16)`}
+          width="2.3"
+          x="14.85"
+          y="2.4"
+        />
+      ))}
+      {variant === 'mark' ? (
+        <path d="M12.7 11.2 21.5 16l-8.8 4.8Z" fill="currentColor" />
+      ) : null}
     </svg>
   )
 }
@@ -45,9 +51,9 @@ export function LogoMark({ size = 28, className }: LogoMarkProps) {
 export type LogoSize = 'sm' | 'md' | 'lg'
 
 const SIZE_MAP: Record<LogoSize, { mark: number; text: string; gap: string }> = {
-  sm: { mark: 22, text: 'text-[1.5rem]', gap: 'gap-2.5' },
-  md: { mark: 26, text: 'text-[1.6rem]', gap: 'gap-3' },
-  lg: { mark: 32, text: 'text-[1.85rem]', gap: 'gap-3' },
+  sm: { mark: 24, text: 'text-[1.45rem]', gap: 'gap-2.5' },
+  md: { mark: 28, text: 'text-[1.55rem]', gap: 'gap-3' },
+  lg: { mark: 34, text: 'text-[1.8rem]', gap: 'gap-3' },
 }
 
 interface LogoProps {
@@ -72,9 +78,10 @@ export function Logo({
       <LogoMark size={mark} />
       {showWordmark ? (
         <span
-          className={cn('font-display font-semibold leading-none tracking-[-0.03em]', wordmarkClassName, text)}
+          className={cn('font-display leading-none tracking-[-0.02em]', wordmarkClassName, text)}
         >
-          WatchMate
+          <span className="font-bold">watch</span>
+          <span className="font-normal opacity-[0.66]">mate</span>
         </span>
       ) : null}
     </span>
@@ -82,7 +89,7 @@ export function Logo({
 
   if (to) {
     return (
-      <Link className="inline-flex" to={to}>
+      <Link className="inline-flex rounded-[10px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-border-focus)] focus-visible:ring-offset-4 focus-visible:ring-offset-[color:var(--color-bg)]" to={to}>
         {content}
       </Link>
     )

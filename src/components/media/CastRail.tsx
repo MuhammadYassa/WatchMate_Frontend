@@ -8,7 +8,7 @@ function CastMemberCard({ member }: { member: CastMemberDTO }) {
   const profileUrl = member.profilePath ? getPosterUrl(member.profilePath, 'w185') : null
 
   return (
-    <div className="flex w-[100px] shrink-0 flex-col gap-2">
+    <div className="flex w-[100px] shrink-0 snap-start flex-col gap-2">
       <div className="relative aspect-[2/3] overflow-hidden rounded-[var(--radius-media)] border border-white/10 bg-[rgba(255,255,255,0.05)]">
         {profileUrl && !imgFailed ? (
           <img
@@ -42,7 +42,9 @@ export function CastRail({ cast }: { cast: CastMemberDTO[] }) {
   return (
     <section className="space-y-4">
       <h2 className="text-[15px] font-semibold text-white">Cast</h2>
-      <div className="scrollbar-hide rail-fade-mask flex gap-3 overflow-x-auto pb-2">
+      {/* Bleeds to the viewport edge on phones so a partially visible card
+          signals the rail scrolls; realigned to the column from lg up. */}
+      <div className="scrollbar-hide rail-fade-mask -mx-4 flex snap-x gap-3 overflow-x-auto overscroll-x-contain px-4 pb-2 scroll-pl-4 sm:-mx-6 sm:px-6 sm:scroll-pl-6 lg:mx-0 lg:px-0 lg:scroll-pl-0">
         {cast.map((member) => (
           <CastMemberCard key={member.tmdbPersonId} member={member} />
         ))}

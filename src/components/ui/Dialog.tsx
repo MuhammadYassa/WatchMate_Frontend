@@ -114,14 +114,14 @@ export function Dialog({
         <div className={cn('mx-auto p-6 sm:p-7', SIZE_CLASSES[size], className)}>
           {hasHeader ? (
             <div className="flex items-start justify-between gap-4">
-              <div className="space-y-2.5">
+              <div className="min-w-0 space-y-2.5">
                 {eyebrow ? (
                   <p className="text-[11px] uppercase tracking-[0.3em] text-[color:var(--color-accent-strong)]">
                     {eyebrow}
                   </p>
                 ) : null}
                 {title ? (
-                  <h2 className="font-display text-3xl tracking-[-0.03em] text-white sm:text-4xl">{title}</h2>
+                  <h2 className="break-words font-display text-3xl tracking-[-0.03em] text-white sm:text-4xl">{title}</h2>
                 ) : null}
                 {description ? (
                   <p className="text-sm leading-7 text-[color:var(--color-text-secondary)]">{description}</p>

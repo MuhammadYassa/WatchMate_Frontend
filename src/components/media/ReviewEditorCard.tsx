@@ -39,7 +39,7 @@ function StarRatingPicker({
           <button
             aria-checked={value === star}
             aria-label={`${star} out of 5 stars`}
-            className="group/star flex size-10 items-center justify-center rounded-[10px] transition duration-150 hover:bg-white/[0.05] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-border-focus)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-bg)] active:scale-90 disabled:cursor-not-allowed disabled:opacity-50"
+            className="group/star flex size-11 items-center justify-center rounded-[10px] transition duration-150 hover:bg-white/[0.05] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-border-focus)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-bg)] active:scale-90 disabled:cursor-not-allowed disabled:opacity-50 sm:size-10"
             disabled={disabled}
             key={star}
             onClick={() => onChange(star)}
@@ -147,7 +147,7 @@ export function ReviewEditorCard({
 
   if (activeReview && !isEditing) {
     return (
-      <Card className="space-y-4 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.98)_100%)] p-6">
+      <Card className="space-y-4 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.98)_100%)] p-5 sm:p-6">
         <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(111,209,168,0.22)_50%,rgba(255,255,255,0)_100%)]" />
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-1.5">
@@ -169,7 +169,7 @@ export function ReviewEditorCard({
           </div>
           <button
             aria-label="Edit your review"
-            className="flex size-9 shrink-0 items-center justify-center rounded-[10px] border border-white/10 bg-white/[0.04] text-[color:var(--color-text-tertiary)] transition duration-200 hover:border-white/18 hover:bg-white/[0.08] hover:text-white"
+            className="flex size-11 shrink-0 items-center justify-center rounded-[10px] border border-white/10 bg-white/[0.04] text-[color:var(--color-text-tertiary)] transition duration-200 hover:border-white/18 hover:bg-white/[0.08] hover:text-white active:scale-95 sm:size-9"
             onClick={() => {
               setComment(activeReview.comment)
               setStarRating(activeReview.starRating)
@@ -189,13 +189,13 @@ export function ReviewEditorCard({
   }
 
   return (
-    <Card className="space-y-5 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.98)_100%)] p-6">
+    <Card className="space-y-5 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.98)_100%)] p-5 sm:p-6">
       <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(111,209,168,0.22)_50%,rgba(255,255,255,0)_100%)]" />
       <div className="space-y-2.5">
         <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
           Your review
         </p>
-        <h2 className="font-display text-3xl tracking-[-0.04em] text-white">
+        <h2 className="font-display text-2xl tracking-[-0.04em] text-white sm:text-3xl">
           {activeReview ? 'Update your take.' : 'Write a review'}
         </h2>
         <p className="text-sm leading-7 text-[color:var(--color-text-secondary)]">
@@ -221,8 +221,9 @@ export function ReviewEditorCard({
         </FormField>
       </div>
 
-      <div className="flex flex-wrap gap-3">
+      <div className="grid gap-3 sm:flex sm:flex-wrap">
         <Button
+          className="w-full sm:w-auto"
           disabled={pending || comment.trim().length < 4}
           loading={createMutation.isPending || updateMutation.isPending}
           onClick={() => {
@@ -247,7 +248,7 @@ export function ReviewEditorCard({
         </Button>
 
         {activeReview ? (
-          <>
+          <div className="grid grid-cols-2 gap-3 sm:contents">
             <Button
               disabled={pending}
               onClick={() => {
@@ -269,7 +270,7 @@ export function ReviewEditorCard({
               <Trash2 aria-hidden="true" className="mr-2 size-4" />
               Delete
             </Button>
-          </>
+          </div>
         ) : null}
       </div>
     </Card>

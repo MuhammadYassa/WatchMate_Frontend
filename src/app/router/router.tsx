@@ -3,22 +3,26 @@ import { createBrowserRouter } from 'react-router-dom'
 import { AuthGuardedRoute } from '../../auth/AuthGuardedRoute'
 import { ProtectedRoute } from '../../auth/ProtectedRoute'
 import { AppShell } from '../../components/layout/AppShell'
-import { DiscoverPage } from '../../pages/DiscoverPage'
-import { DashboardPage } from '../../pages/DashboardPage'
-import { FavouritesPage } from '../../pages/FavouritesPage'
-import { HomePage } from '../../pages/HomePage'
-import { LoginPage } from '../../pages/LoginPage'
-import { MovieDetailPage } from '../../pages/MovieDetailPage'
-import { FollowRequestsPage } from '../../pages/FollowRequestsPage'
-import { ProfilePage } from '../../pages/ProfilePage'
-import { ProfileRedirectPage } from '../../pages/ProfileRedirectPage'
-import { RegisterPage } from '../../pages/RegisterPage'
-import { SeasonEpisodesPage } from '../../pages/SeasonEpisodesPage'
-import { SearchPage } from '../../pages/SearchPage'
-import { ShowDetailPage } from '../../pages/ShowDetailPage'
-import { SocialSearchPage } from '../../pages/SocialSearchPage'
-import { VerifyEmailPage } from '../../pages/VerifyEmailPage'
-import { WatchlistsPage } from '../../pages/WatchlistsPage'
+import {
+  DashboardPage,
+  DiscoverPage,
+  FavouritesPage,
+  FollowRequestsPage,
+  HomePage,
+  LoginPage,
+  MovieDetailPage,
+  PrivacyPage,
+  ProfilePage,
+  ProfileRedirectPage,
+  RegisterPage,
+  SearchPage,
+  SeasonEpisodesPage,
+  ShowDetailPage,
+  SocialSearchPage,
+  TermsPage,
+  VerifyEmailPage,
+  WatchlistsPage,
+} from './lazyPages'
 
 export const appRouter = createBrowserRouter([
   {
@@ -40,6 +44,14 @@ export const appRouter = createBrowserRouter([
       {
         element: <VerifyEmailPage />,
         path: '/verify-email',
+      },
+      {
+        element: <TermsPage />,
+        path: '/terms',
+      },
+      {
+        element: <PrivacyPage />,
+        path: '/privacy',
       },
       {
         element: <HomePage />,

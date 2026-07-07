@@ -123,7 +123,7 @@ export function FavouritesPage() {
           <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
             Library
           </p>
-          <h1 className="font-display text-5xl leading-[0.94] tracking-[-0.03em] text-white md:text-6xl xl:text-[4.75rem]">
+          <h1 className="font-display text-[length:clamp(2.3rem,10.5vw,3rem)] leading-[0.98] tracking-[-0.03em] text-white md:text-6xl xl:text-[4.75rem]">
             Your favourites, all in one place.
           </h1>
           <p className="max-w-2xl text-base leading-7 text-[color:var(--color-text-secondary)]">

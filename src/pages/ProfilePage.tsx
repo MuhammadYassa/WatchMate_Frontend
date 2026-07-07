@@ -116,7 +116,7 @@ function ProfileWatchlistPreview({ watchlist }: { watchlist: WatchListDTO }) {
 
         <div className="relative z-10 flex h-full min-h-[18rem] flex-col justify-end p-5">
           <div className="space-y-1.5">
-            <h3 className="font-display text-[2rem] tracking-[-0.04em] text-white">{watchlist.name}</h3>
+            <h3 className="break-words font-display text-[2rem] tracking-[-0.04em] text-white">{watchlist.name}</h3>
             <p className="text-sm text-[color:var(--color-text-secondary)]">
               {watchlist.media.length} saved {watchlist.media.length === 1 ? 'title' : 'titles'}
             </p>
@@ -129,13 +129,13 @@ function ProfileWatchlistPreview({ watchlist }: { watchlist: WatchListDTO }) {
                   <img
                     key={`${watchlist.id}-${item.type}-${item.tmdbId}`}
                     alt=""
-                    className="aspect-[2/3] w-20 rounded-[12px] border border-white/10 object-cover shadow-[0_16px_35px_rgba(0,0,0,0.28)]"
+                    className="aspect-[2/3] w-16 rounded-[12px] border border-white/10 object-cover shadow-[0_16px_35px_rgba(0,0,0,0.28)] sm:w-20"
                     src={getPosterUrl(item.posterPath, 'w342') ?? undefined}
                   />
                 ) : (
                   <PosterPlaceholder
                     key={`${watchlist.id}-${item.type}-${item.tmdbId}`}
-                    className="w-20"
+                    className="w-16 sm:w-20"
                     title={item.title}
                   />
                 ),
@@ -392,9 +392,9 @@ export function ProfilePage() {
             <UserInitialBadge size="xl" username={profile.username} />
           </div>
 
-          <div className="space-y-4">
+          <div className="min-w-0 space-y-4">
             <div className="space-y-2">
-              <h1 className="font-display text-[3.1rem] leading-[0.94] tracking-[-0.03em] text-white md:text-[4.3rem]">
+              <h1 className="font-display text-[length:clamp(2.1rem,10vw,3.1rem)] leading-[0.94] tracking-[-0.03em] text-white [overflow-wrap:anywhere] md:text-[4.3rem]">
                 {profile.username}
               </h1>
               <div className="flex flex-wrap gap-2">

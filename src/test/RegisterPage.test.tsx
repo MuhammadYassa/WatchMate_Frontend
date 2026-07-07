@@ -39,6 +39,11 @@ describe('RegisterPage', () => {
     fireEvent.change(screen.getByPlaceholderText('Repeat your password'), {
       target: { value: 'Password1!' },
     })
+
+    // Sign up stays disabled until the terms checkbox is accepted.
+    expect(screen.getByRole('button', { name: 'Sign up' })).toBeDisabled()
+    fireEvent.click(screen.getByRole('checkbox', { name: /terms of service/i }))
+
     fireEvent.click(screen.getByRole('button', { name: 'Sign up' }))
 
     await waitFor(() => {

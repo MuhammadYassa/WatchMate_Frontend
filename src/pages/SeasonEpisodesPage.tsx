@@ -30,12 +30,12 @@ function SeasonEpisodesLoadingState() {
     <div className="relative isolate overflow-hidden pb-28">
       <section className="relative overflow-hidden border-b border-white/10 bg-[#0d0e11]">
         <BrowsePageAtmosphere variant="hero" />
-        <div className="relative z-10 mx-auto max-w-[1380px] px-4 pb-16 pt-24 sm:px-6 md:pb-20 md:pt-28 lg:px-8 xl:px-12">
-          <div className="grid items-end gap-8 lg:min-h-[30rem] lg:grid-cols-[292px_minmax(0,1fr)]">
+        <div className="relative z-10 mx-auto max-w-[1380px] px-4 pb-10 pt-6 sm:px-6 md:pb-20 md:pt-28 lg:px-8 xl:px-12">
+          <div className="grid grid-cols-[6.75rem_minmax(0,1fr)] items-end gap-4 sm:grid-cols-[8.5rem_minmax(0,1fr)] md:grid-cols-[11rem_minmax(0,1fr)] lg:min-h-[30rem] lg:grid-cols-[292px_minmax(0,1fr)] lg:gap-8">
             <SkeletonPoster />
-            <div className="space-y-5">
-              <Skeleton className="h-9 w-32 rounded-[14px]" />
-              <Skeleton className="h-20 w-full max-w-3xl rounded-[var(--radius-panel)]" />
+            <div className="min-w-0 space-y-4 lg:space-y-5">
+              <Skeleton className="hidden h-9 w-32 rounded-[14px] lg:block" />
+              <Skeleton className="h-12 w-full max-w-3xl rounded-[var(--radius-panel)] lg:h-20" />
               <SkeletonText />
             </div>
           </div>
@@ -174,10 +174,10 @@ export function SeasonEpisodesPage() {
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,8,11,0.24)_0%,rgba(7,8,11,0.84)_58%,rgba(7,8,11,0.98)_100%)] lg:bg-[linear-gradient(90deg,rgba(7,8,11,0.98)_14%,rgba(7,8,11,0.86)_52%,rgba(7,8,11,0.52)_100%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(47,174,126,0.14)_0%,rgba(47,174,126,0)_34%)]" />
 
-        <div className="relative z-10 mx-auto max-w-[1380px] px-4 pb-16 pt-24 sm:px-6 md:pb-20 md:pt-28 lg:px-8 xl:px-12">
-          <div className="flex flex-wrap items-center justify-between gap-3 pb-6">
+        <div className="relative z-10 mx-auto max-w-[1380px] px-4 pb-10 pt-6 sm:px-6 md:pb-20 md:pt-28 lg:px-8 xl:px-12">
+          <div className="flex flex-wrap items-center justify-between gap-3 pb-5 md:pb-6">
             <Link
-              className="inline-flex items-center gap-2 text-sm text-[color:var(--color-accent)] transition hover:text-white"
+              className="inline-flex min-h-11 items-center gap-2 text-sm text-[color:var(--color-accent)] transition hover:text-white"
               to={`/shows/${parsedTmdbId}`}
             >
               <ArrowLeft aria-hidden="true" className="size-4" />
@@ -186,9 +186,9 @@ export function SeasonEpisodesPage() {
             <GenrePill>{parsedSeasonNumber === 0 ? 'Specials' : seasonLabel}</GenrePill>
           </div>
 
-          <div className="grid items-end gap-8 lg:min-h-[30rem] lg:grid-cols-[292px_minmax(0,1fr)] xl:grid-cols-[336px_minmax(0,1fr)]">
-            <div className="w-full max-w-[280px] lg:max-w-none">
-              <div className="motion-poster relative overflow-hidden rounded-[var(--radius-panel)] border border-white/12 bg-[rgba(255,255,255,0.04)] shadow-[0_30px_80px_rgba(0,0,0,0.42)]">
+          <div className="grid grid-cols-[6.75rem_minmax(0,1fr)] items-end gap-x-4 gap-y-5 sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:gap-x-6 md:grid-cols-[11rem_minmax(0,1fr)] lg:min-h-[30rem] lg:grid-cols-[292px_minmax(0,1fr)] lg:content-end lg:gap-x-8 lg:gap-y-6 xl:grid-cols-[336px_minmax(0,1fr)]">
+            <div className="w-full lg:row-span-2">
+              <div className="motion-poster relative overflow-hidden rounded-[var(--radius-panel)] border border-white/12 bg-[rgba(255,255,255,0.04)] shadow-[0_18px_44px_rgba(0,0,0,0.38)] lg:shadow-[0_30px_80px_rgba(0,0,0,0.42)]">
                 {hasImagePath(posterPath) ? (
                   <img
                     alt={`${seasonName} poster`}
@@ -201,45 +201,45 @@ export function SeasonEpisodesPage() {
               </div>
             </div>
 
-            <div className="space-y-6 pb-2">
-              <div className="space-y-4">
-                <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
-                  {seasonLabel}
-                </p>
-                <h1 className="font-display text-5xl leading-[0.92] tracking-[-0.03em] text-white md:text-6xl xl:text-[5rem]">
-                  {seasonName}
-                </h1>
-                <p className="max-w-3xl text-sm leading-7 text-[color:var(--color-text-secondary)] md:text-base">
-                  {seasonOverview || 'No season overview is available yet.'}
-                </p>
-              </div>
+            <div className="min-w-0 space-y-2 self-end lg:space-y-4">
+              <p className="text-[10px] uppercase tracking-[0.24em] text-[color:var(--color-accent-strong)] sm:text-[11px] sm:tracking-[0.32em]">
+                {seasonLabel}
+              </p>
+              <h1 className="break-words font-display text-[length:clamp(1.55rem,6.8vw,2.1rem)] leading-[1.04] tracking-[-0.03em] text-white md:text-6xl md:leading-[0.94] xl:text-[5rem]">
+                {seasonName}
+              </h1>
+              <p className="hidden max-w-3xl text-sm leading-7 text-[color:var(--color-text-secondary)] md:block md:text-base">
+                {seasonOverview || 'No season overview is available yet.'}
+              </p>
+            </div>
 
-              <div className="flex flex-wrap gap-2.5">
+            <div className="col-span-2 min-w-0 space-y-4 lg:col-span-1 lg:col-start-2 lg:space-y-6 lg:pb-2">
+              <div className="flex flex-wrap gap-2 lg:gap-2.5">
                 <GenrePill>{episodeCount} episodes</GenrePill>
                 <GenrePill>{formatDisplayDate(airDate)}</GenrePill>
                 {parsedSeasonNumber === 0 ? <GenrePill>Special collection</GenrePill> : null}
               </div>
 
-              <div className="grid gap-3 sm:grid-cols-3">
-                <div className="rounded-[var(--radius-panel)] border border-white/10 bg-white/[0.03] p-4">
-                  <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-text-tertiary)]">
+              <div className="grid gap-2 sm:grid-cols-3 sm:gap-3">
+                <div className="flex items-center justify-between gap-3 rounded-[var(--radius-panel)] border border-white/10 bg-white/[0.03] px-3.5 py-2.5 sm:block sm:p-4">
+                  <p className="text-[11px] uppercase tracking-[0.18em] text-[color:var(--color-text-tertiary)] sm:tracking-[0.28em]">
                     Watched
                   </p>
-                  <p className="mt-3 text-sm text-white">
+                  <p className="text-sm text-white sm:mt-3">
                     {watchedEpisodes} of {episodes.length}
                   </p>
                 </div>
-                <div className="rounded-[var(--radius-panel)] border border-white/10 bg-white/[0.03] p-4">
-                  <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-text-tertiary)]">
+                <div className="flex items-center justify-between gap-3 rounded-[var(--radius-panel)] border border-white/10 bg-white/[0.03] px-3.5 py-2.5 sm:block sm:p-4">
+                  <p className="text-[11px] uppercase tracking-[0.18em] text-[color:var(--color-text-tertiary)] sm:tracking-[0.28em]">
                     Aired now
                   </p>
-                  <p className="mt-3 text-sm text-white">{airedEpisodes} available</p>
+                  <p className="text-sm text-white sm:mt-3">{airedEpisodes} available</p>
                 </div>
-                <div className="rounded-[var(--radius-panel)] border border-white/10 bg-white/[0.03] p-4">
-                  <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-text-tertiary)]">
+                <div className="flex items-center justify-between gap-3 rounded-[var(--radius-panel)] border border-white/10 bg-white/[0.03] px-3.5 py-2.5 sm:block sm:p-4">
+                  <p className="text-[11px] uppercase tracking-[0.18em] text-[color:var(--color-text-tertiary)] sm:tracking-[0.28em]">
                     Runtime
                   </p>
-                  <p className="mt-3 inline-flex items-center gap-2 text-sm text-white">
+                  <p className="inline-flex items-center gap-2 text-sm text-white sm:mt-3">
                     <Clock3 aria-hidden="true" className="size-4 text-[color:var(--color-warning)]" />
                     {runtimeMinutes > 0 ? `${runtimeMinutes}m total` : 'Unavailable'}
                   </p>

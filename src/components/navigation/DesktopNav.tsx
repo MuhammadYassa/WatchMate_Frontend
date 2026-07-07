@@ -12,11 +12,13 @@
   UserRound,
   Users,
 } from 'lucide-react'
-import { NavLink, useLocation, useNavigate } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 
 import { useAuthStore } from '../../auth/authStore'
+import { useLogout } from '../../auth/useLogout'
 import { cn } from '../../utils/cn'
 import { Logo } from '../branding/Logo'
+import { Spinner } from '../feedback/Spinner'
 import { getButtonClassName } from '../ui/buttonStyles'
 import type { ShellMode } from '../layout/shellMode'
 import { getShellMode } from '../layout/shellMode'
@@ -42,19 +44,20 @@ const iconMap = {
   users: Users,
 }
 
+// Icons for the top-bar utility links, which collapse to icon-only below lg.
+const utilityIconMap: Record<string, typeof LayoutDashboard> = {
+  Dashboard: LayoutDashboard,
+  Favourites: Heart,
+  Watchlists: Bookmark,
+}
+
 export function DesktopNav({ mode }: { mode?: ShellMode }) {
   const location = useLocation()
-  const navigate = useNavigate()
   const username = useAuthStore((state) => state.username)
   const isAuthenticated = useAuthStore((state) => Boolean(state.accessToken))
-  const clearAuth = useAuthStore((state) => state.clearAuth)
+  const { isLoggingOut, logout } = useLogout()
   const shellMode = mode ?? getShellMode(location.pathname)
   const browseNavItems = isAuthenticated && username ? privateDesktopBrowseNavItems : publicDesktopNavItems
-
-  function handleLogout() {
-    clearAuth()
-    navigate('/')
-  }
 
   if (shellMode === 'side-rail' && isAuthenticated && username) {
     return (
@@ -143,10 +146,11 @@ export function DesktopNav({ mode }: { mode?: ShellMode }) {
           </NavLink>
           <button
             className={getButtonClassName('ghost', 'w-full justify-start gap-2 px-4')}
-            onClick={handleLogout}
+            disabled={isLoggingOut}
+            onClick={() => void logout()}
             type="button"
           >
-            <LogOut aria-hidden="true" className="size-4" />
+            {isLoggingOut ? <Spinner className="text-current" size="sm" /> : <LogOut aria-hidden="true" className="size-4" />}
             Log out
           </button>
         </div>
@@ -156,15 +160,21 @@ export function DesktopNav({ mode }: { mode?: ShellMode }) {
 
   return (
     <header className="sticky top-0 z-40 hidden border-b border-white/8 bg-[rgba(12,13,13,0.80)] backdrop-blur-xl md:block">
-      <div className="mx-auto flex w-full max-w-[1320px] items-center justify-between gap-6 px-6 py-4 xl:px-12">
-        <Logo size="lg" to={isAuthenticated ? '/home' : '/'} />
-        <nav className="flex items-center gap-1.5">
+      <div className="mx-auto flex w-full max-w-[1320px] items-center justify-between gap-3 px-5 py-4 lg:px-6 xl:gap-6 xl:px-12">
+        {/* Tablet widths (768-1024) get the md logo; the lg lockup returns at lg. */}
+        <span className="lg:hidden">
+          <Logo size="md" to={isAuthenticated ? '/home' : '/'} />
+        </span>
+        <span className="hidden lg:block">
+          <Logo size="lg" to={isAuthenticated ? '/home' : '/'} />
+        </span>
+        <nav className="flex items-center gap-1 lg:gap-1.5">
           {browseNavItems.map((item) => (
             <NavLink
               key={item.to}
               className={({ isActive }) =>
                 cn(
-                  'rounded-[12px] border border-transparent px-3.5 py-2.5 text-sm text-[color:var(--color-text-secondary)] transition duration-300 hover:bg-white/[0.04] hover:text-white',
+                  'rounded-[12px] border border-transparent px-2.5 py-2.5 text-sm text-[color:var(--color-text-secondary)] transition duration-300 hover:bg-white/[0.04] hover:text-white lg:px-3.5',
                   isActive
                     ? 'border-white/8 bg-[rgba(47,174,126,0.08)] text-white shadow-[0_0_0_1px_rgba(47,174,126,0.08)_inset]'
                     : '',
@@ -176,35 +186,46 @@ export function DesktopNav({ mode }: { mode?: ShellMode }) {
             </NavLink>
           ))}
         </nav>
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-1.5 lg:gap-2.5">
           {isAuthenticated && username ? (
             <>
               <nav className="flex items-center gap-1">
-                {privateDesktopUtilityNavItems.map((item) => (
-                  <NavLink
-                    key={item.to}
-                    className={({ isActive }) =>
-                      cn(
-                        'rounded-[12px] border border-transparent px-3 py-2 text-xs uppercase tracking-[0.18em] text-[color:var(--color-text-tertiary)] transition duration-300 hover:text-white',
-                        isActive ? 'border-white/8 bg-white/[0.05] text-[color:var(--color-accent)]' : '',
-                      )
-                    }
-                    to={item.to}
-                  >
-                    {item.label}
-                  </NavLink>
-                ))}
+                {privateDesktopUtilityNavItems.map((item) => {
+                  const Icon = utilityIconMap[item.label] ?? LayoutDashboard
+
+                  return (
+                    <NavLink
+                      aria-label={item.label}
+                      key={item.to}
+                      className={({ isActive }) =>
+                        cn(
+                          'flex min-h-10 items-center justify-center rounded-[12px] border border-transparent px-2.5 py-2 text-xs uppercase tracking-[0.18em] text-[color:var(--color-text-tertiary)] transition duration-300 hover:text-white lg:px-3',
+                          isActive ? 'border-white/8 bg-white/[0.05] text-[color:var(--color-accent)]' : '',
+                        )
+                      }
+                      title={item.label}
+                      to={item.to}
+                    >
+                      <Icon aria-hidden="true" className="size-4 lg:hidden" />
+                      <span className="hidden lg:inline">{item.label}</span>
+                    </NavLink>
+                  )
+                })}
               </nav>
-              <NavLink className={getButtonClassName('secondary', 'min-h-10 px-4 py-2')} to="/profile">
-                {username}
+              <NavLink
+                className={getButtonClassName('secondary', 'min-h-10 max-w-[8.5rem] px-3 py-2 lg:px-4 xl:max-w-none')}
+                to="/profile"
+              >
+                <span className="truncate">{username}</span>
               </NavLink>
               <button
                 aria-label="Log out"
                 className={getButtonClassName('ghost', 'min-h-10 px-3 py-2')}
-                onClick={handleLogout}
+                disabled={isLoggingOut}
+                onClick={() => void logout()}
                 type="button"
               >
-                <LogOut aria-hidden="true" className="size-4" />
+                {isLoggingOut ? <Spinner className="text-current" size="sm" /> : <LogOut aria-hidden="true" className="size-4" />}
               </button>
             </>
           ) : (

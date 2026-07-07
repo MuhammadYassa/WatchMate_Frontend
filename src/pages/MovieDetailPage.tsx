@@ -40,21 +40,21 @@ function MovieDetailLoadingState() {
     <div className="relative isolate overflow-hidden pb-28">
       <section className="relative overflow-hidden border-b border-white/10 bg-[#0d0e11]">
         <BrowsePageAtmosphere variant="hero" />
-        <div className="relative z-10 mx-auto max-w-[1380px] px-4 pb-16 pt-24 sm:px-6 md:pb-20 md:pt-28 lg:px-8 xl:px-12">
-          <div className="grid items-end gap-8 lg:min-h-[38rem] lg:grid-cols-[292px_minmax(0,1fr)] xl:grid-cols-[336px_minmax(0,1fr)]">
+        <div className="relative z-10 mx-auto max-w-[1380px] px-4 pb-10 pt-8 sm:px-6 md:pb-20 md:pt-28 lg:px-8 xl:px-12">
+          <div className="grid grid-cols-[6.75rem_minmax(0,1fr)] items-end gap-4 sm:grid-cols-[8.5rem_minmax(0,1fr)] md:grid-cols-[11rem_minmax(0,1fr)] lg:min-h-[38rem] lg:grid-cols-[292px_minmax(0,1fr)] lg:gap-8 xl:grid-cols-[336px_minmax(0,1fr)]">
             <SkeletonPoster />
-            <div className="space-y-5">
-              <div className="flex flex-wrap gap-2">
+            <div className="min-w-0 space-y-4 lg:space-y-5">
+              <div className="hidden flex-wrap gap-2 lg:flex">
                 <Skeleton className="h-9 w-28 rounded-[14px]" />
                 <Skeleton className="h-9 w-24 rounded-[14px]" />
               </div>
-              <Skeleton className="h-20 w-full max-w-3xl rounded-[var(--radius-panel)]" />
+              <Skeleton className="h-12 w-full max-w-3xl rounded-[var(--radius-panel)] lg:h-20" />
               <SkeletonText />
-              <div className="flex flex-wrap gap-3">
-                <Skeleton className="h-10 w-28 rounded-[14px]" />
-                <Skeleton className="h-10 w-28 rounded-[14px]" />
-                <Skeleton className="h-10 w-28 rounded-[14px]" />
-              </div>
+            </div>
+            <div className="col-span-2 flex flex-wrap gap-2 lg:col-span-1 lg:col-start-2 lg:gap-3">
+              <Skeleton className="h-9 w-24 rounded-[14px] lg:h-10 lg:w-28" />
+              <Skeleton className="h-9 w-24 rounded-[14px] lg:h-10 lg:w-28" />
+              <Skeleton className="h-9 w-24 rounded-[14px] lg:h-10 lg:w-28" />
             </div>
           </div>
         </div>
@@ -212,15 +212,18 @@ export function MovieDetailPage() {
       />
 
       <PageContainer className="relative z-10 -mt-10 space-y-8 pt-0 md:-mt-14">
-        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px] 2xl:grid-cols-[minmax(0,1fr)_380px]">
-          <div className="space-y-6">
-            <Card className="space-y-6 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.9)_0%,rgba(11,12,16,0.98)_100%)] p-6 shadow-[0_26px_70px_rgba(0,0,0,0.32)]">
+        {/* On phones both column wrappers flatten (display: contents) so every
+            section joins one ordered stack: actions first, reviews last. At xl
+            the wrappers become real columns again and order resets to DOM flow. */}
+        <div className="grid grid-cols-1 gap-5 sm:gap-6 xl:grid-cols-[minmax(0,1fr)_360px] 2xl:grid-cols-[minmax(0,1fr)_380px]">
+          <div className="contents xl:block xl:space-y-6">
+            <Card className="order-2 space-y-5 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.9)_0%,rgba(11,12,16,0.98)_100%)] p-5 shadow-[0_26px_70px_rgba(0,0,0,0.32)] sm:space-y-6 sm:p-6">
               <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(111,209,168,0.24)_50%,rgba(255,255,255,0)_100%)]" />
               <SectionHeader eyebrow="Overview" title="What to expect" />
               <p className="max-w-4xl text-sm leading-7 text-[color:var(--color-text-secondary)]">
                 {movie.overview || 'No overview is available for this movie yet.'}
               </p>
-              <div className="grid gap-4 sm:grid-cols-2">
+              <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
                 <div className="rounded-[var(--radius-panel)] border border-white/10 bg-white/[0.03] p-4">
                   <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-text-tertiary)]">
                     Release date
@@ -242,39 +245,53 @@ export function MovieDetailPage() {
               </div>
             </Card>
 
-            <CastRail cast={movie.cast} />
+            <div className="order-3 min-w-0">
+              <CastRail cast={movie.cast} />
+            </div>
 
             {isAuthenticated ? (
-              <ReviewEditorCard
-                detailQueryKey={detailQueryKey}
-                existingReview={ownReview}
-                key={`movie-review-${movie.tmdbId}-${ownReview?.reviewId ?? 'new'}`}
-                mediaType={movie.type}
-                reviewQueryKey={reviewsQueryKey}
-                tmdbId={movie.tmdbId}
-              />
+              <div className="order-6">
+                <ReviewEditorCard
+                  detailQueryKey={detailQueryKey}
+                  existingReview={ownReview}
+                  key={`movie-review-${movie.tmdbId}-${ownReview?.reviewId ?? 'new'}`}
+                  mediaType={movie.type}
+                  reviewQueryKey={reviewsQueryKey}
+                  tmdbId={movie.tmdbId}
+                />
+              </div>
             ) : null}
 
-            <ReviewList reviews={reviews} />
+            <div className="order-7 min-w-0">
+              <ReviewList reviews={reviews} />
+            </div>
           </div>
 
-          <div className="space-y-6">
-            {isAuthenticated ? (
-              <MediaActionsPanel
-                isFavourited={movie.isFavourited}
-                mediaType={movie.type}
-                onOpenWatchlists={() => setWatchlistDialogOpen(true)}
-                onSubmitStatus={(status) => statusMutation.mutateAsync(status)}
-                onToggleFavourite={() => favouriteMutation.mutateAsync()}
-                pending={actionPending}
-                watchStatus={movie.watchStatus}
-              />
-            ) : (
-              <ActionPrompt isAuthenticated={isAuthenticated} returnTo={`/movies/${movie.tmdbId}`} />
-            )}
+          <div className="contents xl:block xl:space-y-6">
+            <div className="order-1 xl:sticky xl:top-28">
+              {isAuthenticated ? (
+                <MediaActionsPanel
+                  isFavourited={movie.isFavourited}
+                  mediaType={movie.type}
+                  onOpenWatchlists={() => setWatchlistDialogOpen(true)}
+                  onSubmitStatus={(status) => statusMutation.mutateAsync(status)}
+                  onToggleFavourite={() => favouriteMutation.mutateAsync()}
+                  pending={actionPending}
+                  watchStatus={movie.watchStatus}
+                />
+              ) : (
+                <ActionPrompt isAuthenticated={isAuthenticated} returnTo={`/movies/${movie.tmdbId}`} />
+              )}
+            </div>
 
-            {movie.bestTrailer ? <TrailerCard trailer={movie.bestTrailer} /> : null}
-            <WatchProvidersCard watchProviders={movie.watchProviders} />
+            {movie.bestTrailer ? (
+              <div className="order-4">
+                <TrailerCard trailer={movie.bestTrailer} />
+              </div>
+            ) : null}
+            <div className="order-5">
+              <WatchProvidersCard watchProviders={movie.watchProviders} />
+            </div>
           </div>
         </div>
 

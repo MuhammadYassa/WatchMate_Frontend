@@ -1,4 +1,4 @@
-import { ArrowRight, Eye, EyeOff, LockKeyhole, User } from 'lucide-react'
+import { ArrowRight, LockKeyhole, User } from 'lucide-react'
 import { useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
@@ -13,14 +13,17 @@ import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import { FormField } from '../components/ui/FormField'
 import { Input } from '../components/ui/Input'
+import { PasswordInput } from '../components/ui/PasswordInput'
 import { ApiClientError } from '../types/errors'
 
+// The backend returns the same AUTH_FAILED code for bad credentials and
+// unverified accounts, so this message must not speculate about verification.
 function getFriendlyLoginError(error: ApiClientError | null) {
   if (!error) {
     return null
   }
 
-  return "That username or password didn't work. You can also request a new verification email if needed."
+  return 'Incorrect username or password.'
 }
 
 export function LoginPage() {
@@ -29,7 +32,6 @@ export function LoginPage() {
   const setAuth = useAuthStore((state) => state.setAuth)
   const { pushToast } = useToast()
   const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
   const [username, setUsername] = useState('')
 
   const returnTo = new URLSearchParams(location.search).get('returnTo') ?? '/home'
@@ -61,11 +63,12 @@ export function LoginPage() {
           </p>
         </section>
 
-        <Card className="motion-scale-in w-full max-w-xl justify-self-center p-6 md:p-8 lg:justify-self-end xl:p-10">
+        <div className="w-full max-w-xl justify-self-center lg:justify-self-end">
+          <Card className="motion-scale-in w-full p-6 md:p-8 xl:p-10">
           <div className="space-y-7">
             <div className="space-y-2">
               <Logo className="mb-3 lg:hidden" size="md" />
-              <h1 className="font-display text-5xl tracking-[-0.03em] text-white md:text-6xl">
+              <h1 className="font-display text-[length:clamp(2.4rem,10.5vw,3rem)] tracking-[-0.03em] text-white md:text-6xl">
                 Welcome back.
               </h1>
               <p className="text-sm leading-7 text-[color:var(--color-text-secondary)]">
@@ -99,37 +102,15 @@ export function LoginPage() {
                   />
                 </div>
               </FormField>
-              <FormField
-                label="Password"
-                trailing={
-                  <button
-                    aria-label={showPassword ? 'Hide password' : 'Show password'}
-                    aria-pressed={showPassword}
-                    className="-m-2 flex items-center rounded-[8px] p-2 text-[color:var(--color-text-tertiary)] transition hover:text-white"
-                    onClick={() => setShowPassword((current) => !current)}
-                    type="button"
-                  >
-                    {showPassword
-                      ? <EyeOff aria-hidden="true" className="size-4" />
-                      : <Eye aria-hidden="true" className="size-4" />}
-                  </button>
-                }
-              >
-                <div className="relative">
-                  <LockKeyhole
-                    aria-hidden="true"
-                    className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-[color:var(--color-text-tertiary)]"
-                  />
-                  <Input
-                    autoComplete="current-password"
-                    className="pl-11"
-                    onChange={(event) => setPassword(event.target.value)}
-                    placeholder="Enter your password"
-                    required
-                    type={showPassword ? 'text' : 'password'}
-                    value={password}
-                  />
-                </div>
+              <FormField label="Password">
+                <PasswordInput
+                  autoComplete="current-password"
+                  leadingIcon={<LockKeyhole className="size-4" />}
+                  onChange={(event) => setPassword(event.target.value)}
+                  placeholder="Enter your password"
+                  required
+                  value={password}
+                />
               </FormField>
 
               {error ? (
@@ -147,22 +128,23 @@ export function LoginPage() {
               </Button>
             </form>
 
-            <div className="space-y-3 border-t border-white/10 pt-6 text-center text-sm text-[color:var(--color-text-tertiary)]">
-              <p>
-                Need a new verification email?{' '}
-                <Link className="text-[color:var(--color-accent-strong)] hover:text-white" to="/verify-email">
-                  Verify your account
-                </Link>
-              </p>
-              <p>
-                Don&apos;t have an account yet?{' '}
-                <Link className="text-[color:var(--color-accent-strong)] hover:text-white" to="/register">
-                  Sign up
-                </Link>
-              </p>
-            </div>
+            <p className="border-t border-white/10 pt-6 text-center text-sm text-[color:var(--color-text-tertiary)]">
+              Don&apos;t have an account yet?{' '}
+              <Link className="text-[color:var(--color-accent-strong)] hover:text-white" to="/register">
+                Sign up
+              </Link>
+            </p>
           </div>
-        </Card>
+          </Card>
+
+          {/* Account help lives outside the card so it never competes with the login flow. */}
+          <p className="mt-5 text-center text-sm text-[color:var(--color-text-tertiary)]">
+            Waiting on a verification email?{' '}
+            <Link className="text-[color:var(--color-accent-strong)] transition hover:text-white" to="/verify-email">
+              Resend it
+            </Link>
+          </p>
+        </div>
       </div>
     </PageContainer>
   )

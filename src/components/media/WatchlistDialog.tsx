@@ -156,8 +156,8 @@ export function WatchlistDialog({
                   className="flex flex-col gap-4 border-white/10 bg-[rgba(255,255,255,0.03)] p-4 sm:flex-row sm:items-center sm:justify-between"
                   key={watchlist.id}
                 >
-                  <div>
-                    <p className="text-sm font-semibold text-white">{watchlist.name}</p>
+                  <div className="min-w-0">
+                    <p className="break-words text-sm font-semibold text-white">{watchlist.name}</p>
                     <p className="text-xs text-[color:var(--color-text-tertiary)]">
                       {watchlist.media.length} saved {watchlist.media.length === 1 ? 'title' : 'titles'}
                     </p>

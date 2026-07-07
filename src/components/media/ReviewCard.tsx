@@ -9,14 +9,14 @@ function getInitial(username: string) {
 
 export function ReviewCard({ review }: { review: ReviewResponseDTO }) {
   return (
-    <div className="space-y-4 rounded-[var(--radius-panel)] border border-white/[0.07] bg-[color:var(--color-surface-1)] p-5">
+    <div className="space-y-3.5 rounded-[var(--radius-panel)] border border-white/[0.07] bg-[color:var(--color-surface-1)] p-4 sm:space-y-4 sm:p-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="flex size-11 items-center justify-center rounded-[var(--radius-control)] border border-white/[0.08] bg-[rgba(47,174,126,0.07)] text-sm font-semibold text-[color:var(--color-accent)]">
+        <div className="flex min-w-0 items-center gap-3">
+          <div className="flex size-11 shrink-0 items-center justify-center rounded-[var(--radius-control)] border border-white/[0.08] bg-[rgba(47,174,126,0.07)] text-sm font-semibold text-[color:var(--color-accent)]">
             {getInitial(review.username)}
           </div>
-          <div>
-            <p className="text-sm font-semibold text-white">{review.username}</p>
+          <div className="min-w-0">
+            <p className="text-sm font-semibold text-white [overflow-wrap:anywhere]">{review.username}</p>
             <p className="text-xs text-[color:var(--color-text-tertiary)]">
               {formatDisplayDate(review.updatedAt || review.postedAt)}
             </p>
@@ -27,7 +27,7 @@ export function ReviewCard({ review }: { review: ReviewResponseDTO }) {
           {review.starRating.toFixed(1)}
         </div>
       </div>
-      <p className="text-sm leading-7 text-[color:var(--color-text-secondary)]">{review.comment}</p>
+      <p className="break-words text-sm leading-7 text-[color:var(--color-text-secondary)]">{review.comment}</p>
     </div>
   )
 }

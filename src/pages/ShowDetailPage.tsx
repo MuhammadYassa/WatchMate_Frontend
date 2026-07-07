@@ -51,21 +51,21 @@ function ShowDetailLoadingState() {
     <div className="relative isolate overflow-hidden pb-28">
       <section className="relative overflow-hidden border-b border-white/10 bg-[#0d0e11]">
         <BrowsePageAtmosphere variant="hero" />
-        <div className="relative z-10 mx-auto max-w-[1380px] px-4 pb-16 pt-24 sm:px-6 md:pb-20 md:pt-28 lg:px-8 xl:px-12">
-          <div className="grid items-end gap-8 lg:min-h-[38rem] lg:grid-cols-[292px_minmax(0,1fr)] xl:grid-cols-[336px_minmax(0,1fr)]">
+        <div className="relative z-10 mx-auto max-w-[1380px] px-4 pb-10 pt-8 sm:px-6 md:pb-20 md:pt-28 lg:px-8 xl:px-12">
+          <div className="grid grid-cols-[6.75rem_minmax(0,1fr)] items-end gap-4 sm:grid-cols-[8.5rem_minmax(0,1fr)] md:grid-cols-[11rem_minmax(0,1fr)] lg:min-h-[38rem] lg:grid-cols-[292px_minmax(0,1fr)] lg:gap-8 xl:grid-cols-[336px_minmax(0,1fr)]">
             <SkeletonPoster />
-            <div className="space-y-5">
-              <div className="flex flex-wrap gap-2">
+            <div className="min-w-0 space-y-4 lg:space-y-5">
+              <div className="hidden flex-wrap gap-2 lg:flex">
                 <Skeleton className="h-9 w-28 rounded-[14px]" />
                 <Skeleton className="h-9 w-24 rounded-[14px]" />
               </div>
-              <Skeleton className="h-20 w-full max-w-3xl rounded-[var(--radius-panel)]" />
+              <Skeleton className="h-12 w-full max-w-3xl rounded-[var(--radius-panel)] lg:h-20" />
               <SkeletonText />
-              <div className="flex flex-wrap gap-3">
-                <Skeleton className="h-10 w-28 rounded-[14px]" />
-                <Skeleton className="h-10 w-28 rounded-[14px]" />
-                <Skeleton className="h-10 w-28 rounded-[14px]" />
-              </div>
+            </div>
+            <div className="col-span-2 flex flex-wrap gap-2 lg:col-span-1 lg:col-start-2 lg:gap-3">
+              <Skeleton className="h-9 w-24 rounded-[14px] lg:h-10 lg:w-28" />
+              <Skeleton className="h-9 w-24 rounded-[14px] lg:h-10 lg:w-28" />
+              <Skeleton className="h-9 w-24 rounded-[14px] lg:h-10 lg:w-28" />
             </div>
           </div>
         </div>
@@ -305,46 +305,50 @@ export function ShowDetailPage() {
       />
 
       <PageContainer className="relative z-10 -mt-10 space-y-8 pt-0 md:-mt-14">
-        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_380px] 2xl:grid-cols-[minmax(0,1fr)_400px]">
-          <div className="space-y-6">
-            <Card className="space-y-6 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.9)_0%,rgba(11,12,16,0.98)_100%)] p-6 shadow-[0_26px_70px_rgba(0,0,0,0.32)]">
+        {/* On phones both column wrappers flatten (display: contents) so every
+            section joins one ordered stack: actions → overview → tracking →
+            next episode → seasons → cast → trailer → providers → reviews.
+            At xl the wrappers become real columns again and DOM order rules. */}
+        <div className="grid grid-cols-1 gap-5 sm:gap-6 xl:grid-cols-[minmax(0,1fr)_380px] 2xl:grid-cols-[minmax(0,1fr)_400px]">
+          <div className="contents xl:block xl:space-y-6">
+            <Card className="order-2 space-y-5 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.9)_0%,rgba(11,12,16,0.98)_100%)] p-5 shadow-[0_26px_70px_rgba(0,0,0,0.32)] sm:space-y-6 sm:p-6">
               <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(111,209,168,0.24)_50%,rgba(255,255,255,0)_100%)]" />
               <SectionHeader eyebrow="Overview" title="What this show is about" />
               <p className="max-w-4xl text-sm leading-7 text-[color:var(--color-text-secondary)]">
                 {show.overview || 'No overview is available for this show yet.'}
               </p>
-              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                <div className="rounded-[var(--radius-panel)] border border-white/10 bg-white/[0.03] p-4">
-                  <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-text-tertiary)]">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
+                <div className="rounded-[var(--radius-panel)] border border-white/10 bg-white/[0.03] p-3.5 sm:p-4">
+                  <p className="text-[11px] uppercase tracking-[0.18em] text-[color:var(--color-text-tertiary)] sm:tracking-[0.28em]">
                     First aired
                   </p>
-                  <p className="mt-3 text-sm text-white">{formatDisplayDate(show.firstAirDate)}</p>
+                  <p className="mt-2.5 text-sm text-white sm:mt-3">{formatDisplayDate(show.firstAirDate)}</p>
                 </div>
-                <div className="rounded-[var(--radius-panel)] border border-white/10 bg-white/[0.03] p-4">
-                  <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-text-tertiary)]">
+                <div className="rounded-[var(--radius-panel)] border border-white/10 bg-white/[0.03] p-3.5 sm:p-4">
+                  <p className="text-[11px] uppercase tracking-[0.18em] text-[color:var(--color-text-tertiary)] sm:tracking-[0.28em]">
                     Last aired
                   </p>
-                  <p className="mt-3 text-sm text-white">{formatDisplayDate(show.lastAirDate)}</p>
+                  <p className="mt-2.5 text-sm text-white sm:mt-3">{formatDisplayDate(show.lastAirDate)}</p>
                 </div>
-                <div className="rounded-[var(--radius-panel)] border border-white/10 bg-white/[0.03] p-4">
-                  <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-text-tertiary)]">
+                <div className="rounded-[var(--radius-panel)] border border-white/10 bg-white/[0.03] p-3.5 sm:p-4">
+                  <p className="text-[11px] uppercase tracking-[0.18em] text-[color:var(--color-text-tertiary)] sm:tracking-[0.28em]">
                     Seasons
                   </p>
-                  <p className="mt-3 text-sm text-white">{show.numberOfSeasons ?? 'Unknown'}</p>
+                  <p className="mt-2.5 text-sm text-white sm:mt-3">{show.numberOfSeasons ?? 'Unknown'}</p>
                 </div>
-                <div className="rounded-[var(--radius-panel)] border border-white/10 bg-white/[0.03] p-4">
-                  <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-text-tertiary)]">
+                <div className="rounded-[var(--radius-panel)] border border-white/10 bg-white/[0.03] p-3.5 sm:p-4">
+                  <p className="text-[11px] uppercase tracking-[0.18em] text-[color:var(--color-text-tertiary)] sm:tracking-[0.28em]">
                     Episodes
                   </p>
-                  <p className="mt-3 text-sm text-white">{show.numberOfEpisodes ?? 'Unknown'}</p>
+                  <p className="mt-2.5 text-sm text-white sm:mt-3">{show.numberOfEpisodes ?? 'Unknown'}</p>
                 </div>
               </div>
             </Card>
 
-            <section className="space-y-5">
+            <section className="order-6 min-w-0 space-y-4 sm:space-y-5">
               <SectionHeader eyebrow="Seasons" title="Browse every season" />
               {show.seasons.length > 0 ? (
-                <div className="motion-stagger grid gap-4">
+                <div className="motion-stagger grid gap-3 sm:gap-4">
                   {show.seasons.map((season) => (
                     <SeasonCard key={season.seasonNumber} season={season} showTmdbId={show.tmdbId} />
                   ))}
@@ -358,56 +362,74 @@ export function ShowDetailPage() {
               )}
             </section>
 
-            <CastRail cast={show.cast} />
+            <div className="order-7 min-w-0">
+              <CastRail cast={show.cast} />
+            </div>
 
             {isAuthenticated ? (
-              <ReviewEditorCard
-                detailQueryKey={detailQueryKey}
-                existingReview={ownReview}
-                key={`show-review-${show.tmdbId}-${ownReview?.reviewId ?? 'new'}`}
-                mediaType={show.type}
-                reviewQueryKey={reviewsQueryKey}
-                tmdbId={show.tmdbId}
-              />
+              <div className="order-10">
+                <ReviewEditorCard
+                  detailQueryKey={detailQueryKey}
+                  existingReview={ownReview}
+                  key={`show-review-${show.tmdbId}-${ownReview?.reviewId ?? 'new'}`}
+                  mediaType={show.type}
+                  reviewQueryKey={reviewsQueryKey}
+                  tmdbId={show.tmdbId}
+                />
+              </div>
             ) : null}
 
-            <ReviewList reviews={reviews} />
+            <div className="order-11 min-w-0">
+              <ReviewList reviews={reviews} />
+            </div>
           </div>
 
-          <div className="space-y-6">
+          <div className="contents xl:block xl:space-y-6">
+            <div className="order-1 xl:sticky xl:top-28">
+              {isAuthenticated ? (
+                <MediaActionsPanel
+                  isFavourited={show.isFavourited}
+                  mediaType={show.type}
+                  onOpenWatchlists={() => setWatchlistDialogOpen(true)}
+                  onSubmitStatus={(status) => statusMutation.mutateAsync(status)}
+                  onToggleFavourite={() => favouriteMutation.mutateAsync()}
+                  pending={actionPending}
+                  watchStatus={show.watchStatus}
+                />
+              ) : (
+                <ActionPrompt isAuthenticated={isAuthenticated} returnTo={`/shows/${show.tmdbId}`} />
+              )}
+            </div>
+
+            <div className="order-4">
+              <NextEpisodeCard nextEpisode={nextEpisodeDetails} />
+            </div>
+
+            {show.bestTrailer ? (
+              <div className="order-8">
+                <TrailerCard trailer={show.bestTrailer} />
+              </div>
+            ) : null}
+            <div className="order-9">
+              <WatchProvidersCard watchProviders={show.watchProviders} />
+            </div>
+
             {isAuthenticated ? (
-              <MediaActionsPanel
-                isFavourited={show.isFavourited}
-                mediaType={show.type}
-                onOpenWatchlists={() => setWatchlistDialogOpen(true)}
-                onSubmitStatus={(status) => statusMutation.mutateAsync(status)}
-                onToggleFavourite={() => favouriteMutation.mutateAsync()}
-                pending={actionPending}
-                watchStatus={show.watchStatus}
-              />
-            ) : (
-              <ActionPrompt isAuthenticated={isAuthenticated} returnTo={`/shows/${show.tmdbId}`} />
-            )}
-
-            <NextEpisodeCard nextEpisode={nextEpisodeDetails} />
-
-            {show.bestTrailer ? <TrailerCard trailer={show.bestTrailer} /> : null}
-            <WatchProvidersCard watchProviders={show.watchProviders} />
-
-            {isAuthenticated ? (
-              <ShowProgressCard
-                pendingLabel={pendingJobLabel}
-                progress={showProgressQuery.data ?? null}
-              />
+              <div className="order-3">
+                <ShowProgressCard
+                  pendingLabel={pendingJobLabel}
+                  progress={showProgressQuery.data ?? null}
+                />
+              </div>
             ) : null}
 
             {show.nextEpisodeSeasonNumber !== null && show.nextEpisodeEpisodeNumber !== null ? (
-              <Card className="space-y-4 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.88)_0%,rgba(11,12,16,0.98)_100%)] p-6">
+              <Card className="order-5 space-y-4 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.88)_0%,rgba(11,12,16,0.98)_100%)] p-5 sm:p-6">
                 <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(111,209,168,0.08)_0%,rgba(111,209,168,0)_74%)]" />
                 <div className="relative space-y-4">
                   <SectionHeader eyebrow="Up next" title="Jump to the current season" />
                   <Link
-                    className={getButtonClassName('secondary')}
+                    className={getButtonClassName('secondary', 'w-full sm:w-auto')}
                     to={`/shows/${show.tmdbId}/seasons/${show.nextEpisodeSeasonNumber}/episodes`}
                   >
                     <Tv2 aria-hidden="true" className="mr-2 size-4" />

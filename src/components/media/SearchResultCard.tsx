@@ -13,7 +13,7 @@ export function SearchResultCard({ item }: { item: SearchItemDTO }) {
 
   return (
     <Link
-      className="motion-card group relative grid grid-cols-[92px_1fr] items-start gap-4 overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(160deg,rgba(22,24,26,0.88)_0%,rgba(13,14,15,0.96)_100%)] p-4 shadow-[0_24px_55px_rgba(0,0,0,0.28)] transition duration-300 hover:border-[rgba(47,174,126,0.18)] hover:shadow-[0_34px_82px_rgba(0,0,0,0.46)] sm:grid-cols-[116px_1fr] sm:gap-5 md:grid-cols-[138px_1fr] md:p-5"
+      className="motion-card group relative grid grid-cols-[92px_minmax(0,1fr)] items-start gap-4 overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(160deg,rgba(22,24,26,0.88)_0%,rgba(13,14,15,0.96)_100%)] p-4 shadow-[0_24px_55px_rgba(0,0,0,0.28)] transition duration-300 hover:border-[rgba(47,174,126,0.18)] hover:shadow-[0_34px_82px_rgba(0,0,0,0.46)] sm:grid-cols-[116px_minmax(0,1fr)] sm:gap-5 md:grid-cols-[138px_minmax(0,1fr)] md:p-5"
       to={getSearchResultRoute(item.id, item.mediaType)}
     >
       <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(47,174,126,0.07)_0%,rgba(47,174,126,0)_72%)] opacity-0 transition duration-300 group-hover:opacity-100" />
@@ -21,7 +21,7 @@ export function SearchResultCard({ item }: { item: SearchItemDTO }) {
         {hasImagePath(item.posterPath) && !imageFailed ? (
           <img
             alt={`${item.title} poster`}
-            className="aspect-[2/3] w-full object-cover transition duration-500 group-hover:scale-[1.04]"
+            className="aspect-[2/3] w-full object-cover transition duration-500 ease-[var(--ease-premium)] group-hover:scale-[1.04]"
             loading="lazy"
             onError={() => setImageFailed(true)}
             src={getPosterUrl(item.posterPath, 'w342') ?? undefined}
@@ -32,7 +32,7 @@ export function SearchResultCard({ item }: { item: SearchItemDTO }) {
       </div>
       <div className="relative flex min-h-full flex-col justify-between gap-5 self-stretch">
         <div className="space-y-3">
-          <h2 className="font-display text-[1.9rem] leading-none tracking-[-0.04em] text-white md:text-[2.6rem]">
+          <h2 className="break-words font-display text-[1.6rem] leading-[1.02] tracking-[-0.04em] text-white sm:text-[1.9rem] md:text-[2.6rem]">
             {item.title}
           </h2>
           <div className="flex flex-wrap gap-2.5 text-sm text-[color:var(--color-text-secondary)]">
@@ -51,7 +51,7 @@ export function SearchResultCard({ item }: { item: SearchItemDTO }) {
             {typeof item.voteAverage === 'number' ? (
               <span className="inline-flex items-center gap-2 rounded-full border border-[rgba(111,209,168,0.18)] bg-[rgba(111,209,168,0.08)] px-3 py-1.5">
                 <Star aria-hidden="true" className="size-4 fill-current text-[color:var(--color-highlight)]" />
-                {item.voteAverage.toFixed(1)}
+                <span className="tabular-nums">{item.voteAverage.toFixed(1)}</span>
               </span>
             ) : null}
             {item.genres.length > 0 ? (

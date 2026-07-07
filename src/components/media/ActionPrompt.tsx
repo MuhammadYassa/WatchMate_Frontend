@@ -11,12 +11,12 @@ interface ActionPromptProps {
 
 export function ActionPrompt({ isAuthenticated, returnTo }: ActionPromptProps) {
   return (
-    <Card className="space-y-5 border-white/10 bg-[linear-gradient(145deg,rgba(21,22,27,0.92)_0%,rgba(10,11,15,0.98)_100%)] p-6 shadow-[0_26px_70px_rgba(0,0,0,0.36)] md:sticky md:top-28">
+    <Card className="space-y-5 border-white/10 bg-[linear-gradient(145deg,rgba(21,22,27,0.92)_0%,rgba(10,11,15,0.98)_100%)] p-5 shadow-[0_26px_70px_rgba(0,0,0,0.36)] sm:p-6">
       <div className="space-y-2.5">
         <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
           Your actions
         </p>
-        <h2 className="font-display text-3xl tracking-[-0.04em] text-white">
+        <h2 className="font-display text-2xl tracking-[-0.04em] text-white sm:text-3xl">
           {isAuthenticated ? 'Tracking actions arrive next.' : 'Sign in to track this title.'}
         </h2>
         <p className="text-sm leading-7 text-[color:var(--color-text-secondary)]">

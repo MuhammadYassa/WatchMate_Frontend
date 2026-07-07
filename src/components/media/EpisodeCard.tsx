@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CalendarDays, Check, Circle, Clock3, Loader2, MonitorPlay } from 'lucide-react'
+import { CalendarDays, Check, Clock3, MonitorPlay } from 'lucide-react'
 
 import type { ShowEpisodeDetailsDTO } from '../../types/api'
 import { formatDisplayDate } from '../../utils/dates'
@@ -11,6 +11,7 @@ import {
 } from '../../utils/labels'
 import { getStillUrl, hasImagePath } from '../../utils/tmdbImages'
 import { cn } from '../../utils/cn'
+import { Spinner } from '../feedback/Spinner'
 import { Card } from '../ui/Card'
 import { CompletionStatusBadge, InformationalStatusBadge } from './StatusBadge'
 
@@ -26,12 +27,15 @@ export function EpisodeCard({ episode, onTick, tickPending }: EpisodeCardProps) 
   const [imageFailed, setImageFailed] = useState(false)
   const isUnaired = episode.isAired === false
   const isWatched = episode.watched === true
+  // Pop the check only when the user completes the episode in this session,
+  // not for episodes that were already watched when the page loaded.
+  const [watchedOnMount] = useState(isWatched)
   const episodePositionLabel = `Season ${episode.seasonNumber} Episode ${episode.episodeNumber}`
 
   return (
     <Card
       className={cn(
-        'group grid gap-5 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(22,24,26,0.9)_0%,rgba(13,14,15,0.98)_100%)] p-4 shadow-[0_22px_50px_rgba(0,0,0,0.3)] transition duration-300 hover:border-[rgba(47,174,126,0.16)] hover:shadow-[0_30px_72px_rgba(0,0,0,0.44)] md:p-5 lg:grid-cols-[280px_1fr]',
+        'group grid gap-4 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(22,24,26,0.9)_0%,rgba(13,14,15,0.98)_100%)] p-4 shadow-[0_22px_50px_rgba(0,0,0,0.3)] transition duration-300 hover:border-[rgba(47,174,126,0.16)] hover:shadow-[0_30px_72px_rgba(0,0,0,0.44)] sm:gap-5 md:p-5 lg:grid-cols-[280px_minmax(0,1fr)]',
         isWatched
           ? 'border-[rgba(111,209,168,0.28)] bg-[linear-gradient(160deg,rgba(20,32,27,0.82)_0%,rgba(13,14,15,0.98)_100%)]'
           : null,
@@ -42,7 +46,7 @@ export function EpisodeCard({ episode, onTick, tickPending }: EpisodeCardProps) 
         {hasImagePath(episode.stillPath) && !imageFailed ? (
           <img
             alt={`${episode.name} still`}
-            className="aspect-video w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+            className="aspect-video w-full object-cover transition duration-500 ease-[var(--ease-premium)] group-hover:scale-[1.03]"
             onError={() => setImageFailed(true)}
             src={getStillUrl(episode.stillPath, 'w300') ?? undefined}
           />
@@ -57,13 +61,13 @@ export function EpisodeCard({ episode, onTick, tickPending }: EpisodeCardProps) 
           </span>
         </div>
       </div>
-      <div className="relative space-y-4 self-center">
-        <div className="flex items-start justify-between gap-4">
-          <div className="space-y-2">
-            <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-accent-strong)]">
+      <div className="relative min-w-0 space-y-3 self-center sm:space-y-4">
+        <div className="flex items-start justify-between gap-3 sm:gap-4">
+          <div className="min-w-0 space-y-1.5 sm:space-y-2">
+            <p className="hidden text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-accent-strong)] sm:block">
               Episode detail
             </p>
-            <h2 className="font-display text-[2rem] tracking-[-0.04em] text-white">{episode.name}</h2>
+            <h2 className="break-words font-display text-[1.35rem] leading-[1.15] tracking-[-0.04em] text-white sm:text-[2rem] sm:leading-tight">{episode.name}</h2>
           </div>
 
           {onTick ? (
@@ -75,10 +79,13 @@ export function EpisodeCard({ episode, onTick, tickPending }: EpisodeCardProps) 
               }
               aria-pressed={isWatched}
               className={cn(
-                'mt-1 flex size-11 shrink-0 items-center justify-center rounded-full border transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-bg)]',
+                'mt-0.5 flex size-11 shrink-0 items-center justify-center rounded-full transition duration-200 active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-bg)] sm:mt-1',
                 isWatched
-                  ? 'border-[rgba(111,209,168,0.55)] bg-[color:var(--color-accent)] text-black shadow-[0_0_0_4px_rgba(111,209,168,0.12)] hover:bg-[color:var(--color-accent-strong)]'
-                  : 'border-[rgba(255,255,255,0.24)] bg-transparent text-[color:var(--color-text-secondary)] hover:border-[rgba(111,209,168,0.48)] hover:bg-[rgba(111,209,168,0.08)] hover:text-[color:var(--color-accent)]',
+                  ? cn(
+                      'border border-transparent bg-[color:var(--color-action)] text-[color:var(--color-action-ink)] shadow-[0_0_0_4px_rgba(69,199,147,0.16),0_6px_18px_rgba(69,199,147,0.28)] hover:brightness-105',
+                      !watchedOnMount && 'motion-check-ring',
+                    )
+                  : 'border-2 border-white/30 bg-transparent text-white/30 hover:border-[rgba(111,209,168,0.55)] hover:bg-[rgba(111,209,168,0.08)] hover:text-[color:var(--color-accent)]',
               )}
               disabled={tickPending}
               onClick={onTick}
@@ -86,11 +93,16 @@ export function EpisodeCard({ episode, onTick, tickPending }: EpisodeCardProps) 
               type="button"
             >
               {tickPending ? (
-                <Loader2 aria-hidden="true" className="size-5 animate-spin" />
-              ) : isWatched ? (
-                <Check aria-hidden="true" className="size-5 stroke-[3]" />
+                <Spinner className="text-current" size="md" />
               ) : (
-                <Circle aria-hidden="true" className="size-5" />
+                <Check
+                  aria-hidden="true"
+                  className={cn(
+                    'size-5',
+                    isWatched ? 'stroke-[3.5]' : 'stroke-[2.5]',
+                    isWatched && !watchedOnMount && 'motion-check-pop',
+                  )}
+                />
               )}
             </button>
           ) : null}
@@ -111,18 +123,18 @@ export function EpisodeCard({ episode, onTick, tickPending }: EpisodeCardProps) 
           ) : null}
         </div>
 
-        <div className="flex flex-wrap gap-3 text-sm text-[color:var(--color-text-secondary)]">
-          <span className="inline-flex items-center gap-2 rounded-[12px] border border-white/10 bg-[rgba(255,255,255,0.04)] px-3 py-2">
-            <CalendarDays aria-hidden="true" className="size-4 text-[color:var(--color-text-tertiary)]" />
+        <div className="flex flex-wrap gap-2 text-[13px] text-[color:var(--color-text-secondary)] sm:gap-3 sm:text-sm">
+          <span className="inline-flex items-center gap-1.5 rounded-[10px] border border-white/10 bg-[rgba(255,255,255,0.04)] px-2.5 py-1.5 sm:gap-2 sm:rounded-[12px] sm:px-3 sm:py-2">
+            <CalendarDays aria-hidden="true" className="size-3.5 text-[color:var(--color-text-tertiary)] sm:size-4" />
             {formatDisplayDate(episode.airDate)}
           </span>
-          <span className="inline-flex items-center gap-2 rounded-[12px] border border-white/10 bg-[rgba(255,255,255,0.04)] px-3 py-2">
-            <Clock3 aria-hidden="true" className="size-4 text-[color:var(--color-text-tertiary)]" />
+          <span className="inline-flex items-center gap-1.5 rounded-[10px] border border-white/10 bg-[rgba(255,255,255,0.04)] px-2.5 py-1.5 sm:gap-2 sm:rounded-[12px] sm:px-3 sm:py-2">
+            <Clock3 aria-hidden="true" className="size-3.5 text-[color:var(--color-text-tertiary)] sm:size-4" />
             {formatRuntime(episode.runtime)}
           </span>
         </div>
 
-        <p className="text-sm leading-7 text-[color:var(--color-text-secondary)]">
+        <p className="text-sm leading-6 text-[color:var(--color-text-secondary)] sm:leading-7">
           {episode.overview || 'No overview is available for this episode yet.'}
         </p>
       </div>

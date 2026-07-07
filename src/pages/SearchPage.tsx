@@ -25,7 +25,7 @@ function SearchLoadingState() {
     <div className="space-y-4">
       {[0, 1, 2].map((row) => (
         <div
-          className="grid grid-cols-[92px_1fr] items-start gap-4 rounded-[var(--radius-panel)] border border-white/[0.07] bg-[color:var(--color-surface-1)] p-4 sm:grid-cols-[116px_1fr] sm:gap-5 md:grid-cols-[138px_1fr] md:p-5"
+          className="grid grid-cols-[92px_minmax(0,1fr)] items-start gap-4 rounded-[var(--radius-panel)] border border-white/[0.07] bg-[color:var(--color-surface-1)] p-4 sm:grid-cols-[116px_minmax(0,1fr)] sm:gap-5 md:grid-cols-[138px_minmax(0,1fr)] md:p-5"
           key={row}
         >
           <Skeleton className="aspect-[2/3] w-full rounded-[var(--radius-media)]" />

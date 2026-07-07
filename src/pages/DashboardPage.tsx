@@ -102,10 +102,10 @@ function UpcomingStackCard({ item }: { item: UpcomingEpisodeItemDTO }) {
       <Card className="motion-card h-full border-white/10 bg-[linear-gradient(145deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.96)_100%)] p-5 hover:border-[rgba(47,174,126,0.2)]">
         <div className="space-y-3">
           <div className="flex items-start justify-between gap-3">
-            <div className="space-y-1">
-              <h3 className="font-display text-[2rem] tracking-[-0.04em] text-white">{item.title}</h3>
+            <div className="min-w-0 space-y-1">
+              <h3 className="break-words font-display text-[1.7rem] tracking-[-0.04em] text-white sm:text-[2rem]">{item.title}</h3>
             </div>
-            <div className="rounded-[12px] border border-white/10 bg-[rgba(255,255,255,0.04)] px-3 py-2 text-xs text-[color:var(--color-text-secondary)]">
+            <div className="shrink-0 whitespace-nowrap rounded-[12px] border border-white/10 bg-[rgba(255,255,255,0.04)] px-3 py-2 text-xs text-[color:var(--color-text-secondary)]">
               {formatDaysUntilLabel(item.daysUntilAirDate)}
             </div>
           </div>
@@ -249,9 +249,9 @@ export function DashboardPage() {
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(10,11,11,0.96)_8%,rgba(10,11,11,0.74)_46%,rgba(10,11,11,0.28)_100%)]" />
 
           <div className="relative z-10 flex h-full min-h-[34rem] flex-col justify-end px-6 py-7 md:px-8 md:py-8 lg:px-10 lg:py-10">
-            <div className="motion-stagger max-w-3xl space-y-5">
+            <div className="motion-stagger min-w-0 max-w-3xl space-y-5">
               <div className="space-y-3">
-                <h1 className="font-display text-[3.4rem] leading-[0.92] tracking-[-0.03em] text-white sm:text-[4.4rem] md:text-[5.3rem]">
+                <h1 className="break-words font-display text-[length:clamp(2.4rem,11.5vw,3.4rem)] leading-[0.92] tracking-[-0.03em] text-white sm:text-[4.4rem] md:text-[5.3rem]">
                   {hero ? hero.title : 'What should you watch next?'}
                 </h1>
                 <p className="max-w-2xl text-base leading-8 text-[color:var(--color-text-secondary)] md:text-lg">
@@ -376,7 +376,7 @@ export function DashboardPage() {
       <section className="relative z-10 space-y-5">
         <SectionHeader
           action={
-            <div className="flex gap-1.5">
+            <div className="flex flex-wrap gap-1.5">
               {TO_WATCH_FILTER_LABELS.map(({ label, value }) => (
                 <Button
                   key={value}
@@ -431,7 +431,7 @@ export function DashboardPage() {
       <section className="relative z-10 scroll-mt-24 space-y-6" id="release-calendar">
         <SectionHeader
           action={
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               {[14, 30].map((days) => (
                 <Button
                   key={days}
@@ -459,11 +459,11 @@ export function DashboardPage() {
           <div className="grid gap-8">
             {calendarGroups.map((group) => (
               <div
-                className="grid gap-6 border-t border-white/6 pt-8 first:border-t-0 first:pt-0 lg:grid-cols-[170px_1fr]"
+                className="grid gap-6 border-t border-white/6 pt-8 first:border-t-0 first:pt-0 lg:grid-cols-[170px_minmax(0,1fr)]"
                 key={group.date}
               >
                 <div className="space-y-3 lg:sticky lg:top-28 lg:self-start">
-                  <h3 className="font-display text-[2.6rem] leading-none tracking-[-0.03em] text-white">
+                  <h3 className="break-words font-display text-[2.2rem] leading-none tracking-[-0.03em] text-white sm:text-[2.6rem]">
                     {formatCalendarDateHeading(group.date)}
                   </h3>
                   <div className="inline-flex rounded-[12px] border border-white/10 bg-[rgba(255,255,255,0.04)] px-3 py-2 text-xs text-[color:var(--color-text-secondary)]">

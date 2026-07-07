@@ -333,7 +333,7 @@ export function WatchlistsPage() {
             <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
               Library
             </p>
-            <h1 className="font-display text-5xl leading-[0.94] tracking-[-0.03em] text-white md:text-6xl xl:text-[4.75rem]">
+            <h1 className="font-display text-[length:clamp(2.3rem,10.5vw,3rem)] leading-[0.98] tracking-[-0.03em] text-white md:text-6xl xl:text-[4.75rem]">
               Your watchlists, ready to browse.
             </h1>
             <p className="text-base leading-7 text-[color:var(--color-text-secondary)]">
@@ -392,11 +392,11 @@ export function WatchlistsPage() {
 
                     <div className="space-y-5 self-center">
                       <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
-                        <div className="space-y-2">
+                        <div className="min-w-0 space-y-2">
                           <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
                             Watchlist
                           </p>
-                          <h2 className="font-display text-4xl tracking-[-0.04em] text-white">
+                          <h2 className="break-words font-display text-[1.9rem] tracking-[-0.04em] text-white sm:text-4xl">
                             {watchlist.name}
                           </h2>
                           <p className="text-sm text-[color:var(--color-text-tertiary)]">

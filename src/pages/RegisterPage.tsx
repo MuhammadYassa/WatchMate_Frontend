@@ -1,4 +1,4 @@
-﻿import { ArrowRight, Eye, EyeOff, LockKeyhole, Mail, ShieldCheck, User } from 'lucide-react'
+﻿import { ArrowRight, LockKeyhole, Mail, ShieldCheck, User } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
@@ -9,8 +9,10 @@ import { PageContainer } from '../components/layout/PageContainer'
 import { PublicPageAtmosphere } from '../components/public/PublicPageAtmosphere'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
+import { Checkbox } from '../components/ui/Checkbox'
 import { FormField } from '../components/ui/FormField'
 import { Input } from '../components/ui/Input'
+import { PasswordInput } from '../components/ui/PasswordInput'
 import { getButtonClassName } from '../components/ui/buttonStyles'
 import { ApiClientError } from '../types/errors'
 
@@ -39,11 +41,10 @@ function getRegisterError(error: ApiClientError | null) {
 }
 
 export function RegisterPage() {
+  const [agreedToTerms, setAgreedToTerms] = useState(false)
   const [confirmPassword, setConfirmPassword] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [username, setUsername] = useState('')
 
   const passwordIsValid = useMemo(() => validatePassword(password), [password])
@@ -64,7 +65,7 @@ export function RegisterPage() {
             <ShieldCheck aria-hidden="true" className="size-9" />
           </div>
           <div className="space-y-3">
-            <h1 className="font-display text-5xl tracking-[-0.03em] text-white md:text-6xl">
+            <h1 className="font-display text-[length:clamp(2.4rem,10.5vw,3rem)] tracking-[-0.03em] text-white md:text-6xl">
               Your account is almost ready.
             </h1>
             <p className="mx-auto max-w-xl text-sm leading-7 text-[color:var(--color-text-secondary)]">
@@ -105,7 +106,7 @@ export function RegisterPage() {
           <div className="space-y-7">
             <div className="space-y-2">
               <Logo className="mb-3 lg:hidden" size="md" />
-              <h1 className="font-display text-5xl tracking-[-0.03em] text-white md:text-6xl">
+              <h1 className="font-display text-[length:clamp(2.4rem,10.5vw,3rem)] tracking-[-0.03em] text-white md:text-6xl">
                 Start tracking for free.
               </h1>
               <p className="text-sm leading-7 text-[color:var(--color-text-secondary)]">
@@ -118,7 +119,7 @@ export function RegisterPage() {
               className="space-y-5"
               onSubmit={(event) => {
                 event.preventDefault()
-                if (!passwordIsValid || !passwordMatches) {
+                if (!passwordIsValid || !passwordMatches || !agreedToTerms) {
                   return
                 }
 
@@ -166,69 +167,59 @@ export function RegisterPage() {
                 error={password.length > 0 && !passwordIsValid ? 'Use at least 8 characters with a letter, number, and symbol.' : null}
                 hint="Use at least 8 characters, including a letter, number, and symbol."
                 label="Password"
-                trailing={
-                  <button
-                    aria-label={showPassword ? 'Hide password' : 'Show password'}
-                    aria-pressed={showPassword}
-                    className="-m-2 flex items-center rounded-[8px] p-2 text-[color:var(--color-text-tertiary)] transition hover:text-white"
-                    onClick={() => setShowPassword((c) => !c)}
-                    type="button"
-                  >
-                    {showPassword
-                      ? <EyeOff aria-hidden="true" className="size-4" />
-                      : <Eye aria-hidden="true" className="size-4" />}
-                  </button>
-                }
               >
-                <div className="relative">
-                  <LockKeyhole
-                    aria-hidden="true"
-                    className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-[color:var(--color-text-tertiary)]"
-                  />
-                  <Input
-                    autoComplete="new-password"
-                    className="pl-11"
-                    onChange={(event) => setPassword(event.target.value)}
-                    placeholder="Create a password"
-                    required
-                    type={showPassword ? 'text' : 'password'}
-                    value={password}
-                  />
-                </div>
+                <PasswordInput
+                  autoComplete="new-password"
+                  leadingIcon={<LockKeyhole className="size-4" />}
+                  onChange={(event) => setPassword(event.target.value)}
+                  placeholder="Create a password"
+                  required
+                  value={password}
+                />
               </FormField>
               <FormField
                 error={confirmPassword.length > 0 && !passwordMatches ? 'Passwords need to match.' : null}
                 label="Confirm password"
-                trailing={
-                  <button
-                    aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
-                    aria-pressed={showConfirmPassword}
-                    className="-m-2 flex items-center rounded-[8px] p-2 text-[color:var(--color-text-tertiary)] transition hover:text-white"
-                    onClick={() => setShowConfirmPassword((c) => !c)}
-                    type="button"
-                  >
-                    {showConfirmPassword
-                      ? <EyeOff aria-hidden="true" className="size-4" />
-                      : <Eye aria-hidden="true" className="size-4" />}
-                  </button>
-                }
               >
-                <div className="relative">
-                  <ShieldCheck
-                    aria-hidden="true"
-                    className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-[color:var(--color-text-tertiary)]"
-                  />
-                  <Input
-                    autoComplete="new-password"
-                    className="pl-11"
-                    onChange={(event) => setConfirmPassword(event.target.value)}
-                    placeholder="Repeat your password"
-                    required
-                    type={showConfirmPassword ? 'text' : 'password'}
-                    value={confirmPassword}
-                  />
-                </div>
+                <PasswordInput
+                  autoComplete="new-password"
+                  leadingIcon={<ShieldCheck className="size-4" />}
+                  onChange={(event) => setConfirmPassword(event.target.value)}
+                  placeholder="Repeat your password"
+                  required
+                  value={confirmPassword}
+                />
               </FormField>
+
+              <label className="flex items-start gap-3 text-sm leading-6 text-[color:var(--color-text-secondary)]">
+                <Checkbox
+                  checked={agreedToTerms}
+                  className="mt-0.5"
+                  onChange={(event) => setAgreedToTerms(event.target.checked)}
+                  required
+                />
+                <span>
+                  I agree to the{' '}
+                  <Link
+                    className="text-[color:var(--color-accent-strong)] transition hover:text-white"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    to="/terms"
+                  >
+                    Terms of Service
+                  </Link>{' '}
+                  and{' '}
+                  <Link
+                    className="text-[color:var(--color-accent-strong)] transition hover:text-white"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    to="/privacy"
+                  >
+                    Privacy Policy
+                  </Link>
+                  .
+                </span>
+              </label>
 
               {error ? (
                 <div
@@ -241,7 +232,7 @@ export function RegisterPage() {
 
               <Button
                 className="w-full"
-                disabled={!passwordIsValid || !passwordMatches}
+                disabled={!passwordIsValid || !passwordMatches || !agreedToTerms}
                 loading={registerMutation.isPending}
                 type="submit"
               >

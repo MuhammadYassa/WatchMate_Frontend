@@ -19,6 +19,7 @@ export function Spinner({ size = 'sm', className }: SpinnerProps) {
     <LogoMark
       className={cn('motion-spin text-[color:var(--color-accent)]', className)}
       size={SIZE_MAP[size]}
+      variant="ring"
     />
   )
 }

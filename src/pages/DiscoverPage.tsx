@@ -110,7 +110,7 @@ function DiscoverFeatureCard({ item }: { item: DiscoveryMediaItemDTO | null }) {
       <div className="relative flex flex-col gap-6 sm:flex-row sm:items-end">
         <div className="min-w-0 flex-1 space-y-4">
           <div className="space-y-3">
-            <h2 className="font-display text-3xl tracking-[-0.04em] text-white md:text-4xl">
+            <h2 className="break-words font-display text-3xl tracking-[-0.04em] text-white md:text-4xl">
               {item.title}
             </h2>
             <p className="line-clamp-4 max-w-xl text-sm leading-7 text-[color:var(--color-text-secondary)]">

@@ -1,0 +1,75 @@
+<svg width="1200" height="400" viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&amp;display=swap');
+      :root {
+        --color-bg: #0c0d0d;
+        --color-bg-elevated: #070808;
+        --color-surface-3: #26292b;
+        --color-accent: #2fae7e;
+        --color-action: #45c793;
+        --color-text-primary: #edefee;
+        --color-text-secondary: #b4b9b7;
+        --color-text-tertiary: #7f8583;
+        --border-soft: rgba(255,255,255,0.09);
+        --border-strong: rgba(255,255,255,0.15);
+      }
+      .wm-strong { font-family: 'Space Grotesk','Segoe UI',sans-serif; font-weight: 700; }
+      .wm-light  { font-family: 'Space Grotesk','Segoe UI',sans-serif; font-weight: 400; }
+      .tagline   { font-family: 'Space Grotesk','Segoe UI',sans-serif; font-weight: 500; letter-spacing: 4px; }
+    </style>
+    <filter id="softBlur" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+    <filter id="tightBlur" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+  </defs>
+
+  <!-- canvas / brand card -->
+  <rect x="4" y="4" width="1192" height="392" rx="28" fill="var(--color-bg)" stroke="var(--border-soft)" stroke-width="1.5"/>
+
+  <!-- ambient glow behind badge -->
+  <circle cx="200" cy="200" r="140" fill="var(--color-accent)" opacity="0.15" filter="url(#softBlur)"/>
+
+  <!-- badge -->
+  <rect x="100" y="100" width="200" height="200" rx="46" fill="var(--color-bg-elevated)" stroke="var(--border-soft)" stroke-width="2"/>
+
+  <!-- sprocket / progress ring: 20 ticks, 14 lit = watched, 6 dim = remaining -->
+  <g>
+    <rect x="195" y="124" width="10" height="16" rx="3" fill="var(--color-action)"/>
+    <rect x="195" y="124" width="10" height="16" rx="3" fill="var(--color-action)" transform="rotate(18 200 200)"/>
+    <rect x="195" y="124" width="10" height="16" rx="3" fill="var(--color-action)" transform="rotate(36 200 200)"/>
+    <rect x="195" y="124" width="10" height="16" rx="3" fill="var(--color-action)" transform="rotate(54 200 200)"/>
+    <rect x="195" y="124" width="10" height="16" rx="3" fill="var(--color-action)" transform="rotate(72 200 200)"/>
+    <rect x="195" y="124" width="10" height="16" rx="3" fill="var(--color-action)" transform="rotate(90 200 200)"/>
+    <rect x="195" y="124" width="10" height="16" rx="3" fill="var(--color-action)" transform="rotate(108 200 200)"/>
+    <rect x="195" y="124" width="10" height="16" rx="3" fill="var(--color-action)" transform="rotate(126 200 200)"/>
+    <rect x="195" y="124" width="10" height="16" rx="3" fill="var(--color-action)" transform="rotate(144 200 200)"/>
+    <rect x="195" y="124" width="10" height="16" rx="3" fill="var(--color-action)" transform="rotate(162 200 200)"/>
+    <rect x="195" y="124" width="10" height="16" rx="3" fill="var(--color-action)" transform="rotate(180 200 200)"/>
+    <rect x="195" y="124" width="10" height="16" rx="3" fill="var(--color-action)" transform="rotate(198 200 200)"/>
+    <rect x="195" y="124" width="10" height="16" rx="3" fill="var(--color-action)" transform="rotate(216 200 200)"/>
+    <rect x="195" y="124" width="10" height="16" rx="3" fill="var(--color-action)" transform="rotate(234 200 200)"/>
+
+    <rect x="195" y="124" width="10" height="16" rx="3" fill="var(--color-surface-3)" stroke="var(--border-soft)" stroke-width="1" transform="rotate(252 200 200)"/>
+    <rect x="195" y="124" width="10" height="16" rx="3" fill="var(--color-surface-3)" stroke="var(--border-soft)" stroke-width="1" transform="rotate(270 200 200)"/>
+    <rect x="195" y="124" width="10" height="16" rx="3" fill="var(--color-surface-3)" stroke="var(--border-soft)" stroke-width="1" transform="rotate(288 200 200)"/>
+    <rect x="195" y="124" width="10" height="16" rx="3" fill="var(--color-surface-3)" stroke="var(--border-soft)" stroke-width="1" transform="rotate(306 200 200)"/>
+    <rect x="195" y="124" width="10" height="16" rx="3" fill="var(--color-surface-3)" stroke="var(--border-soft)" stroke-width="1" transform="rotate(324 200 200)"/>
+    <rect x="195" y="124" width="10" height="16" rx="3" fill="var(--color-surface-3)" stroke="var(--border-soft)" stroke-width="1" transform="rotate(342 200 200)"/>
+  </g>
+
+  <!-- play mark, centered -->
+  <circle cx="200" cy="200" r="50" fill="var(--color-accent)" opacity="0.18" filter="url(#tightBlur)"/>
+  <polygon points="184,176 184,224 224,200" fill="var(--color-action)"/>
+
+  <!-- wordmark -->
+  <text x="360" y="196" font-size="64">
+    <tspan class="wm-strong" fill="var(--color-text-primary)">watch</tspan><tspan class="wm-light" fill="var(--color-text-secondary)">mate</tspan>
+  </text>
+
+  <rect x="362" y="214" width="44" height="4" rx="2" fill="var(--color-accent)"/>
+
+  <text x="362" y="246" font-size="18" class="tagline" fill="var(--color-text-tertiary)">MOVIES &amp; SHOWS, TRACKED</text>
+</svg>

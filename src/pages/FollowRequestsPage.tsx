@@ -177,7 +177,7 @@ export function FollowRequestsPage() {
           <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
             Social
           </p>
-          <h1 className="font-display text-5xl tracking-[-0.03em] text-white md:text-6xl xl:text-[4.75rem]">
+          <h1 className="font-display text-[length:clamp(2.3rem,10.5vw,3rem)] tracking-[-0.03em] text-white md:text-6xl xl:text-[4.75rem]">
             Follow requests
           </h1>
           <p className="max-w-2xl text-base leading-7 text-[color:var(--color-text-secondary)]">
@@ -256,14 +256,14 @@ export function FollowRequestsPage() {
                   style={{ animationDelay: `${Math.min(index * 45, 220)}ms` }}
                 >
                   <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(47,174,126,0.08)_0%,rgba(47,174,126,0)_72%)] opacity-0 transition duration-300 hover:opacity-100" />
-                  <div className="relative flex items-center gap-4">
+                  <div className="relative flex min-w-0 items-center gap-4">
                     <UserInitialBadge
                       size="sm"
                       username={activeTab === 'received' ? request.requesterUsername : request.targetUsername}
                     />
-                    <div className="space-y-1.5">
+                    <div className="min-w-0 space-y-1.5">
                       <Link
-                        className="text-lg font-semibold text-white transition hover:text-[color:var(--color-accent)]"
+                        className="text-lg font-semibold text-white transition [overflow-wrap:anywhere] hover:text-[color:var(--color-accent)]"
                         to={`/social/profile/${encodeURIComponent(activeTab === 'received' ? request.requesterUsername : request.targetUsername)}`}
                       >
                         {activeTab === 'received' ? request.requesterUsername : request.targetUsername}

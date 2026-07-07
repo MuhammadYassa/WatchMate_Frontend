@@ -1,6 +1,9 @@
-import { Check, Heart, ListPlus, Loader2 } from 'lucide-react'
+import { useState } from 'react'
+import { Check, Heart, ListPlus } from 'lucide-react'
 
 import type { MediaType, WatchStatus } from '../../types/enums'
+import { cn } from '../../utils/cn'
+import { Spinner } from '../feedback/Spinner'
 import { Button } from '../ui/Button'
 import { Card } from '../ui/Card'
 
@@ -25,13 +28,17 @@ export function MediaActionsPanel({
 }: MediaActionsPanelProps) {
   const isWatched = watchStatus === 'WATCHED'
   const isPlanned = watchStatus === 'TO_WATCH'
+  // Completion feedback fires only for state changes made in this session,
+  // never for statuses that arrived with the page.
+  const [watchedOnMount] = useState(isWatched)
+  const [favouritedOnMount] = useState(isFavourited === true)
 
   return (
-    <Card className="space-y-6 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.94)_0%,rgba(10,11,15,0.99)_100%)] p-6 shadow-[0_26px_70px_rgba(0,0,0,0.38)] md:sticky md:top-28">
+    <Card className="space-y-4 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.94)_0%,rgba(10,11,15,0.99)_100%)] p-5 shadow-[0_26px_70px_rgba(0,0,0,0.38)] sm:space-y-6 sm:p-6">
       <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(111,209,168,0.30)_50%,rgba(255,255,255,0)_100%)]" />
       <div className="space-y-2.5">
-        <h2 className="font-display text-3xl tracking-[-0.04em] text-white">Track this title.</h2>
-        <p className="text-sm leading-7 text-[color:var(--color-text-secondary)]">
+        <h2 className="font-display text-2xl tracking-[-0.04em] text-white sm:text-3xl">Track this title.</h2>
+        <p className="hidden text-sm leading-7 text-[color:var(--color-text-secondary)] sm:block">
           Save favourites, organize watchlists, and keep your status in sync.
         </p>
       </div>
@@ -47,7 +54,10 @@ export function MediaActionsPanel({
               }}
               variant={isWatched ? 'primary' : 'secondary'}
             >
-              <Check aria-hidden="true" className="mr-2 size-4" />
+              <Check
+                aria-hidden="true"
+                className={cn('mr-2 size-4', isWatched && !watchedOnMount && 'motion-check-pop')}
+              />
               {isWatched ? 'Watched' : 'Mark as watched'}
             </Button>
             <Button
@@ -73,9 +83,15 @@ export function MediaActionsPanel({
               variant={watchStatus === 'WATCHED' ? 'primary' : 'secondary'}
             >
               {pending ? (
-                <Loader2 aria-hidden="true" className="mr-2 size-4 animate-spin" />
+                <Spinner className="mr-2 text-current" size="sm" />
               ) : (
-                <Check aria-hidden="true" className="mr-2 size-4" />
+                <Check
+                  aria-hidden="true"
+                  className={cn(
+                    'mr-2 size-4',
+                    watchStatus === 'WATCHED' && !watchedOnMount && 'motion-check-pop',
+                  )}
+                />
               )}
               {pending
                 ? 'Marking watched…'
@@ -107,9 +123,11 @@ export function MediaActionsPanel({
         >
           <Heart
             aria-hidden="true"
-            className={`mr-2 size-4 transition duration-200 ${
-              isFavourited ? 'fill-current text-[color:var(--color-highlight)]' : ''
-            }`}
+            className={cn(
+              'mr-2 size-4 transition duration-200',
+              isFavourited && 'fill-current text-[color:var(--color-highlight)]',
+              isFavourited && !favouritedOnMount && 'motion-heart-pop',
+            )}
           />
           {isFavourited ? 'Remove from favourites' : 'Add to favourites'}
         </Button>
