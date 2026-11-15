@@ -21,6 +21,7 @@ import { getButtonClassName } from '../components/ui/buttonStyles'
 import type { DiscoveryMediaItemDTO } from '../types/api'
 import { formatMediaType } from '../utils/labels'
 import { getMediaRoute } from '../utils/mediaRoutes'
+import { getBackdropUrl } from '../utils/tmdbImages'
 
 const categoryMap = {
   'airing-today': {
@@ -63,7 +64,7 @@ function GenrePanel({
   title: string
 }) {
   return (
-    <div className="overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(160deg,rgba(18,19,23,0.86)_0%,rgba(10,11,15,0.96)_100%)] px-5 py-5 shadow-[0_22px_58px_rgba(0,0,0,0.24)] md:px-6 md:py-6">
+    <div className="wm-genre-panel overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[color:var(--color-surface-1)] px-5 py-5 md:px-6 md:py-6">
       <div className="space-y-4">
         <SectionHeader title={title} />
         <div className="flex flex-wrap gap-3">{children}</div>
@@ -90,7 +91,7 @@ function PosterGridSkeleton() {
 function DiscoverFeatureCard({ item }: { item: DiscoveryMediaItemDTO | null }) {
   if (!item) {
     return (
-      <div className="motion-scale-in relative overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(160deg,rgba(18,19,23,0.86)_0%,rgba(10,11,15,0.96)_100%)] p-6 shadow-[0_26px_70px_rgba(0,0,0,0.34)]">
+      <div className="wm-discover-feature motion-scale-in relative overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[color:var(--color-surface-1)] p-6">
         <div className="space-y-4">
           <h2 className="font-display text-3xl tracking-[-0.04em] text-white md:text-4xl">
             Queue up the next thing worth watching.
@@ -105,7 +106,8 @@ function DiscoverFeatureCard({ item }: { item: DiscoveryMediaItemDTO | null }) {
   }
 
   return (
-    <div className="motion-scale-in relative overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(160deg,rgba(18,19,23,0.86)_0%,rgba(10,11,15,0.96)_100%)] p-6 shadow-[0_26px_70px_rgba(0,0,0,0.34)]">
+    <div className="wm-discover-feature motion-scale-in relative overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[color:var(--color-surface-1)] p-6">
+      {item.backdropPath ? <img alt="" className="wm-discover-feature-image" src={getBackdropUrl(item.backdropPath, 'w780') ?? undefined} onError={(event) => { event.currentTarget.style.visibility = 'hidden' }} /> : null}
       <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(47,174,126,0.12)_0%,rgba(47,174,126,0)_74%)]" />
       <div className="relative flex flex-col gap-6 sm:flex-row sm:items-end">
         <div className="min-w-0 flex-1 space-y-4">
@@ -168,10 +170,10 @@ export function DiscoverPage() {
   const featuredItem = categoryQuery.data?.[0] ?? null
 
   return (
-    <PageContainer className="relative isolate space-y-12 overflow-hidden pt-8 md:space-y-14 md:pt-12">
+    <PageContainer className="wm-discover relative isolate space-y-12 overflow-hidden pt-8 md:space-y-14 md:pt-12">
       <BrowsePageAtmosphere variant="hero" />
 
-      <section className="relative z-10 space-y-8 overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.9)_0%,rgba(10,11,14,0.98)_100%)] px-5 py-6 shadow-[0_30px_80px_rgba(0,0,0,0.34)] md:px-8 md:py-8 lg:px-10 lg:py-10">
+      <section className="wm-discover-intro relative z-10 space-y-8 overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[color:var(--color-surface-1)] px-5 py-6 md:px-8 md:py-8 lg:px-10 lg:py-10">
         <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(47,174,126,0.14)_0%,rgba(47,174,126,0)_72%)]" />
         <div className="relative grid gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.82fr)] lg:items-end">
           <div className="space-y-6">

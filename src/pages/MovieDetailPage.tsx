@@ -37,7 +37,7 @@ const REVIEWS_PAGE_SIZE = 20
 
 function MovieDetailLoadingState() {
   return (
-    <div className="relative isolate overflow-hidden pb-28">
+    <div className="wm-detail-page relative isolate overflow-hidden pb-28">
       <section className="relative overflow-hidden border-b border-white/10 bg-[#0d0e11]">
         <BrowsePageAtmosphere variant="hero" />
         <div className="relative z-10 mx-auto max-w-[1380px] px-4 pb-10 pt-8 sm:px-6 md:pb-20 md:pt-28 lg:px-8 xl:px-12">
@@ -217,7 +217,7 @@ export function MovieDetailPage() {
             the wrappers become real columns again and order resets to DOM flow. */}
         <div className="grid grid-cols-1 gap-5 sm:gap-6 xl:grid-cols-[minmax(0,1fr)_360px] 2xl:grid-cols-[minmax(0,1fr)_380px]">
           <div className="contents xl:block xl:space-y-6">
-            <Card className="order-2 space-y-5 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.9)_0%,rgba(11,12,16,0.98)_100%)] p-5 shadow-[0_26px_70px_rgba(0,0,0,0.32)] sm:space-y-6 sm:p-6">
+            <Card className="order-2 space-y-5 overflow-hidden border-white/10 bg-[color:var(--color-surface-1)] p-5 shadow-none sm:space-y-6 sm:p-6">
               <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(111,209,168,0.24)_50%,rgba(255,255,255,0)_100%)]" />
               <SectionHeader eyebrow="Overview" title="What to expect" />
               <p className="max-w-4xl text-sm leading-7 text-[color:var(--color-text-secondary)]">

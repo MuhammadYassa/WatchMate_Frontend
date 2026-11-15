@@ -10,7 +10,7 @@ export function MobileTopBar() {
   const isAuthenticated = useAuthStore((state) => Boolean(state.accessToken))
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/8 bg-[rgba(12,13,17,0.86)] px-4 py-3.5 backdrop-blur-xl md:hidden">
+    <header className="wm-mobile-topbar sticky top-0 z-40 border-b border-white/8 bg-[rgba(12,13,17,0.86)] px-4 py-3.5 backdrop-blur-xl md:hidden">
       <div className="mx-auto flex max-w-[1320px] items-center justify-between gap-3">
         <Logo size="sm" to={isAuthenticated ? '/home' : '/'} />
         {isAuthenticated && username ? (

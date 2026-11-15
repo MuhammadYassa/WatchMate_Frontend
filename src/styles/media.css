@@ -1,0 +1,20 @@
+/* Shared poster presentation, extracted unchanged from the approved Home. */
+.poster-editorial .motion-poster { border: 0; border-radius: var(--radius-media); box-shadow: none; transition: transform 240ms var(--home-ease), box-shadow 240ms var(--home-ease); }
+.poster-editorial .motion-poster > img { transition: transform 360ms var(--home-ease), opacity 220ms ease; }
+.poster-editorial .motion-poster > .pointer-events-none { height: 30%; opacity: 0.4; transition: opacity 300ms ease; }
+.poster-editorial .motion-poster > .absolute.right-3 { border: 0; border-radius: 4px; background: var(--home-ink-overlay); padding: 5px 7px; font-size: 11px; color: var(--home-art-ink); backdrop-filter: none; }
+.poster-editorial > div:last-child { position: relative; padding-right: 14px; }
+.poster-editorial > div:last-child > p:first-child { font-size: 14px; line-height: 1.5; font-weight: 500; color: var(--color-text-primary); }
+.poster-editorial > div:last-child > p:last-child:not(:first-child) { font-size: 11px; line-height: 1.7; color: var(--color-text-tertiary); }
+.poster-editorial-open { position: absolute; display: flex; align-items: center; justify-content: space-between; gap: 20px; inset: auto 14px 14px; padding: 11px 12px; border-radius: 5px; background: var(--home-art-ink); color: var(--color-bg); font-size: 11px; font-weight: 600; opacity: 0; transform: translateY(8px); transition: opacity 160ms ease, transform 220ms var(--home-ease); pointer-events: none; }
+.poster-editorial:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 5px; border-radius: var(--radius-media); }
+.poster-editorial:focus-visible .motion-poster { transform: none; box-shadow: none; }
+.poster-editorial:focus-visible .poster-editorial-open { opacity: 1; transform: none; transition: none; }
+.poster-editorial:active .motion-poster { transform: scale(0.985); transition-duration: 110ms; }
+@media (hover: hover) and (pointer: fine) {
+.poster-editorial:hover .motion-poster { transform: translateY(-5px) rotateX(1deg); box-shadow: 0 16px 24px rgb(0 0 0 / 26%); }
+.poster-editorial:hover .motion-poster > img { transform: scale(1.035); }
+.poster-editorial:hover .motion-poster > .pointer-events-none { opacity: 1; }
+.poster-editorial:hover .poster-editorial-open { opacity: 1; transform: translateY(0); }
+.poster-editorial > div:last-child > p:first-child { font-size: 13px; }
+}

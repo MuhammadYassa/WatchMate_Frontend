@@ -27,11 +27,11 @@ import { getPosterUrl, hasImagePath } from '../utils/tmdbImages'
 
 function SeasonEpisodesLoadingState() {
   return (
-    <div className="relative isolate overflow-hidden pb-28">
-      <section className="relative overflow-hidden border-b border-white/10 bg-[#0d0e11]">
+    <div className="wm-season-page relative isolate overflow-hidden pb-28">
+      <section className="wm-season-hero relative overflow-hidden border-b border-white/10 bg-[color:var(--color-bg)]">
         <BrowsePageAtmosphere variant="hero" />
-        <div className="relative z-10 mx-auto max-w-[1380px] px-4 pb-10 pt-6 sm:px-6 md:pb-20 md:pt-28 lg:px-8 xl:px-12">
-          <div className="grid grid-cols-[6.75rem_minmax(0,1fr)] items-end gap-4 sm:grid-cols-[8.5rem_minmax(0,1fr)] md:grid-cols-[11rem_minmax(0,1fr)] lg:min-h-[30rem] lg:grid-cols-[292px_minmax(0,1fr)] lg:gap-8">
+        <div className="wm-season-inner relative z-10 mx-auto max-w-[1380px] px-4 pb-10 pt-6 sm:px-6 md:pb-20 md:pt-28 lg:px-8 xl:px-12">
+          <div className="wm-season-grid grid grid-cols-[6.75rem_minmax(0,1fr)] items-end gap-4 sm:grid-cols-[8.5rem_minmax(0,1fr)] md:grid-cols-[11rem_minmax(0,1fr)] lg:min-h-[30rem] lg:grid-cols-[292px_minmax(0,1fr)] lg:gap-8">
             <SkeletonPoster />
             <div className="min-w-0 space-y-4 lg:space-y-5">
               <Skeleton className="hidden h-9 w-32 rounded-[14px] lg:block" />
@@ -162,8 +162,8 @@ export function SeasonEpisodesPage() {
   const episodeCount = seasonMeta?.episodeCount ?? totalEpisodes
 
   return (
-    <div className="relative isolate overflow-hidden pb-28">
-      <section className="relative overflow-hidden border-b border-white/10 bg-[#0d0e11]">
+    <div className="wm-season-page relative isolate overflow-hidden pb-28">
+      <section className="wm-season-hero relative overflow-hidden border-b border-white/10 bg-[color:var(--color-bg)]">
         {hasImagePath(posterPath) ? (
           <img
             alt=""
@@ -174,7 +174,7 @@ export function SeasonEpisodesPage() {
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,8,11,0.24)_0%,rgba(7,8,11,0.84)_58%,rgba(7,8,11,0.98)_100%)] lg:bg-[linear-gradient(90deg,rgba(7,8,11,0.98)_14%,rgba(7,8,11,0.86)_52%,rgba(7,8,11,0.52)_100%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(47,174,126,0.14)_0%,rgba(47,174,126,0)_34%)]" />
 
-        <div className="relative z-10 mx-auto max-w-[1380px] px-4 pb-10 pt-6 sm:px-6 md:pb-20 md:pt-28 lg:px-8 xl:px-12">
+        <div className="wm-season-inner relative z-10 mx-auto max-w-[1380px] px-4 pb-10 pt-6 sm:px-6 md:pb-20 md:pt-28 lg:px-8 xl:px-12">
           <div className="flex flex-wrap items-center justify-between gap-3 pb-5 md:pb-6">
             <Link
               className="inline-flex min-h-11 items-center gap-2 text-sm text-[color:var(--color-accent)] transition hover:text-white"
@@ -186,7 +186,7 @@ export function SeasonEpisodesPage() {
             <GenrePill>{parsedSeasonNumber === 0 ? 'Specials' : seasonLabel}</GenrePill>
           </div>
 
-          <div className="grid grid-cols-[6.75rem_minmax(0,1fr)] items-end gap-x-4 gap-y-5 sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:gap-x-6 md:grid-cols-[11rem_minmax(0,1fr)] lg:min-h-[30rem] lg:grid-cols-[292px_minmax(0,1fr)] lg:content-end lg:gap-x-8 lg:gap-y-6 xl:grid-cols-[336px_minmax(0,1fr)]">
+          <div className="wm-season-grid grid grid-cols-[6.75rem_minmax(0,1fr)] items-end gap-x-4 gap-y-5 sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:gap-x-6 md:grid-cols-[11rem_minmax(0,1fr)] lg:min-h-[30rem] lg:grid-cols-[292px_minmax(0,1fr)] lg:content-end lg:gap-x-8 lg:gap-y-6 xl:grid-cols-[336px_minmax(0,1fr)]">
             <div className="w-full lg:row-span-2">
               <div className="motion-poster relative overflow-hidden rounded-[var(--radius-panel)] border border-white/12 bg-[rgba(255,255,255,0.04)] shadow-[0_18px_44px_rgba(0,0,0,0.38)] lg:shadow-[0_30px_80px_rgba(0,0,0,0.42)]">
                 {hasImagePath(posterPath) ? (

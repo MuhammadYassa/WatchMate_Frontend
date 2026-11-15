@@ -61,7 +61,7 @@ export function DesktopNav({ mode }: { mode?: ShellMode }) {
 
   if (shellMode === 'side-rail' && isAuthenticated && username) {
     return (
-      <aside className="motion-slide-up fixed inset-y-0 left-0 z-40 hidden w-[var(--shell-side-rail-width)] border-r border-white/8 bg-[linear-gradient(180deg,rgba(16,18,20,0.94)_0%,rgba(7,8,8,0.99)_100%)] px-5 py-5 shadow-[0_30px_90px_rgba(0,0,0,0.44)] backdrop-blur-xl md:flex md:flex-col">
+      <aside className="wm-side-rail motion-slide-up fixed inset-y-0 left-0 z-40 hidden w-[var(--shell-side-rail-width)] border-r border-white/8 bg-[linear-gradient(180deg,rgba(16,18,20,0.94)_0%,rgba(7,8,8,0.99)_100%)] px-5 py-5 shadow-[0_30px_90px_rgba(0,0,0,0.44)] backdrop-blur-xl md:flex md:flex-col">
         <div className="px-1">
           <Logo size="lg" to="/dashboard" />
         </div>
@@ -159,7 +159,7 @@ export function DesktopNav({ mode }: { mode?: ShellMode }) {
   }
 
   return (
-    <header className="sticky top-0 z-40 hidden border-b border-white/8 bg-[rgba(12,13,13,0.80)] backdrop-blur-xl md:block">
+    <header className="wm-topbar sticky top-0 z-40 hidden border-b border-white/8 bg-[rgba(12,13,13,0.80)] backdrop-blur-xl md:block">
       <div className="mx-auto flex w-full max-w-[1320px] items-center justify-between gap-3 px-5 py-4 lg:px-6 xl:gap-6 xl:px-12">
         {/* Tablet widths (768-1024) get the md logo; the lg lockup returns at lg. */}
         <span className="lg:hidden">

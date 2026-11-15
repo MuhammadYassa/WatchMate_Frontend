@@ -35,14 +35,14 @@ export function EpisodeCard({ episode, onTick, tickPending }: EpisodeCardProps) 
   return (
     <Card
       className={cn(
-        'group grid gap-4 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(22,24,26,0.9)_0%,rgba(13,14,15,0.98)_100%)] p-4 shadow-[0_22px_50px_rgba(0,0,0,0.3)] transition duration-300 hover:border-[rgba(47,174,126,0.16)] hover:shadow-[0_30px_72px_rgba(0,0,0,0.44)] sm:gap-5 md:p-5 lg:grid-cols-[280px_minmax(0,1fr)]',
+        'wm-episode group grid gap-4 overflow-hidden border-white/10 bg-[color:var(--color-surface-1)] p-4 shadow-none transition duration-300 hover:border-[rgba(47,174,126,0.16)] hover:shadow-none sm:gap-5 md:p-5 lg:grid-cols-[280px_minmax(0,1fr)]',
         isWatched
-          ? 'border-[rgba(111,209,168,0.28)] bg-[linear-gradient(160deg,rgba(20,32,27,0.82)_0%,rgba(13,14,15,0.98)_100%)]'
+          ? 'border-[rgba(111,209,168,0.28)] bg-[color:var(--color-surface-1)]'
           : null,
       )}
     >
       <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(47,174,126,0.06)_0%,rgba(47,174,126,0)_72%)] opacity-0 transition duration-300 group-hover:opacity-100" />
-      <div className="relative overflow-hidden rounded-[var(--radius-media)] border border-white/10 bg-[linear-gradient(180deg,#161922_0%,#0d0e11_100%)]">
+      <div className="relative overflow-hidden rounded-[var(--radius-media)] border border-white/10 bg-[color:var(--color-surface-1)]">
         {hasImagePath(episode.stillPath) && !imageFailed ? (
           <img
             alt={`${episode.name} still`}
@@ -82,7 +82,7 @@ export function EpisodeCard({ episode, onTick, tickPending }: EpisodeCardProps) 
                 'mt-0.5 flex size-11 shrink-0 items-center justify-center rounded-full transition duration-200 active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-bg)] sm:mt-1',
                 isWatched
                   ? cn(
-                      'border border-transparent bg-[color:var(--color-action)] text-[color:var(--color-action-ink)] shadow-[0_0_0_4px_rgba(69,199,147,0.16),0_6px_18px_rgba(69,199,147,0.28)] hover:brightness-105',
+                      'border border-transparent bg-[color:var(--color-action)] text-[color:var(--color-action-ink)] shadow-none hover:brightness-105',
                       !watchedOnMount && 'motion-check-ring',
                     )
                   : 'border-2 border-white/30 bg-transparent text-white/30 hover:border-[rgba(111,209,168,0.55)] hover:bg-[rgba(111,209,168,0.08)] hover:text-[color:var(--color-accent)]',

@@ -147,7 +147,7 @@ export function ReviewEditorCard({
 
   if (activeReview && !isEditing) {
     return (
-      <Card className="space-y-4 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.98)_100%)] p-5 sm:p-6">
+      <Card className="space-y-4 overflow-hidden border-white/10 bg-[color:var(--color-surface-1)] p-5 sm:p-6">
         <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(111,209,168,0.22)_50%,rgba(255,255,255,0)_100%)]" />
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-1.5">
@@ -189,7 +189,7 @@ export function ReviewEditorCard({
   }
 
   return (
-    <Card className="space-y-5 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.98)_100%)] p-5 sm:p-6">
+    <Card className="space-y-5 overflow-hidden border-white/10 bg-[color:var(--color-surface-1)] p-5 sm:p-6">
       <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(111,209,168,0.22)_50%,rgba(255,255,255,0)_100%)]" />
       <div className="space-y-2.5">
         <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">

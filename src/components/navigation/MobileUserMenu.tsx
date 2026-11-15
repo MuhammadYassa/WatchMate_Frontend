@@ -66,7 +66,7 @@ export function MobileUserMenu({ username }: { username: string }) {
 
       {open ? (
         <div
-          className="motion-scale-in absolute right-0 top-[calc(100%+0.5rem)] z-50 w-52 origin-top-right overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[color:var(--color-surface-glass-strong)] py-1.5 shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-xl"
+          className="wm-account-menu motion-scale-in absolute right-0 top-[calc(100%+0.5rem)] z-50 w-52 origin-top-right overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[color:var(--color-surface-glass-strong)] py-1.5 shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-xl"
           role="menu"
         >
           <Link

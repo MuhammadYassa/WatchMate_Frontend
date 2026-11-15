@@ -9,7 +9,7 @@ interface FormFieldProps {
 
 export function FormField({ children, error, hint, label, trailing }: PropsWithChildren<FormFieldProps>) {
   return (
-    <label className="block space-y-2.5">
+    <label className="wm-form-field block space-y-2.5">
       <div className="flex items-center justify-between gap-3">
         <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--color-text-secondary)]">
           {label}

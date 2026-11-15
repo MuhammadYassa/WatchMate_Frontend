@@ -7,7 +7,7 @@ import { Card } from '../ui/Card'
 export function NextEpisodeCard({ nextEpisode }: { nextEpisode: NextEpisodeAiringDTO }) {
   if (!nextEpisode.nextEpisodeAirDate && !nextEpisode.episodeName) {
     return (
-      <Card className="space-y-3 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(19,20,25,0.92)_0%,rgba(10,11,15,0.99)_100%)] p-5 sm:space-y-4 sm:p-6">
+      <Card className="space-y-3 overflow-hidden border-white/10 bg-[color:var(--color-surface-1)] p-5 sm:space-y-4 sm:p-6">
         <h3 className="font-display text-2xl tracking-[-0.04em] text-white sm:text-3xl">
           No upcoming episode is scheduled yet.
         </h3>
@@ -19,7 +19,7 @@ export function NextEpisodeCard({ nextEpisode }: { nextEpisode: NextEpisodeAirin
   }
 
   return (
-    <Card className="space-y-4 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(19,20,25,0.92)_0%,rgba(10,11,15,0.99)_100%)] p-5 shadow-[0_24px_60px_rgba(0,0,0,0.34)] sm:space-y-5 sm:p-6">
+    <Card className="space-y-4 overflow-hidden border-white/10 bg-[color:var(--color-surface-1)] p-5 shadow-none sm:space-y-5 sm:p-6">
       <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(111,209,168,0.28)_50%,rgba(255,255,255,0)_100%)]" />
       <div className="space-y-2.5">
         <h3 className="break-words font-display text-2xl tracking-[-0.04em] text-white sm:text-3xl">

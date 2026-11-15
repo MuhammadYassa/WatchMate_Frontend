@@ -45,7 +45,7 @@ function normalizeUsername(value: string | null | undefined) {
 
 function ProfileLoadingState() {
   return (
-    <PageContainer className="relative isolate space-y-10 overflow-hidden pt-8 md:pt-10">
+    <PageContainer className="wm-profile relative isolate space-y-10 overflow-hidden pt-8 md:pt-10">
       <BrowsePageAtmosphere variant="hero" />
       <Card className="relative z-10 overflow-hidden p-0">
         <Skeleton className="h-48 rounded-none" />
@@ -90,7 +90,7 @@ function ProfileStatCard({
   value: number | string
 }) {
   return (
-    <div className="rounded-[var(--radius-panel)] border border-white/[0.07] bg-[color:var(--color-surface-1)] p-4">
+    <div className="wm-profile-stat rounded-[var(--radius-panel)] border border-white/[0.07] bg-[color:var(--color-surface-1)] p-4">
       <p className="text-[12px] text-[color:var(--color-text-tertiary)]">{label}</p>
       <p className="mt-1 font-display text-[2.3rem] leading-none tracking-[-0.04em] tabular-nums text-white">{value}</p>
     </div>
@@ -102,7 +102,7 @@ function ProfileWatchlistPreview({ watchlist }: { watchlist: WatchListDTO }) {
   const heroItem = previewItems[0]
 
   return (
-    <Card className="overflow-hidden p-0">
+    <Card className="wm-profile-collection overflow-hidden p-0">
       <div className="relative min-h-[18rem]">
         {heroItem && hasImagePath(heroItem.posterPath) ? (
           <img
@@ -129,7 +129,7 @@ function ProfileWatchlistPreview({ watchlist }: { watchlist: WatchListDTO }) {
                   <img
                     key={`${watchlist.id}-${item.type}-${item.tmdbId}`}
                     alt=""
-                    className="aspect-[2/3] w-16 rounded-[12px] border border-white/10 object-cover shadow-[0_16px_35px_rgba(0,0,0,0.28)] sm:w-20"
+                    className="aspect-[2/3] w-16 rounded-[12px] border border-white/10 object-cover shadow-none sm:w-20"
                     src={getPosterUrl(item.posterPath, 'w342') ?? undefined}
                   />
                 ) : (
@@ -337,7 +337,7 @@ export function ProfilePage() {
 
   if (profileQuery.isError || !profileQuery.data) {
     return (
-      <PageContainer className="relative isolate overflow-hidden pt-10">
+      <PageContainer className="wm-profile relative isolate overflow-hidden pt-10">
         <BrowsePageAtmosphere />
         <div className="relative z-10">
           <ErrorState
@@ -378,11 +378,11 @@ export function ProfilePage() {
     || privacyMutation.isPending
 
   return (
-    <PageContainer className="relative isolate space-y-10 overflow-hidden pt-8 md:space-y-12 md:pt-10">
+    <PageContainer className="wm-profile relative isolate space-y-10 overflow-hidden pt-8 md:space-y-12 md:pt-10">
       <BrowsePageAtmosphere variant="hero" />
 
-      <Card className="relative z-10 overflow-hidden p-0 shadow-[0_34px_90px_rgba(0,0,0,0.38)]">
-        <div className="relative h-36 md:h-48">
+      <Card className="wm-profile-hero relative z-10 overflow-hidden p-0 shadow-none">
+        <div className="wm-profile-cover relative h-36 md:h-48">
           <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(47,174,126,0.18)_0%,rgba(17,21,20,0.22)_42%,rgba(9,10,10,0.86)_100%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(47,174,126,0.2),transparent_28%),radial-gradient(circle_at_15%_80%,rgba(111,209,168,0.08),transparent_18%)]" />
         </div>
@@ -475,7 +475,7 @@ export function ProfilePage() {
         </div>
       </Card>
 
-      <div className="relative z-10 grid gap-8 xl:grid-cols-[0.8fr_1.2fr]">
+      <div className="wm-profile-columns relative z-10 grid gap-8 xl:grid-cols-[0.8fr_1.2fr]">
         <div className="space-y-6">
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-2">
             <ProfileStatCard label="Followers" value={profile.followersCount} />

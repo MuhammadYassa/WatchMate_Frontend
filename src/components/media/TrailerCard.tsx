@@ -6,7 +6,7 @@ export function TrailerCard({ trailer }: { trailer: TrailerDTO }) {
   const typeLabel = [trailer.official ? 'Official' : null, trailer.type].filter(Boolean).join(' ')
 
   return (
-    <div className="overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.9)_0%,rgba(11,12,16,0.98)_100%)] shadow-[0_24px_60px_rgba(0,0,0,0.24)]">
+    <div className="overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[color:var(--color-surface-1)] shadow-none">
       <a
         aria-label={`Watch ${trailer.name} on YouTube (opens in new tab)`}
         className="group relative block aspect-video overflow-hidden"
@@ -23,7 +23,7 @@ export function TrailerCard({ trailer }: { trailer: TrailerDTO }) {
           aria-hidden="true"
           className="absolute inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.28)] transition duration-300 group-hover:bg-[rgba(0,0,0,0.42)]"
         >
-          <div className="flex size-14 items-center justify-center rounded-full bg-white/90 text-black shadow-[0_8px_24px_rgba(0,0,0,0.42)] transition duration-300 group-hover:scale-105 group-hover:bg-white">
+          <div className="flex size-14 items-center justify-center rounded-full bg-white/90 text-black shadow-none transition duration-300 group-hover:scale-105 group-hover:bg-white">
             <Play className="ml-1 size-6 fill-current" />
           </div>
         </div>

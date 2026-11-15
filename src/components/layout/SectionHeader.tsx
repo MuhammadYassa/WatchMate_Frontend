@@ -8,7 +8,7 @@ interface SectionHeaderProps {
 
 export function SectionHeader({ action, eyebrow, title }: SectionHeaderProps) {
   return (
-    <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <div className="wm-section-heading flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div className="min-w-0 space-y-2">
         {eyebrow ? (
           <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--color-accent-strong)]">

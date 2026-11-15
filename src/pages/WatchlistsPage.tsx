@@ -52,12 +52,12 @@ function getWatchlistNameError(error: unknown) {
 
 function WatchlistsLoadingState() {
   return (
-    <PageContainer className="relative isolate space-y-8 overflow-hidden pt-8 md:pt-12">
+    <PageContainer className="wm-watchlists relative isolate space-y-8 overflow-hidden pt-8 md:pt-12">
       <BrowsePageAtmosphere variant="hero" />
       <Skeleton className="relative z-10 h-[260px] rounded-[var(--radius-panel)]" />
       {[0, 1, 2].map((item) => (
         <Card
-          className="relative z-10 space-y-6 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.98)_100%)] p-6"
+          className="relative z-10 space-y-6 overflow-hidden border-white/10 bg-[color:var(--color-surface-1)] p-6"
           key={item}
         >
           <Skeleton className="h-8 w-48 rounded-[14px]" />
@@ -84,14 +84,14 @@ function WatchlistPosterPreview({ watchlist }: { watchlist: WatchListDTO }) {
 
   if (!previewItems.length) {
     return (
-      <div className="grid min-h-[220px] place-items-center rounded-[var(--radius-panel)] border border-dashed border-white/10 bg-[rgba(255,255,255,0.03)] p-5">
+      <div className="wm-watchlist-preview grid min-h-[220px] place-items-center rounded-[var(--radius-panel)] border border-dashed border-white/10 bg-[rgba(255,255,255,0.03)] p-5">
         <PosterPlaceholder className="max-w-[150px]" title={watchlist.name} />
       </div>
     )
   }
 
   return (
-    <div className="group relative flex min-h-[240px] items-center justify-center overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.94)_0%,rgba(11,12,16,0.98)_100%)] px-6 py-5">
+    <div className="wm-watchlist-preview group relative flex min-h-[240px] items-center justify-center overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[color:var(--color-surface-1)] px-6 py-5">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(47,174,126,0.12)_0%,rgba(47,174,126,0)_58%)]" />
       {previewItems.map((item, index) => {
         const rotation =
@@ -300,7 +300,7 @@ export function WatchlistsPage() {
 
   if (watchlistsQuery.isError || !watchlistsQuery.data) {
     return (
-      <PageContainer className="relative isolate overflow-hidden pt-10">
+      <PageContainer className="wm-watchlists relative isolate overflow-hidden pt-10">
         <BrowsePageAtmosphere />
         <div className="relative z-10">
           <ErrorState
@@ -323,10 +323,10 @@ export function WatchlistsPage() {
   const renameError = getWatchlistNameError(renameMutation.error)
 
   return (
-    <PageContainer className="relative isolate space-y-8 overflow-hidden pt-8 md:space-y-10 md:pt-12">
+    <PageContainer className="wm-watchlists relative isolate space-y-8 overflow-hidden pt-8 md:space-y-10 md:pt-12">
       <BrowsePageAtmosphere variant="hero" />
 
-      <section className="relative z-10 overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.98)_100%)] px-6 py-7 shadow-[0_30px_80px_rgba(0,0,0,0.36)] md:px-8 md:py-9">
+      <section className="relative z-10 overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[color:var(--color-surface-1)] px-6 py-7 shadow-none md:px-8 md:py-9">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(47,174,126,0.15)_0%,rgba(47,174,126,0)_34%),linear-gradient(145deg,rgba(255,255,255,0.05)_0%,rgba(255,255,255,0)_42%)]" />
         <div className="relative z-10 flex flex-col gap-7 md:flex-row md:items-end md:justify-between">
           <div className="max-w-3xl space-y-4">
@@ -380,14 +380,14 @@ export function WatchlistsPage() {
 
             return (
               <Card
-                className="overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.98)_100%)] p-5 shadow-[0_24px_60px_rgba(0,0,0,0.32)] md:p-6"
+                className="wm-collection overflow-hidden border-white/10 bg-[color:var(--color-surface-1)] p-5 shadow-none md:p-6"
                 key={watchlist.id}
               >
                 <div
                   className="motion-slide-up space-y-6"
                   style={{ animationDelay: `${Math.min(index * 55, 220)}ms` }}
                 >
-                  <div className="grid gap-6 xl:grid-cols-[280px_minmax(0,1fr)]">
+                  <div className="wm-collection-layout grid gap-6 xl:grid-cols-[280px_minmax(0,1fr)]">
                     <WatchlistPosterPreview watchlist={watchlist} />
 
                     <div className="space-y-5 self-center">

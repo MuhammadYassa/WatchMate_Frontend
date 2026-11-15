@@ -34,7 +34,7 @@ export function MediaActionsPanel({
   const [favouritedOnMount] = useState(isFavourited === true)
 
   return (
-    <Card className="space-y-4 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.94)_0%,rgba(10,11,15,0.99)_100%)] p-5 shadow-[0_26px_70px_rgba(0,0,0,0.38)] sm:space-y-6 sm:p-6">
+    <Card className="wm-media-actions space-y-4 overflow-hidden border-white/10 bg-[color:var(--color-surface-1)] p-5 shadow-none sm:space-y-6 sm:p-6">
       <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(111,209,168,0.30)_50%,rgba(255,255,255,0)_100%)]" />
       <div className="space-y-2.5">
         <h2 className="font-display text-2xl tracking-[-0.04em] text-white sm:text-3xl">Track this title.</h2>

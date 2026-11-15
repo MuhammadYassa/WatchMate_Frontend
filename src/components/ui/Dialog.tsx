@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useId, useRef, useState, type ReactNode } from 'react'
 
 import { cn } from '../../utils/cn'
 import { prefersReducedMotion } from '../../utils/motion'
@@ -38,6 +38,8 @@ export function Dialog({
 }: DialogProps) {
   const dialogRef = useRef<HTMLDialogElement>(null)
   const [closing, setClosing] = useState(false)
+  const titleId = useId()
+  const descriptionId = useId()
 
   useEffect(() => {
     const dialogEl = dialogRef.current
@@ -101,6 +103,9 @@ export function Dialog({
 
   return (
     <dialog
+      aria-labelledby={title ? titleId : undefined}
+      aria-describedby={description ? descriptionId : undefined}
+      data-size={size}
       className="wm-dialog motion-modal m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] overflow-y-auto rounded-[var(--radius-panel)] border border-white/10 bg-[color:var(--color-surface-glass-strong)] text-[color:var(--color-text-primary)] shadow-[0_32px_90px_rgba(0,0,0,0.52)] backdrop-blur-xl"
       data-closing={closing ? 'true' : undefined}
       onClick={(event) => {
@@ -121,10 +126,10 @@ export function Dialog({
                   </p>
                 ) : null}
                 {title ? (
-                  <h2 className="break-words font-display text-3xl tracking-[-0.03em] text-white sm:text-4xl">{title}</h2>
+                  <h2 id={titleId} className="break-words font-display text-3xl tracking-[-0.03em] text-white sm:text-4xl">{title}</h2>
                 ) : null}
                 {description ? (
-                  <p className="text-sm leading-7 text-[color:var(--color-text-secondary)]">{description}</p>
+                  <p id={descriptionId} className="text-sm leading-7 text-[color:var(--color-text-secondary)]">{description}</p>
                 ) : null}
               </div>
               {headerActions}

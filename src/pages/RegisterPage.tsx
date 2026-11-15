@@ -58,7 +58,7 @@ export function RegisterPage() {
 
   if (registerMutation.isSuccess) {
     return (
-      <PageContainer className="relative isolate flex min-h-[calc(100dvh-8rem)] items-center justify-center py-8 md:py-10">
+      <PageContainer className="wm-auth relative isolate flex min-h-[calc(100dvh-8rem)] items-center justify-center py-8 md:py-10">
         <PublicPageAtmosphere variant="verify" />
         <Card className="motion-scale-in w-full max-w-2xl space-y-6 p-7 text-center md:p-10">
           <div className="mx-auto flex size-20 items-center justify-center rounded-[var(--radius-panel)] border border-white/10 bg-[rgba(47,174,126,0.07)] text-[color:var(--color-accent)]">
@@ -87,7 +87,7 @@ export function RegisterPage() {
   }
 
   return (
-    <PageContainer className="relative isolate flex min-h-[calc(100dvh-8rem)] items-center py-8 md:py-10">
+    <PageContainer className="wm-auth relative isolate flex min-h-[calc(100dvh-8rem)] items-center py-8 md:py-10">
       <PublicPageAtmosphere variant="auth" />
 
       <div className="grid w-full gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">

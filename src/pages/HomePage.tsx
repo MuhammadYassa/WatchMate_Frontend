@@ -1,70 +1,69 @@
-﻿import { useQuery } from '@tanstack/react-query'
-import { ArrowRight, Layers3, PlayCircle } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
+import { ArrowRight, ArrowUpRight, Layers3, PlayCircle, Star } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { dashboardApi } from '../api/dashboardApi'
 import { homeApi } from '../api/homeApi'
 import { useAuthStore } from '../auth/authStore'
-import { BrowsePageAtmosphere } from '../components/browse/BrowsePageAtmosphere'
 import { EmptyState } from '../components/feedback/EmptyState'
 import { ErrorState } from '../components/feedback/ErrorState'
-import { Skeleton, SkeletonPoster } from '../components/feedback/Skeleton'
+import { Skeleton } from '../components/feedback/Skeleton'
 import { PageContainer } from '../components/layout/PageContainer'
-import { SectionHeader } from '../components/layout/SectionHeader'
 import { GenreChip } from '../components/media/GenreChip'
+import { HomeReveal } from '../components/media/HomeReveal'
 import { MediaRail } from '../components/media/MediaRail'
-import { PosterCard, PosterCardActionLink } from '../components/media/PosterCard'
+import { PosterCard } from '../components/media/PosterCard'
 import { Button } from '../components/ui/Button'
 import { getButtonClassName } from '../components/ui/buttonStyles'
 import type { DiscoveryMediaItemDTO } from '../types/api'
 import { formatMediaType } from '../utils/labels'
 import { getMediaRoute } from '../utils/mediaRoutes'
 import { getBackdropUrl } from '../utils/tmdbImages'
+import '../styles/editorial.css'
 
 function HomeLoadingState() {
   return (
-    <PageContainer className="relative isolate space-y-12 overflow-hidden pt-6 md:pt-8">
-      <BrowsePageAtmosphere variant="hero" />
-      <Skeleton className="-mx-4 h-[72dvh] min-h-[34rem] rounded-none sm:-mx-6 lg:-mx-8 xl:-mx-12" />
-      <div className="space-y-4">
-        <Skeleton className="h-14 w-full max-w-3xl rounded-[16px]" />
-        <div className="flex gap-4 overflow-hidden">
-          <SkeletonPoster />
-          <SkeletonPoster />
-          <SkeletonPoster />
+    <div aria-busy="true" aria-label="Loading your Home feed" className="home-editorial home-loading">
+      <div className="home-feature home-wrap" aria-hidden="true">
+        <div className="home-feature-art"><Skeleton className="h-full w-full rounded-none" /></div>
+        <div className="home-feature-copy">
+          <Skeleton className="mb-6 h-4 w-32" />
+          <Skeleton className="h-20 w-4/5" /><Skeleton className="mt-3 h-20 w-3/5" />
+          <Skeleton className="mt-7 h-4 w-4/5" /><Skeleton className="mt-3 h-4 w-3/5" />
+          <div className="mt-8 flex gap-3"><Skeleton className="h-12 w-36" /><Skeleton className="h-12 w-36" /></div>
         </div>
       </div>
-      {[0, 1].map((section) => (
-        <div className="space-y-5" key={section}>
-          <Skeleton className="h-8 w-56" />
-          <div className="flex gap-4 overflow-hidden">
-            <SkeletonPoster />
-            <SkeletonPoster />
-            <SkeletonPoster />
+      <div className="home-wrap" aria-hidden="true">
+        <div className="home-genres">
+          <div className="home-genres-intro"><Skeleton className="h-6 w-40" /><Skeleton className="mt-2 h-4 w-36" /></div>
+          <div className="home-genre-rows">
+            {[0, 1].map((row) => <div className="home-genre-row" key={row}>
+              <Skeleton className="mt-3 h-4 w-10" />
+              <div className="home-genre-chips home-loading-chips">
+                {[48, 66, 52, 100].map((width) => <Skeleton className="h-9" key={width} style={{ width }} />)}
+              </div>
+            </div>)}
           </div>
         </div>
-      ))}
-    </PageContainer>
+        {[0, 1].map((section) => (
+          <div className="home-shelf" key={section}>
+            <Skeleton className="mb-7 h-10 w-64" />
+            <div className="flex gap-5 overflow-hidden">
+              {[0, 1, 2, 3, 4, 5].map((poster) => <Skeleton className="aspect-[2/3] w-[210px] shrink-0" key={poster} />)}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   )
 }
 
 function getHomeHero(homeData: Awaited<ReturnType<typeof homeApi.getHome>>) {
-  const sections = [
-    homeData.trendingMovies,
-    homeData.trendingShows,
-    homeData.popularNow,
-    homeData.upcoming,
-  ]
-
+  const sections = [homeData.trendingMovies, homeData.trendingShows, homeData.popularNow, homeData.upcoming]
   return sections.flat().find(Boolean) ?? null
 }
 
-function CompactGenreShelf({
-  movieGenres,
-  onMovieGenre,
-  onShowGenre,
-  showGenres,
-}: {
+function CompactGenreShelf({ movieGenres, onMovieGenre, onShowGenre, showGenres }: {
   movieGenres: string[]
   onMovieGenre: (genre: string) => void
   onShowGenre: (genre: string) => void
@@ -74,24 +73,21 @@ function CompactGenreShelf({
   const featuredShowGenres = showGenres.slice(0, 4)
 
   return (
-    <div className="rounded-[var(--radius-panel)] border border-white/8 bg-[rgba(12,13,17,0.84)] px-4 py-4 shadow-[0_18px_42px_rgba(0,0,0,0.28)] backdrop-blur-xl sm:px-5">
-      <div className="grid gap-4 lg:grid-cols-[auto_1fr_auto_1fr] lg:items-center">
-        <p className="text-sm font-medium text-[color:var(--color-text-secondary)]">Movies</p>
-        <div className="flex flex-wrap gap-2.5">
-          <span className="sr-only">Browse movie genres</span>
-          {featuredMovieGenres.map((genre) => (
-            <GenreChip key={`movie-${genre}`} onClick={() => onMovieGenre(genre)}>
-              {genre}
-            </GenreChip>
-          ))}
+    <div className="home-genres">
+      <div className="home-genres-intro"><span>Browse by genre</span></div>
+      <div className="home-genre-rows">
+        <div className="home-genre-row">
+          <p>Movies</p>
+          <div className="home-genre-chips">
+            <span className="sr-only">Browse movie genres</span>
+            {featuredMovieGenres.map((genre) => <GenreChip key={`movie-${genre}`} onClick={() => onMovieGenre(genre)}>{genre}</GenreChip>)}
+          </div>
         </div>
-        <p className="text-sm font-medium text-[color:var(--color-text-secondary)]">Shows</p>
-        <div className="flex flex-wrap gap-2.5">
-          {featuredShowGenres.map((genre) => (
-            <GenreChip key={`show-${genre}`} onClick={() => onShowGenre(genre)}>
-              {genre}
-            </GenreChip>
-          ))}
+        <div className="home-genre-row">
+          <p>Shows</p>
+          <div className="home-genre-chips">
+            {featuredShowGenres.map((genre) => <GenreChip key={`show-${genre}`} onClick={() => onShowGenre(genre)}>{genre}</GenreChip>)}
+          </div>
         </div>
       </div>
     </div>
@@ -102,43 +98,27 @@ export function HomePage() {
   const navigate = useNavigate()
   const isAuthenticated = useAuthStore((state) => Boolean(state.accessToken))
 
-  const homeQuery = useQuery({
-    queryFn: homeApi.getHome,
-    queryKey: ['home'],
-  })
-
+  const homeQuery = useQuery({ queryFn: homeApi.getHome, queryKey: ['home'] })
   const continueWatchingQuery = useQuery({
     enabled: isAuthenticated,
     queryFn: () => dashboardApi.getContinueWatching(10),
     queryKey: ['dashboard', 'continue-watching', 10],
   })
 
-  if (homeQuery.isLoading) {
-    return <HomeLoadingState />
-  }
+  if (homeQuery.isLoading) return <HomeLoadingState />
 
   if (homeQuery.isError || !homeQuery.data) {
     return (
-      <PageContainer className="relative isolate overflow-hidden pt-10">
-        <BrowsePageAtmosphere />
-        <div className="relative z-10">
-          <ErrorState
-            action={
-              <Button onClick={() => homeQuery.refetch()} variant="secondary">
-                Try again
-              </Button>
-            }
-          />
-        </div>
-      </PageContainer>
+      <div className="home-editorial home-feedback">
+        <PageContainer className="pt-10">
+          <ErrorState action={<Button onClick={() => homeQuery.refetch()} variant="secondary">Try again</Button>} />
+        </PageContainer>
+      </div>
     )
   }
 
   const hero = getHomeHero(homeQuery.data)
-  const sections: Array<{
-    items: DiscoveryMediaItemDTO[]
-    title: string
-  }> = [
+  const sections: Array<{ items: DiscoveryMediaItemDTO[]; title: string }> = [
     { items: homeQuery.data.trendingMovies, title: 'Trending Movies' },
     { items: homeQuery.data.trendingShows, title: 'Trending Shows' },
     { items: homeQuery.data.popularNow, title: 'Popular Now' },
@@ -146,162 +126,87 @@ export function HomePage() {
     { items: homeQuery.data.upcoming, title: 'Upcoming' },
     { items: homeQuery.data.recommendedLater, title: 'Recommended Later' },
   ]
-
   const continueWatchingItems = continueWatchingQuery.data?.items ?? []
 
   return (
-    <div className="relative isolate overflow-hidden pb-24">
-      <BrowsePageAtmosphere variant="hero" />
-
+    <div className="home-editorial">
       {hero ? (
-        <section className="relative min-h-[84dvh] overflow-hidden border-b border-white/6">
-          {hero.backdropPath ? (
-            <img
-              alt=""
-              className="motion-hero-img absolute inset-0 h-full w-full object-cover [--hero-img-opacity:0.72]"
-              src={getBackdropUrl(hero.backdropPath, 'w1280') ?? undefined}
-            />
-          ) : null}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_18%,rgba(47,174,126,0.12),transparent_22%),linear-gradient(180deg,rgba(7,8,8,0.14)_0%,rgba(7,8,8,0.34)_24%,rgba(7,8,8,0.96)_100%)]" />
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(10,11,11,0.96)_8%,rgba(10,11,11,0.78)_38%,rgba(10,11,11,0.3)_100%)]" />
-
-          <div className="relative mx-auto flex min-h-[84dvh] max-w-[1440px] items-end px-4 pb-18 pt-28 sm:px-6 lg:px-8 xl:px-12">
-            <div className="motion-stagger min-w-0 max-w-3xl space-y-6">
-              <div className="space-y-4">
-                <h1 className="break-words font-display text-[length:clamp(2.5rem,12vw,3.6rem)] leading-[0.92] tracking-[-0.03em] text-white sm:text-[4.7rem] md:text-[5.8rem]">
-                  {hero.title}
-                </h1>
-                <p className="line-clamp-3 max-w-2xl text-base leading-8 text-[color:var(--color-text-secondary)] md:text-lg">
-                  {hero.overview || "A standout title from today's WatchMate feed."}
-                </p>
-              </div>
-
-              <div className="flex flex-wrap gap-3">
-                <Link
-                  className={getButtonClassName('primary', 'min-w-[12rem]')}
-                  to={getMediaRoute(hero.tmdbId, hero.type)}
-                >
-                  <PlayCircle aria-hidden="true" className="size-4" />
-                  View details
-                </Link>
-                <Link className={getButtonClassName('secondary', 'min-w-[12rem]')} to="/discover">
-                  Explore titles
-                </Link>
-              </div>
+        <section className="home-feature home-wrap" aria-labelledby="home-feature-title">
+          <div className="home-feature-art">
+            {hero.backdropPath ? <img alt="" className="home-feature-image" key={hero.backdropPath}
+              onError={(event) => { event.currentTarget.style.visibility = 'hidden' }}
+              src={getBackdropUrl(hero.backdropPath, 'w1280') ?? undefined} /> : null}
+            <div className="home-feature-shade" />
+          </div>
+          <div className="home-feature-copy">
+            <p className="home-feature-label"><span /> Featured title</p>
+            <div className="home-title-window"><h1 id="home-feature-title">{hero.title}</h1></div>
+            <div className="home-feature-meta">
+              <span>{formatMediaType(hero.type)}</span>
+              {hero.releaseDate ? <span>{hero.releaseDate.slice(0, 4)}</span> : null}
+              {typeof hero.rating === 'number' ? <span className="home-feature-rating"><Star aria-hidden="true" className="size-3.5 fill-current" /> {hero.rating.toFixed(1)}</span> : null}
+            </div>
+            <p className="home-feature-overview">{hero.overview || 'No overview is available for this title.'}</p>
+            <div className="home-feature-actions">
+              <Link className={getButtonClassName('primary')} to={getMediaRoute(hero.tmdbId, hero.type)}>
+                <PlayCircle aria-hidden="true" className="size-4" /> View details <ArrowUpRight aria-hidden="true" className="size-4 home-action-arrow" />
+              </Link>
+              <Link className={getButtonClassName('secondary')} to="/discover">Explore titles <ArrowRight aria-hidden="true" className="size-4 home-action-arrow" /></Link>
             </div>
           </div>
         </section>
       ) : (
-        <PageContainer className="relative isolate overflow-hidden pt-10">
-          <div className="relative z-10">
-            <EmptyState
-              body="The home feed is empty right now. Try again in a moment."
-              heading="Nothing to show yet"
-              icon={<Layers3 aria-hidden="true" className="size-5" />}
-            />
-          </div>
-        </PageContainer>
+        <PageContainer className="pt-10"><EmptyState body="The home feed is empty right now. Try again in a moment." heading="Nothing to show yet" icon={<Layers3 aria-hidden="true" className="size-5" />} /></PageContainer>
       )}
 
-      <div className="relative z-10 -mt-6 md:-mt-8">
-        <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8 xl:px-12">
-          <CompactGenreShelf
-            movieGenres={homeQuery.data.movieGenres}
-            onMovieGenre={(genre) => navigate(`/discover?genreType=movie&genre=${encodeURIComponent(genre)}`)}
-            onShowGenre={(genre) => navigate(`/discover?genreType=show&genre=${encodeURIComponent(genre)}`)}
-            showGenres={homeQuery.data.showGenres}
-          />
-        </div>
+      <div className="home-wrap">
+        <CompactGenreShelf movieGenres={homeQuery.data.movieGenres} showGenres={homeQuery.data.showGenres}
+          onMovieGenre={(genre) => navigate(`/discover?genreType=movie&genre=${encodeURIComponent(genre)}`)}
+          onShowGenre={(genre) => navigate(`/discover?genreType=show&genre=${encodeURIComponent(genre)}`)} />
       </div>
 
       {isAuthenticated && continueWatchingItems.length > 0 ? (
-        <section className="relative z-10 mt-12">
-          <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8 xl:px-12">
-            <div className="motion-stagger space-y-5">
-              <SectionHeader  title="Continue watching" />
-              <MediaRail className="pr-0">
-                {continueWatchingItems.map((item) => (
-                  <PosterCard
-                    key={`${item.type}-${item.tmdbId}`}
-                    href={getMediaRoute(item.tmdbId, item.type)}
-                    imagePath={item.posterPath}
-                    mediaTypeLabel={
-                      item.type === 'SHOW' && item.resumeSeasonNumber && item.resumeEpisodeNumber
-                        ? `Resume S${item.resumeSeasonNumber} E${item.resumeEpisodeNumber}`
-                        : formatMediaType(item.type)
-                    }
-                    rating={item.rating}
-                    title={item.title}
-                  />
-                ))}
-              </MediaRail>
-            </div>
-          </div>
-        </section>
+        <HomeReveal className="home-shelf home-wrap home-resume">
+          <div className="home-shelf-heading"><div><h2>Continue watching</h2></div></div>
+          <MediaRail className="home-rail">
+            {continueWatchingItems.map((item) => (
+              <PosterCard key={`${item.type}-${item.tmdbId}`} href={getMediaRoute(item.tmdbId, item.type)} imagePath={item.posterPath}
+                mediaTypeLabel={item.type === 'SHOW' && item.resumeSeasonNumber && item.resumeEpisodeNumber
+                  ? `Resume S${item.resumeSeasonNumber} E${item.resumeEpisodeNumber}` : formatMediaType(item.type)}
+                presentation="editorial" rating={item.rating} title={item.title} />
+            ))}
+          </MediaRail>
+        </HomeReveal>
       ) : null}
 
-      {sections.map((section, index) =>
-        section.items.length > 0 ? (
-          <section className="relative z-10 mt-14" key={section.title}>
-            <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8 xl:px-12">
-              <div className="space-y-5">
-                <SectionHeader
-                  action={
-                    index < 2 ? <PosterCardActionLink href="/discover" label="Explore more" /> : undefined
-                  }
-                  
-                  title={section.title}
-                />
-                <MediaRail className="pr-0">
-                  {section.items.map((item) => (
-                    <PosterCard
-                      key={`${section.title}-${item.tmdbId}`}
-                      href={getMediaRoute(item.tmdbId, item.type)}
-                      imagePath={item.posterPath}
-                      mediaTypeLabel={formatMediaType(item.type)}
-                      rating={item.rating}
-                      releaseDate={item.releaseDate}
-                      title={item.title}
-                    />
-                  ))}
-                </MediaRail>
-              </div>
-            </div>
-          </section>
-        ) : null,
-      )}
+      {sections.map((section, index) => section.items.length > 0 ? (
+        <HomeReveal className={`home-shelf home-wrap${index === 2 ? ' home-shelf-featured' : ''}`} key={section.title}>
+          <div className="home-shelf-heading">
+            <div><h2>{section.title}</h2></div>
+            {index < 2 ? <Link className={getButtonClassName('secondary', 'home-explore-link')} to="/discover">
+              Explore more <ArrowUpRight aria-hidden="true" className="size-4" />
+            </Link> : null}
+          </div>
+          <MediaRail className="home-rail">
+            {section.items.map((item) => (
+              <PosterCard key={`${section.title}-${item.tmdbId}`} href={getMediaRoute(item.tmdbId, item.type)} imagePath={item.posterPath}
+                mediaTypeLabel={formatMediaType(item.type)} rating={item.rating} releaseDate={item.releaseDate}
+                title={item.title} presentation="editorial" />
+            ))}
+          </MediaRail>
+        </HomeReveal>
+      ) : null)}
 
       {!isAuthenticated ? (
-        <section className="relative z-10 mt-16">
-          <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8 xl:px-12">
-            <div className="overflow-hidden rounded-[var(--radius-panel)] border border-[rgba(47,174,126,0.14)] bg-[linear-gradient(145deg,rgba(22,24,26,0.92)_0%,rgba(13,14,15,0.98)_100%)] px-5 py-6 shadow-[0_26px_60px_rgba(0,0,0,0.32)]">
-              <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(47,174,126,0.10)_0%,rgba(47,174,126,0)_72%)]" />
-              <div className="relative flex flex-wrap items-center justify-between gap-4">
-                <div>
-                  <span className="text-sm text-[color:var(--color-text-secondary)]">
-                    Create an account to carry your progress, favourites, and watchlists with you.
-                  </span>
-                </div>
-                <Link
-                  className="inline-flex items-center gap-2 text-sm font-medium text-[color:var(--color-accent)] transition hover:text-white"
-                  to="/register"
-                >
-                  Start tracking <ArrowRight aria-hidden="true" className="size-4" />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
+        <HomeReveal className="home-join home-wrap">
+          <div className="home-join-copy"><p className="home-join-title">Track what you watch.</p>
+            <p>Create an account to carry your progress, favourites, and watchlists with you.</p></div>
+          <Link className={getButtonClassName('primary')} to="/register">Start tracking <ArrowRight aria-hidden="true" className="size-4" /></Link>
+        </HomeReveal>
       ) : null}
 
       {!hero && !sections.some((section) => section.items.length > 0) ? (
-        <PageContainer className="pt-12">
-          <EmptyState
-            body="Nothing is available in the home feed right now."
-            heading="The browse canvas is quiet tonight"
-            icon={<PlayCircle aria-hidden="true" className="size-5" />}
-          />
-        </PageContainer>
+        <PageContainer className="pt-12"><EmptyState body="Nothing is available in the home feed right now." heading="The browse canvas is quiet tonight" icon={<PlayCircle aria-hidden="true" className="size-5" />} /></PageContainer>
       ) : null}
     </div>
   )

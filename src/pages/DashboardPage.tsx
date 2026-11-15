@@ -99,7 +99,7 @@ function groupCalendarItems(items: CalendarItemDTO[]) {
 function UpcomingStackCard({ item }: { item: UpcomingEpisodeItemDTO }) {
   return (
     <Link className="block" to={getMediaRoute(item.tmdbId, item.type)}>
-      <Card className="motion-card h-full border-white/10 bg-[linear-gradient(145deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.96)_100%)] p-5 hover:border-[rgba(47,174,126,0.2)]">
+      <Card className="wm-upcoming-row motion-card h-full border-white/10 bg-[color:var(--color-surface-1)] p-5 hover:border-[rgba(47,174,126,0.2)]">
         <div className="space-y-3">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0 space-y-1">
@@ -159,7 +159,7 @@ function ToWatchLoadingRow() {
 function ToWatchItemRow({ item }: { item: ToWatchItemDTO }) {
   return (
     <Link className="block" to={getMediaRoute(item.tmdbId, item.type)}>
-      <Card className="group flex items-center gap-4 border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.9)_0%,rgba(12,13,17,0.98)_100%)] p-4 transition duration-200 hover:border-[rgba(47,174,126,0.2)]">
+      <Card className="wm-planned-row group flex items-center gap-4 border-white/10 bg-[color:var(--color-surface-1)] p-4 transition duration-200 hover:border-[rgba(47,174,126,0.2)]">
         <div className="relative h-14 w-10 shrink-0 overflow-hidden rounded-[var(--radius-media)] border border-white/10">
           {hasImagePath(item.posterPath) ? (
             <img
@@ -233,11 +233,11 @@ export function DashboardPage() {
   const secondaryUpcoming = upcomingItems.slice(1, 4)
 
   return (
-    <PageContainer className="relative isolate space-y-12 overflow-hidden pt-8 md:space-y-14 md:pt-10">
+    <PageContainer className="wm-dashboard relative isolate space-y-12 overflow-hidden pt-8 md:space-y-14 md:pt-10">
       <BrowsePageAtmosphere variant="hero" />
 
-      <section className="relative z-10 grid gap-5 xl:grid-cols-[1.18fr_0.82fr] xl:items-stretch">
-        <div className="relative min-h-[34rem] overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(145deg,rgba(18,19,23,0.96)_0%,rgba(11,12,15,1)_100%)] shadow-[0_30px_90px_rgba(0,0,0,0.36)]">
+      <section className="wm-dashboard-opening relative z-10 grid gap-5 xl:grid-cols-[1.18fr_0.82fr] xl:items-stretch">
+        <div className="wm-dashboard-hero relative min-h-[34rem] overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[color:var(--color-surface-1)] shadow-none">
           {hero && 'backdropPath' in hero && hero.backdropPath ? (
             <img
               alt=""
@@ -291,8 +291,8 @@ export function DashboardPage() {
           </div>
         </div>
 
-        <div className="motion-stagger grid gap-4">
-          <Card className="border-white/10 bg-[linear-gradient(145deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.96)_100%)] p-5">
+        <div className="wm-dashboard-upcoming motion-stagger grid gap-4">
+          <Card className="border-white/10 bg-[color:var(--color-surface-1)] p-5">
             <div className="space-y-3">
               <h2 className="font-display text-[2.3rem] tracking-[-0.04em] text-white">
                 Next on your list

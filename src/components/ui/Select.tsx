@@ -9,6 +9,7 @@ interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
 export function Select({ className, error = false, ...props }: SelectProps) {
   return (
     <select
+      aria-invalid={error || undefined}
       className={cn(
         'w-full rounded-[var(--radius-control)] border bg-[rgba(10,12,16,0.82)] px-4 py-3.5 text-sm text-[color:var(--color-text-primary)] shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] transition duration-300 focus-visible:outline-none',
         error

@@ -26,7 +26,7 @@ export function Card({
   return (
     <div
       className={cn(
-        'relative rounded-[var(--radius-panel)]',
+        'wm-card relative rounded-[var(--radius-panel)]',
         variantBase[variant],
         className,
       )}

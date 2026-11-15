@@ -15,7 +15,7 @@ const variantClasses: Record<ButtonVariant, string> = {
 
 export function getButtonClassName(variant: ButtonVariant = 'primary', className?: string) {
   return cn(
-    'inline-flex min-h-11 select-none items-center justify-center gap-2 rounded-[var(--radius-control)] px-5 py-2.5 text-sm font-semibold tracking-[0.01em] touch-manipulation transition duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-border-focus)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-bg)] disabled:cursor-not-allowed disabled:opacity-50 active:scale-[0.97] active:duration-[120ms]',
+    'wm-button inline-flex min-h-11 select-none items-center justify-center gap-2 rounded-[var(--radius-control)] px-5 py-2.5 text-sm font-semibold tracking-[0.01em] touch-manipulation transition duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-border-focus)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-bg)] disabled:cursor-not-allowed disabled:opacity-50 active:scale-[0.97] active:duration-[120ms]',
     variantClasses[variant],
     className,
   )

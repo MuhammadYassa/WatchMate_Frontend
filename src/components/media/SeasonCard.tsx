@@ -20,9 +20,9 @@ export function SeasonCard({ season, showTmdbId }: SeasonCardProps) {
 
   return (
     <Link className="group block focus-visible:outline-none" to={`/shows/${showTmdbId}/seasons/${season.seasonNumber}/episodes`}>
-      <Card className="grid grid-cols-[5.25rem_minmax(0,1fr)] gap-4 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.98)_100%)] p-3.5 transition duration-300 group-hover:-translate-y-1 group-hover:border-white/16 group-hover:shadow-[0_30px_70px_rgba(0,0,0,0.42)] group-focus-visible:border-[rgba(47,174,126,0.55)] group-focus-visible:shadow-[0_0_0_3px_var(--color-accent-glow)] sm:grid-cols-[138px_minmax(0,1fr)] sm:gap-5 sm:p-5">
+      <Card className="wm-season-card grid grid-cols-[5.25rem_minmax(0,1fr)] gap-4 overflow-hidden border-white/10 bg-[color:var(--color-surface-1)] p-3.5 transition duration-300 group-hover:-translate-y-1 group-hover:border-white/16 group-hover:shadow-none group-focus-visible:border-[rgba(47,174,126,0.55)] group-focus-visible:shadow-[0_0_0_3px_var(--color-accent-glow)] sm:grid-cols-[138px_minmax(0,1fr)] sm:gap-5 sm:p-5">
         <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(47,174,126,0.06)_0%,rgba(47,174,126,0)_72%)] opacity-0 transition duration-300 group-hover:opacity-100" />
-        <div className="relative self-start overflow-hidden rounded-[var(--radius-media)] border border-white/10 bg-[rgba(255,255,255,0.03)] shadow-[0_18px_35px_rgba(0,0,0,0.28)] sm:max-w-[138px] sm:self-auto">
+        <div className="relative self-start overflow-hidden rounded-[var(--radius-media)] border border-white/10 bg-[rgba(255,255,255,0.03)] shadow-none sm:max-w-[138px] sm:self-auto">
           {hasImagePath(season.posterPath) && !imageFailed ? (
             <img
               alt={`${season.name || label} poster`}

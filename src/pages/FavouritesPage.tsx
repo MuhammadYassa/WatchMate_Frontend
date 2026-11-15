@@ -23,7 +23,7 @@ const PAGE_SIZE = 20
 
 function FavouritesLoadingState() {
   return (
-    <PageContainer className="relative isolate space-y-8 overflow-hidden pt-8 md:pt-12">
+    <PageContainer className="wm-favourites relative isolate space-y-8 overflow-hidden pt-8 md:pt-12">
       <BrowsePageAtmosphere variant="hero" />
       <Skeleton className="relative z-10 h-[220px] rounded-[var(--radius-panel)]" />
       <div className="relative z-10">
@@ -93,7 +93,7 @@ export function FavouritesPage() {
 
   if (favouritesQuery.isError || !favouritesQuery.data) {
     return (
-      <PageContainer className="relative isolate overflow-hidden pt-10">
+      <PageContainer className="wm-favourites relative isolate overflow-hidden pt-10">
         <BrowsePageAtmosphere />
         <div className="relative z-10">
           <ErrorState
@@ -114,10 +114,10 @@ export function FavouritesPage() {
   const favouritePage = favouritesQuery.data
 
   return (
-    <PageContainer className="relative isolate space-y-8 overflow-hidden pt-8 md:space-y-10 md:pt-12">
+    <PageContainer className="wm-favourites relative isolate space-y-8 overflow-hidden pt-8 md:space-y-10 md:pt-12">
       <BrowsePageAtmosphere variant="hero" />
 
-      <section className="relative z-10 overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.98)_100%)] px-6 py-7 shadow-[0_30px_80px_rgba(0,0,0,0.36)] md:px-8 md:py-9">
+      <section className="relative z-10 overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[color:var(--color-surface-1)] px-6 py-7 shadow-none md:px-8 md:py-9">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(47,174,126,0.14)_0%,rgba(47,174,126,0)_32%),linear-gradient(145deg,rgba(255,255,255,0.04)_0%,rgba(255,255,255,0)_42%)]" />
         <div className="relative z-10 space-y-4">
           <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">

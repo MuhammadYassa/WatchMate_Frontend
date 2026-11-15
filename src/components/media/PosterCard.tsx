@@ -1,5 +1,5 @@
 ﻿import { useState } from 'react'
-import { Star } from 'lucide-react'
+import { ArrowUpRight, Star } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import { getButtonClassName } from '../ui/buttonStyles'
@@ -16,6 +16,7 @@ interface PosterCardProps {
   rating?: number | null
   title: string
   variant?: 'grid' | 'rail'
+  presentation?: 'default' | 'editorial'
 }
 
 export function PosterCard({
@@ -27,6 +28,7 @@ export function PosterCard({
   rating,
   title,
   variant = 'rail',
+  presentation = 'editorial',
 }: PosterCardProps) {
   const [imageFailed, setImageFailed] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
@@ -39,6 +41,7 @@ export function PosterCard({
           ? 'min-w-[164px] max-w-[164px] shrink-0 snap-start sm:min-w-[186px] sm:max-w-[186px]'
           : 'min-w-0 max-w-none',
         className ?? '',
+        presentation === 'editorial' ? 'poster-editorial' : '',
       ].join(' ')}
       to={href}
     >
@@ -62,6 +65,11 @@ export function PosterCard({
           <PosterPlaceholder title={title} />
         )}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-[linear-gradient(180deg,rgba(8,9,12,0)_0%,rgba(8,9,12,0.9)_100%)]" />
+        {presentation === 'editorial' ? (
+          <span aria-hidden="true" className="poster-editorial-open">
+            View title <ArrowUpRight className="size-4" />
+          </span>
+        ) : null}
         {typeof rating === 'number' ? (
           <div className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-[10px] border border-white/14 bg-[rgba(8,9,12,0.78)] px-2.5 py-1 text-[11px] font-medium tabular-nums text-[color:var(--color-highlight)] backdrop-blur-xl">
             <Star aria-hidden="true" className="size-3 fill-current" />

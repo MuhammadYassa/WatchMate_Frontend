@@ -12,7 +12,7 @@ export function PosterPlaceholder({ title, className }: PosterPlaceholderProps) 
   return (
     <div
       className={cn(
-        'relative aspect-[2/3] overflow-hidden rounded-[var(--radius-media)] border border-white/8 bg-[radial-gradient(circle_at_top,_rgba(47,174,126,0.18),_transparent_42%),linear-gradient(180deg,#1a1714_0%,#0d0b0a_100%)]',
+        'wm-poster-placeholder relative aspect-[2/3] overflow-hidden rounded-[var(--radius-media)] border border-white/8 bg-[radial-gradient(circle_at_top,_rgba(47,174,126,0.18),_transparent_42%),linear-gradient(180deg,#1a1714_0%,#0d0b0a_100%)]',
         className,
       )}
     >

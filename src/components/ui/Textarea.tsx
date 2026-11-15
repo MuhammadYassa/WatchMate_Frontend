@@ -9,6 +9,7 @@ interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
 export function Textarea({ className, error = false, ...props }: TextareaProps) {
   return (
     <textarea
+      aria-invalid={error || undefined}
       className={cn(
         'min-h-32 w-full rounded-[var(--radius-control)] border bg-[rgba(10,12,16,0.82)] px-4 py-3.5 text-sm text-[color:var(--color-text-primary)] placeholder:text-[color:var(--color-text-tertiary)] shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] transition duration-300 focus-visible:outline-none',
         error

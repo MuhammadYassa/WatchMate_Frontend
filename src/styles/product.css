@@ -1,0 +1,71 @@
+/* Shared Cinematic Editorial foundations. Page compositions are in pages.css. */
+.wm-shell { background: var(--color-bg); }
+.wm-shell .text-white { color: var(--color-text-primary); }
+.wm-shell :is(h1,h2,h3) { text-wrap: balance; }
+.wm-main { min-width: 0; }
+.wm-page { max-width: 1440px; padding-inline: clamp(20px,4.5vw,64px); }
+.wm-page h1 { font-size: clamp(32px,4.5vw,56px); font-weight: 500; line-height: 1.08; letter-spacing: -0.035em; }
+.wm-page :is(h2,h3) { font-weight: 500; }
+.wm-card { background: var(--color-surface-1); border-color: var(--color-border); box-shadow: none; backdrop-filter: none; }
+.wm-button { min-height: 44px; box-shadow: none; font-weight: 550; letter-spacing: 0; }
+.wm-shell .motion-btn-primary { color: var(--color-action-ink); }
+.wm-button:focus-visible, .wm-shell :is(a,button,input,textarea,select):focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 3px; }
+.wm-shell :is(input:not([type=checkbox]),textarea,select) { background-color: var(--color-bg); border-color: var(--color-control-border); box-shadow: none; caret-color: var(--color-accent); }
+.wm-shell :is(input,textarea)::placeholder { color: var(--color-text-tertiary); }
+.wm-shell :is(input,textarea,select)[aria-invalid=true] { border-color: var(--color-error); background-color: rgb(147 0 10 / 12%); }
+.wm-shell input[type=checkbox]:checked { background: var(--color-action); }
+.wm-topbar, .wm-mobile-topbar { background: var(--color-bg); backdrop-filter: none; }
+.wm-topbar > div { max-width: 1440px; padding-block: 18px; }
+.wm-topbar nav a { border-radius: 6px; letter-spacing: 0; text-transform: none; font-size: 13px; }
+.wm-topbar nav a[aria-current=page] { color: var(--color-accent); background: var(--color-surface-1); box-shadow: none; border-color: transparent; }
+.wm-side-rail { background: var(--color-bg-elevated); box-shadow: none; backdrop-filter: none; padding: 28px 18px 20px; animation: none; }
+.wm-side-rail nav a { min-height: 46px; border-radius: 6px; padding-inline: 14px; border-color: transparent; box-shadow: none; background-image: none; }
+.wm-side-rail nav a[aria-current=page] { color: var(--color-accent); background: var(--color-surface-2); }
+.wm-side-rail .motion-nav-indicator { width: 2px; }
+.wm-mobile-nav { background: var(--color-bg-elevated); backdrop-filter: none; border-color: var(--color-border-strong); box-shadow: 0 6px 18px rgb(0 0 0 / 24%); border-radius: 10px; }
+.wm-mobile-nav a { border-radius: 6px; }
+.wm-mobile-nav a[aria-current=page] { background: var(--color-surface-2); color: var(--color-accent); }
+.wm-account-menu { background: var(--color-surface-2); backdrop-filter: none; border-color: var(--color-border-strong); border-radius: 10px; }
+.wm-footer { background: var(--color-bg); backdrop-filter: none; }
+.wm-footer > div { max-width: 1440px; }
+.wm-footer p { text-transform: none; letter-spacing: 0; font-size: 12px; }
+.wm-form-field > div > span { font-size: 13px; letter-spacing: 0; text-transform: none; font-weight: 500; }
+.wm-section-heading h2 { font-size: clamp(24px,2.4vw,32px); }
+.wm-section-heading p { font-size: 12px; letter-spacing: 0.04em; }
+.wm-atmosphere { display: none; }
+.wm-feedback { min-height: 220px; justify-content: center; padding: 32px; background: transparent; border: 1px dashed var(--color-border-strong); }
+.wm-feedback h2 { font-size: 26px; }
+.wm-feedback > div:first-child { width: 44px; height: 44px; border: 0; background: var(--color-surface-1); }
+dialog.wm-dialog { background: var(--color-surface-2); border: 1px solid var(--color-border-strong); padding: 0; border-radius: 12px; box-shadow: 0 24px 64px rgb(0 0 0 / 36%); backdrop-filter: none; }
+dialog.wm-dialog h2 { font-size: clamp(24px,4vw,32px); font-weight: 500; }
+dialog.wm-dialog[data-size=sm] { max-width: 28rem; }
+dialog.wm-dialog[data-size=md] { max-width: 36rem; }
+dialog.wm-dialog[data-size=lg] { max-width: 48rem; }
+dialog.wm-dialog::backdrop { background: rgb(8 10 7 / 76%); backdrop-filter: blur(3px); }
+.wm-page .motion-stagger > *, .wm-page .motion-slide-up { animation: none; }
+.wm-page { animation: wm-content-arrive 260ms var(--home-ease) both; }
+.wm-shell .motion-scale-in { animation-duration: 220ms; }
+.wm-shell .motion-fade-in { animation-duration: 220ms; }
+.wm-shell .motion-hero-img { animation-duration: 720ms; will-change: auto; }
+.wm-shell .ambient-drift { animation: none; }
+.wm-shell .glass-hover-glow::after { content: none; }
+.wm-toast { border-radius: 10px; background: var(--color-surface-2); border-color: var(--color-border-strong); backdrop-filter: none; box-shadow: 0 12px 24px rgb(0 0 0 / 24%); }
+.wm-toast[data-tone=error] { border-color: var(--color-error); }
+.wm-toast[data-tone=success] { border-color: var(--color-accent); }
+.wm-shell .shimmer-nocturne { background: linear-gradient(100deg,var(--color-surface-1) 15%,var(--color-surface-3) 48%,var(--color-surface-1) 78%); background-size: 200% 100%; }
+.wm-media-grid { gap: 24px 20px; }
+.wm-media-rail { padding-top: 10px; padding-bottom: 18px; mask-image: none; }
+@keyframes wm-content-arrive { from { opacity: .94; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media(max-width:767px) {
+  html { scroll-padding-block: 88px calc(112px + env(safe-area-inset-bottom)); }
+  .wm-main :is(a,button,input,select,textarea) { scroll-margin-block: 88px calc(112px + env(safe-area-inset-bottom)); }
+  .wm-page { padding-inline: 20px; padding-bottom: calc(8rem + env(safe-area-inset-bottom)); }
+  .wm-mobile-topbar :is(a,button) { min-height: 44px; }
+  .wm-page h1 { font-size: clamp(30px,8vw,40px); }
+  .wm-feedback { padding: 24px 20px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .wm-shell *, .wm-shell *::before, .wm-shell *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .wm-shell .motion-hero-img { opacity: var(--hero-img-opacity,1); }
+  .wm-shell :is(.motion-card,.motion-poster):hover, .wm-shell .group:hover img, .wm-shell a:active, .wm-shell button:active { transform: none !important; scale: none !important; rotate: none !important; translate: none !important; }
+}

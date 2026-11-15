@@ -12,7 +12,7 @@ export function BrowsePageAtmosphere({
   return (
     <div
       aria-hidden="true"
-      className={cn('pointer-events-none absolute inset-0 overflow-hidden', className)}
+      className={cn('wm-atmosphere pointer-events-none absolute inset-0 overflow-hidden', className)}
     >
       <div className="absolute left-[-14%] top-[-4rem] h-[28rem] w-[28rem] rounded-full bg-[radial-gradient(circle,rgba(47,174,126,0.12)_0%,rgba(47,174,126,0)_72%)] blur-3xl" />
       <div className="absolute right-[-12%] top-[20%] h-[24rem] w-[24rem] rounded-full bg-[radial-gradient(circle,rgba(111,209,168,0.12)_0%,rgba(111,209,168,0)_72%)] blur-3xl" />

@@ -24,7 +24,7 @@ type RequestTab = 'received' | 'sent'
 
 function FollowRequestsLoadingState() {
   return (
-    <PageContainer className="relative isolate space-y-8 overflow-hidden pt-8 md:pt-12">
+    <PageContainer className="wm-requests relative isolate space-y-8 overflow-hidden pt-8 md:pt-12">
       <BrowsePageAtmosphere variant="hero" />
       <Skeleton className="relative z-10 h-60 rounded-[var(--radius-panel)]" />
       <Skeleton className="relative z-10 h-28 rounded-[var(--radius-panel)]" />
@@ -141,7 +141,7 @@ export function FollowRequestsPage() {
     || !sentRequestsQuery.data
   ) {
     return (
-      <PageContainer className="relative isolate overflow-hidden pt-8 md:pt-12">
+      <PageContainer className="wm-requests relative isolate overflow-hidden pt-8 md:pt-12">
         <BrowsePageAtmosphere />
         <div className="relative z-10">
           <ErrorState
@@ -168,10 +168,10 @@ export function FollowRequestsPage() {
   const requests = requestPage.content
 
   return (
-    <PageContainer className="relative isolate space-y-8 overflow-hidden pt-8 md:space-y-10 md:pt-12">
+    <PageContainer className="wm-requests relative isolate space-y-8 overflow-hidden pt-8 md:space-y-10 md:pt-12">
       <BrowsePageAtmosphere variant="hero" />
 
-      <section className="relative z-10 overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.98)_100%)] px-6 py-7 shadow-[0_30px_80px_rgba(0,0,0,0.36)] md:px-8 md:py-9">
+      <section className="relative z-10 overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[color:var(--color-surface-1)] px-6 py-7 shadow-none md:px-8 md:py-9">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(47,174,126,0.15)_0%,rgba(47,174,126,0)_34%),linear-gradient(145deg,rgba(255,255,255,0.05)_0%,rgba(255,255,255,0)_42%)]" />
         <div className="relative z-10 space-y-4">
           <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--color-accent-strong)]">
@@ -251,7 +251,7 @@ export function FollowRequestsPage() {
 
               return (
                 <Card
-                  className="motion-slide-up flex flex-col gap-5 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.9)_0%,rgba(11,12,16,0.98)_100%)] p-5 transition duration-300 hover:border-[rgba(47,174,126,0.18)] hover:shadow-[0_28px_68px_rgba(0,0,0,0.38)] md:flex-row md:items-center md:justify-between"
+                  className="motion-slide-up flex flex-col gap-5 overflow-hidden border-white/10 bg-[color:var(--color-surface-1)] p-5 transition duration-300 hover:border-[rgba(47,174,126,0.18)] hover:shadow-none md:flex-row md:items-center md:justify-between"
                   key={request.requestId}
                   style={{ animationDelay: `${Math.min(index * 45, 220)}ms` }}
                 >

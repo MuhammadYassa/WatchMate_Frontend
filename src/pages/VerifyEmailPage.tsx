@@ -95,7 +95,7 @@ export function VerifyEmailPage() {
 
   if (token) {
     return (
-      <PageContainer className="relative isolate flex min-h-[calc(100dvh-8rem)] items-center justify-center py-8 md:py-10">
+      <PageContainer className="wm-verify relative isolate flex min-h-[calc(100dvh-8rem)] items-center justify-center py-8 md:py-10">
         <PublicPageAtmosphere variant="verify" />
 
         <Card className="motion-scale-in w-full max-w-xl space-y-6 p-7 text-center md:p-10">
@@ -160,7 +160,7 @@ export function VerifyEmailPage() {
   }
 
   return (
-    <PageContainer className="relative isolate flex min-h-[calc(100dvh-8rem)] items-center justify-center py-8 md:py-10">
+    <PageContainer className="wm-verify relative isolate flex min-h-[calc(100dvh-8rem)] items-center justify-center py-8 md:py-10">
       <PublicPageAtmosphere variant="verify" />
 
       <Card className="motion-scale-in w-full max-w-xl space-y-6 p-7 md:p-10">

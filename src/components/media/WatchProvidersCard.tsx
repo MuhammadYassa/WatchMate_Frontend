@@ -56,7 +56,7 @@ export function WatchProvidersCard({ watchProviders }: { watchProviders: WatchPr
   if (!hasAnyProvider) {
     if (!watchProviders.link) return null
     return (
-      <div className="overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.9)_0%,rgba(11,12,16,0.98)_100%)] p-4">
+      <div className="overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[color:var(--color-surface-1)] p-4">
         <a
           className="-my-2 inline-flex min-h-11 items-center gap-1.5 py-2 text-[13px] text-[color:var(--color-accent)] transition hover:text-white"
           href={watchProviders.link}
@@ -72,7 +72,7 @@ export function WatchProvidersCard({ watchProviders }: { watchProviders: WatchPr
   }
 
   return (
-    <div className="overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.9)_0%,rgba(11,12,16,0.98)_100%)] p-4 shadow-[0_24px_60px_rgba(0,0,0,0.22)]">
+    <div className="overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[color:var(--color-surface-1)] p-4 shadow-none">
       <div className="space-y-4">
         <div className="flex items-center justify-between gap-3">
           <h2 className="text-[15px] font-semibold text-white">Where to watch</h2>

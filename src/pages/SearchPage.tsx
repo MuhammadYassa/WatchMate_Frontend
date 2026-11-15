@@ -96,10 +96,10 @@ export function SearchPage() {
   )
 
   return (
-    <PageContainer className="relative isolate space-y-10 overflow-hidden pt-8 md:space-y-12 md:pt-12">
+    <PageContainer className="wm-search relative isolate space-y-10 overflow-hidden pt-8 md:space-y-12 md:pt-12">
       <BrowsePageAtmosphere variant="hero" />
 
-      <section className="relative z-10 overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.9)_0%,rgba(10,11,14,0.98)_100%)] px-5 py-8 shadow-[0_30px_80px_rgba(0,0,0,0.34)] md:px-8 md:py-10 lg:px-10 lg:py-12">
+      <section className="wm-search-intro relative z-10 overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[color:var(--color-surface-1)] px-5 py-8 md:px-8 md:py-10 lg:px-10 lg:py-12">
         <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(47,174,126,0.10)_0%,rgba(47,174,126,0)_72%)]" />
         <div className="relative space-y-8">
           <div className="space-y-4">
@@ -228,7 +228,7 @@ export function SearchPage() {
           <h2 className="font-display text-3xl tracking-[-0.04em] text-white md:text-5xl">
             Results for "{debouncedQuery}"
           </h2>
-          <div className="motion-stagger space-y-4" key={debouncedQuery}>
+          <div className="wm-search-results motion-stagger space-y-4" key={debouncedQuery}>
             {results.map((item) => (
               <SearchResultCard item={item} key={`${item.mediaType}-${item.id}`} />
             ))}

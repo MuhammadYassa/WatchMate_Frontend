@@ -10,7 +10,7 @@ export function PublicPageAtmosphere({
   variant = 'auth',
 }: PublicPageAtmosphereProps) {
   return (
-    <div className={cn('pointer-events-none absolute inset-0 -z-10 overflow-hidden', className)}>
+    <div className={cn('wm-atmosphere pointer-events-none absolute inset-0 -z-10 overflow-hidden', className)}>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(47,174,126,0.08),_transparent_26%),linear-gradient(180deg,rgba(16,18,20,0.36)_0%,rgba(7,8,8,0.94)_100%)]" />
       <div className="ambient-drift absolute left-[-8%] top-14 h-72 w-72 rounded-full bg-[rgba(47,174,126,0.07)] blur-[100px]" />
       <div className="ambient-drift absolute bottom-[-12%] right-[-6%] h-80 w-80 rounded-full bg-[rgba(111,209,168,0.05)] blur-[120px] [animation-delay:-6s]" />

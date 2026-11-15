@@ -78,8 +78,9 @@ export function ToastProvider({ children }: PropsWithChildren) {
           return (
             <div
               key={toast.id}
+              data-tone={toast.tone}
               className={[
-                'motion-toast flex items-start gap-3 rounded-[14px] border px-4 py-3.5 text-sm shadow-[0_18px_40px_rgba(0,0,0,0.42)] backdrop-blur-xl',
+                'wm-toast motion-toast flex items-start gap-3 rounded-[14px] border px-4 py-3.5 text-sm shadow-[0_18px_40px_rgba(0,0,0,0.42)] backdrop-blur-xl',
                 toast.tone === 'error'
                   ? 'border-[rgba(255,180,171,0.28)] bg-[rgba(147,0,10,0.72)] text-white'
                   : toast.tone === 'success'

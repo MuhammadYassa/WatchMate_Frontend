@@ -84,10 +84,10 @@ export function SocialSearchPage() {
   const results = useMemo(() => searchQuery.data ?? [], [searchQuery.data])
 
   return (
-    <PageContainer className="relative isolate space-y-8 overflow-hidden pt-8 md:space-y-10 md:pt-12">
+    <PageContainer className="wm-people relative isolate space-y-8 overflow-hidden pt-8 md:space-y-10 md:pt-12">
       <BrowsePageAtmosphere variant="hero" />
 
-      <section className="relative z-10 overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[linear-gradient(160deg,rgba(20,21,25,0.92)_0%,rgba(12,13,17,0.98)_100%)] px-6 py-7 shadow-[0_30px_80px_rgba(0,0,0,0.34)] md:px-8 md:py-9">
+      <section className="relative z-10 overflow-hidden rounded-[var(--radius-panel)] border border-white/10 bg-[color:var(--color-surface-1)] px-6 py-7 shadow-none md:px-8 md:py-9">
         <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(47,174,126,0.10)_0%,rgba(47,174,126,0)_72%)]" />
         <div className="relative space-y-7">
           <div className="space-y-4">
@@ -108,7 +108,7 @@ export function SocialSearchPage() {
               />
               <Input
                 autoComplete="off"
-                className="h-16 rounded-[var(--radius-panel)] border-white/10 bg-[rgba(255,255,255,0.04)] pl-14 pr-24 text-base shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] transition duration-300 focus:border-[rgba(47,174,126,0.32)] focus:shadow-[0_0_0_1px_rgba(47,174,126,0.18),0_18px_55px_rgba(0,0,0,0.32)] md:h-18 [&::-webkit-search-cancel-button]:hidden"
+                className="h-16 rounded-[var(--radius-panel)] border-white/10 bg-[rgba(255,255,255,0.04)] pl-14 pr-24 text-base shadow-none transition duration-300 focus:border-[rgba(47,174,126,0.32)] focus:shadow-none md:h-18 [&::-webkit-search-cancel-button]:hidden"
                 enterKeyHint="search"
                 onChange={(event) => setDraftQuery(event.target.value)}
                 onKeyDown={(event) => {
@@ -187,7 +187,7 @@ export function SocialSearchPage() {
                 to={`/social/profile/${encodeURIComponent(result.username)}`}
               >
                 <Card
-                  className="motion-slide-up group flex min-h-[118px] flex-col gap-5 overflow-hidden border-white/10 bg-[linear-gradient(160deg,rgba(22,24,26,0.9)_0%,rgba(13,14,15,0.98)_100%)] p-5 transition duration-300 hover:border-[rgba(47,174,126,0.16)] hover:shadow-[0_28px_68px_rgba(0,0,0,0.44)] sm:flex-row sm:items-center sm:justify-between"
+                  className="motion-slide-up group flex min-h-[118px] flex-col gap-5 overflow-hidden border-white/10 bg-[color:var(--color-surface-1)] p-5 transition duration-300 hover:border-[rgba(47,174,126,0.16)] hover:shadow-none sm:flex-row sm:items-center sm:justify-between"
                   style={{ animationDelay: `${Math.min(index * 45, 220)}ms` }}
                 >
                   <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_right,rgba(47,174,126,0.06)_0%,rgba(47,174,126,0)_72%)] opacity-0 transition duration-300 group-hover:opacity-100" />

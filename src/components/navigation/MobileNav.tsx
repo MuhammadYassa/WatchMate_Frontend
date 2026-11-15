@@ -37,7 +37,7 @@ export function MobileNav() {
   const navItems = isAuthenticated && username ? privateMobileNavItems : publicMobileNavItems
 
   return (
-    <nav className="fixed inset-x-4 bottom-4 z-40 rounded-[var(--radius-panel)] border border-white/10 bg-[rgba(18,20,22,0.92)] px-2 py-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] shadow-[0_18px_42px_rgba(0,0,0,0.42)] backdrop-blur-xl md:hidden">
+    <nav className="wm-mobile-nav fixed inset-x-4 bottom-4 z-40 rounded-[var(--radius-panel)] border border-white/10 bg-[rgba(18,20,22,0.92)] px-2 py-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] shadow-[0_18px_42px_rgba(0,0,0,0.42)] backdrop-blur-xl md:hidden">
       <div className={cn('grid gap-1', navItems.length === 4 ? 'grid-cols-4' : 'grid-cols-5')}>
         {navItems.map((item) => {
           const Icon = iconMap[item.icon]

@@ -48,7 +48,7 @@ export function LoginPage() {
   const error = loginMutation.error instanceof ApiClientError ? loginMutation.error : null
 
   return (
-    <PageContainer className="relative isolate flex min-h-[calc(100dvh-8rem)] items-center py-8 md:py-10">
+    <PageContainer className="wm-auth relative isolate flex min-h-[calc(100dvh-8rem)] items-center py-8 md:py-10">
       <PublicPageAtmosphere variant="auth" />
 
       <div className="grid w-full gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">

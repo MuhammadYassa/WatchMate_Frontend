@@ -18,7 +18,7 @@ export function AppFooter() {
   }
 
   return (
-    <footer className="relative z-10 hidden border-t border-white/6 bg-[rgba(9,10,13,0.72)] backdrop-blur-xl md:block">
+    <footer className="wm-footer relative z-10 hidden border-t border-white/6 bg-[rgba(9,10,13,0.72)] backdrop-blur-xl md:block">
       <div className="mx-auto flex w-full max-w-[1320px] items-center justify-between gap-6 px-6 py-6 xl:px-12">
         <div className="space-y-2">
           <Logo
