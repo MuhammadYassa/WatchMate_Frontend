@@ -356,10 +356,11 @@ export function ProfilePage() {
 
   const profile = profileData!
 
-  const hasWatchlistsSection = profile.watchlists !== undefined
-  const hasReviewsSection = profile.reviews !== undefined
-  const hasMoviesWatchedSection = profile.moviesWatched !== undefined
-  const hasShowsWatchedSection = profile.showsWatched !== undefined
+  // Null and omitted previews are unavailable; only a returned page is visible.
+  const hasWatchlistsSection = profile.watchlists != null
+  const hasReviewsSection = profile.reviews != null
+  const hasMoviesWatchedSection = profile.moviesWatched != null
+  const hasShowsWatchedSection = profile.showsWatched != null
   const hasVisibleSections =
     hasWatchlistsSection || hasReviewsSection || hasMoviesWatchedSection || hasShowsWatchedSection
   const isBlockedProfile = effectiveFollowStatus === 'BLOCKED'
@@ -480,10 +481,10 @@ export function ProfilePage() {
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-2">
             <ProfileStatCard label="Followers" value={profile.followersCount} />
             <ProfileStatCard label="Following" value={profile.followingCount} />
-            {profile.moviesWatchedCount !== undefined ? (
+            {profile.moviesWatchedCount != null ? (
               <ProfileStatCard label="Movies watched" value={profile.moviesWatchedCount} />
             ) : null}
-            {profile.showsWatchedCount !== undefined ? (
+            {profile.showsWatchedCount != null ? (
               <ProfileStatCard label="Shows watched" value={profile.showsWatchedCount} />
             ) : null}
           </div>

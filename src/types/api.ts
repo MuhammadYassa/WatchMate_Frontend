@@ -454,12 +454,14 @@ export interface UserProfileDTO {
   username: string
   followersCount: number
   followingCount: number
-  watchlists?: SpringPage<WatchListDTO>
-  reviews?: SpringPage<ReviewResponseDTO>
-  moviesWatchedCount?: number
-  showsWatchedCount?: number
-  moviesWatched?: SpringPage<SearchItemDTO>
-  showsWatched?: SpringPage<SearchItemDTO>
+  // Unavailable profile previews/counts may be null or omitted. A returned
+  // page with empty content is visible but empty, not an unavailable section.
+  watchlists?: SpringPage<WatchListDTO> | null
+  reviews?: SpringPage<ReviewResponseDTO> | null
+  moviesWatchedCount?: number | null
+  showsWatchedCount?: number | null
+  moviesWatched?: SpringPage<SearchItemDTO> | null
+  showsWatched?: SpringPage<SearchItemDTO> | null
   followStatus: FollowStatus
   privacyStatus: PrivacyStatus
 }
